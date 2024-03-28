@@ -1,0 +1,176 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(cuid())
+  name          String?
+  email         String?        @unique
+  emailVerified DateTime?
+  image         String?
+  isMaster      Boolean        @default(false)
+  Membersof     Members[]
+  Tasks         Tasks[]
+  subtask       subtask[]
+  Collabrators  Collabrators[]
+  accounts      Account[]
+  sessions      Session[]
+  Space         Space[]
+}
+
+model Space {
+  id          String      @unique @db.VarChar(255)
+  name        String      @db.VarChar(255)
+  description String      @db.Text
+  createdby   String
+  createduser User        @relation(fields: [createdby], references: [id])
+  Team        Team[]
+  SpaceRole   SpaceRole[]
+  Project     Project[]
+}
+
+model Team {
+  id        String    @unique @db.VarChar(255)
+  name      String    @db.VarChar(255)
+  spaceid   Space     @relation(fields: [spaceId], references: [id])
+  createdAt DateTime  @default(now())
+  spaceId   String    @db.VarChar(255)
+  Members   Members[]
+}
+
+model Members {
+  id          String    @unique @db.VarChar(255)
+  teamid      Team      @relation(fields: [teamId], references: [id])
+  teamId      String    @db.VarChar(255)
+  User        User      @relation(fields: [userId], references: [id])
+  userId      String    @db.VarChar(255)
+  roleid      SpaceRole @relation(fields: [spaceRoleId], references: [id])
+  spaceRoleId String    @db.VarChar(255)
+
+  @@id([teamId, userId])
+}
+
+model SpaceRole {
+  id      String    @unique @db.VarChar(255)
+  name    String    @db.VarChar(255)
+  spaceid Space     @relation(fields: [spaceId], references: [id])
+  spaceId String    @db.VarChar(255)
+  Members Members[]
+}
+
+model Project {
+  id           String         @unique @db.VarChar(255)
+  name         String         @db.VarChar(255)
+  description  String?        @db.Text
+  dueDate      DateTime?
+  status       ProjectStatus  @default(OPEN)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  spaceid      Space          @relation(fields: [spaceId], references: [id])
+  spaceId      String         @db.VarChar(255)
+  Tasks        Tasks[]
+  Collabrators Collabrators[]
+  ProjectRole  ProjectRole[]
+}
+
+model Tasks {
+  id          String       @unique @db.VarChar(255)
+  taskname    String       @db.Text
+  description String?      @db.Text
+  prority     TaskPriority @default(LOW)
+  assigned_By String       @db.VarChar(255)
+  assignedTo  User         @relation(fields: [assigned_To], references: [id])
+  assigned_To String       @db.VarChar(255)
+  projectid   Project      @relation(fields: [projectId], references: [id])
+  projectId   String       @db.VarChar(255)
+  subtask     subtask[]
+}
+
+model subtask {
+  id                 String       @unique @db.VarChar(255)
+  taskname           String       @db.Text
+  description        String?      @db.Text
+  prority            TaskPriority @default(LOW)
+  assigned_By        String       @db.VarChar(255)
+  assignedTo         User         @relation(fields: [assigned_To], references: [id])
+  assigned_To        String       @db.VarChar(255)
+  parentTask         Tasks        @relation(fields: [tasksId], references: [id])
+  tasksId            String       @db.VarChar(255)
+  parent_sub_task_id String
+}
+
+model Collabrators {
+  id            String      @unique @db.VarChar(255)
+  projectid     Project     @relation(fields: [projectId], references: [id])
+  projectId     String      @db.VarChar(255)
+  userid        User        @relation(fields: [userId], references: [id])
+  userId        String      @db.VarChar(255)
+  roleid        ProjectRole @relation(fields: [projectRoleId], references: [id])
+  projectRoleId String      @db.VarChar(255)
+}
+
+model ProjectRole {
+  id           String         @unique @db.VarChar(255)
+  name         String         @db.VarChar(255)
+  projectId    Project        @relation(fields: [projectid], references: [id])
+  projectid    String         @db.VarChar(255)
+  Collabrators Collabrators[]
+}
+
+enum ProjectStatus {
+  OPEN
+  IN_PROGRESS
+  CLOSED
+}
+
+enum TaskPriority {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
