@@ -97,8 +97,10 @@ const BarTitles = ({ title }: { title: String }) => {
       </Flex>
       <Flex direction={"column"} gap={"1"} mt={"2"}>
         {_Click &&
-          Result.map((result) => {
-            return <BarItems title={result.title} icons={result.icons} />;
+          Result.map((result, index) => {
+            return (
+              <BarItems key={index} title={result.title} icons={result.icons} />
+            );
           })}
       </Flex>
     </Box>
@@ -117,8 +119,10 @@ const SideBar = () => {
         py={"5"}
         gap={"1"}
       >
-        {BarTiles.map((tiles) => {
-          return <BarItems title={tiles.title} icons={tiles.icons} />;
+        {BarTiles.map((tiles, index) => {
+          return (
+            <BarItems key={index} title={tiles.title} icons={tiles.icons} />
+          );
         })}
         <br />
         <Box className=" w-full h-3/5  overflow-x-hidden overflow-y-scroll">
