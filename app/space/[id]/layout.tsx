@@ -1,7 +1,7 @@
 import { Flex, Separator, Text } from "@radix-ui/themes";
 import React, { ReactNode } from "react";
-import NavBar from "../componets/NavBar";
-import SideBar from "../componets/SideBar";
+import NavBar from "../../componets/NavBar";
+import SideBar from "../../componets/SideBar";
 import SpaceComponets from "./page";
 
 const SpacePage = ({ children }: { children: ReactNode }) => {
