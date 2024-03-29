@@ -14,7 +14,7 @@ const NavBar = () => {
   return (
     <nav>
       <Flex
-        className="bg-[#2E2E30] text-white w-screen h-14 mb-3 mr-3 px-5"
+        className="bg-[#2E2E30] text-white w-full h-14  mr-3 px-5 border-b-2 border-gray-200 border-opacity-20"
         align={"center"}
         justify={"between"}
         gap={"3"}
