@@ -32,7 +32,7 @@ model User {
 model Space {
   id          String      @unique @db.VarChar(255)
   name        String      @db.VarChar(255)
-  description String      @db.Text
+  description String      @default("") @db.Text
   createdby   String
   createduser User        @relation(fields: [createdby], references: [id])
   Team        Team[]

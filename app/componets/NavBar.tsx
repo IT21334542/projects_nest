@@ -11,9 +11,11 @@ import {
 import { FiMenu, FiPlus, FiSearch } from "react-icons/fi";
 import Icons from "./Icons";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 const NavBar = (props: { indicater: any; setter: any }) => {
   const { indicater, setter } = props;
+  const { data } = useSession();
   return (
     <nav>
       <Flex
@@ -52,21 +54,21 @@ const NavBar = (props: { indicater: any; setter: any }) => {
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
             <Flex className=" bg-orange-300 rounded-md ">
-              <Avatar src="" fallback="?" />
+              <Avatar src={data?.user.image!} fallback="?" />
             </Flex>
           </DropdownMenu.Trigger>
           <DropdownMenu.Content align="center">
             <DropdownMenu.Label>
               <Flex>
                 <Text weight={"medium"} size={"2"}>
-                  UserName
+                  {data?.user.name!}
                 </Text>
               </Flex>
             </DropdownMenu.Label>
             <DropdownMenu.Label>
               <Flex>
                 <Text weight={"medium"} size={"2"}>
-                  UserName.email
+                  {data?.user.email}
                 </Text>
               </Flex>
             </DropdownMenu.Label>

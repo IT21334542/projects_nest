@@ -23,7 +23,6 @@ const BlankProjectpage = () => {
   ];
 
   const rand = randomInt(4);
-  console.log("object", rand);
 
   return (
     <Flex

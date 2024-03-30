@@ -10,8 +10,10 @@ import {
 import Link from "next/link";
 import React from "react";
 import { FiArrowLeft, FiChevronsLeft, FiPlus } from "react-icons/fi";
+const { v4: uuidv4 } = require("uuid");
 
 const page = () => {
+  const _SId: String = uuidv4();
   return (
     <Flex className=" bg-[#292A2C] w-screen h-screen" direction={"column"}>
       <Grid columns={"2"} height={"100%"}>
