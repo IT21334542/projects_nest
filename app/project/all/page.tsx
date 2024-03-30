@@ -1,38 +1,5 @@
-import {
-    Button,
-    Card,
-    Flex,
-    Separator,
-    Table,
-    Text
-} from "@radix-ui/themes";
-import { randomInt } from "crypto";
-import { FiFolder, FiPlus } from "react-icons/fi";
-
-const SpaceCard = ({ title }: { title: String }) => {
-  const colorlist: String[] = [
-    "bg-red-200",
-    "bg-green-200",
-    "bg-yellow-100",
-    "bg-pink-500",
-  ];
-  const rand = randomInt(0, 3);
-
-  return (
-    <>
-      <Flex direction={"column"}>
-        <Card
-          className={`w-44 h-36 max-w-44 max-h-36 ${colorlist[rand]}`}
-          variant="ghost"
-        >
-          <FiFolder size={"100%"} />
-        </Card>
-        <br />
-        <Text className=" text-white">{title}</Text>
-      </Flex>
-    </>
-  );
-};
+import { Button, Flex, Separator, Table, Text } from "@radix-ui/themes";
+import { FiLayout, FiPlus } from "react-icons/fi";
 
 const Projectspage = () => {
   return (
@@ -79,7 +46,10 @@ const Projectspage = () => {
         <Table.Body>
           <Table.Row className=" border border-white border-r-0 border-l-0 cursor-pointer">
             <Table.RowHeaderCell className=" text-white">
-              Danilo Sousa
+              <Flex align={"end"} gap={"2"}>
+                <FiLayout color="#ffffff" size={"2em"} />
+                Danilo Sousa
+              </Flex>
             </Table.RowHeaderCell>
             <Table.Cell className=" text-white">danilo@example.com</Table.Cell>
             <Table.Cell className=" text-white">Developer</Table.Cell>
