@@ -1,6 +1,6 @@
 "use client";
 import { Box, Flex, Separator, Text } from "@radix-ui/themes";
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import {
   FiBell,
   FiBookmark,
@@ -33,7 +33,7 @@ const BarTiles: Tiles[] = [
 
 const BarItems = ({ title, icons }: Tiles) => {
   return (
-    <Box className=" w-full bg-gray-400 hover:bg-gray-600 py-1 px-2 rounded-md min-h-fit">
+    <Box className=" w-full bg-[#292A2C] border border-white border-opacity-10 hover:bg-gray-600 py-1 px-2 rounded-md min-h-fit">
       <Flex justify={"start"} align={"center"} gapX={"1"}>
         {icons}
         <Text weight={"light"} className="text-white">
@@ -107,8 +107,11 @@ const BarTitles = ({ title }: { title: String }) => {
   );
 };
 
-const SideBar = () => {
+const SideBar = ({ indicator }: { indicator: any }) => {
   const [_ShowBar, _setShowBar] = useState<boolean>(true);
+  useEffect(() => {
+    _setShowBar(indicator);
+  }, [indicator]);
   if (_ShowBar)
     return (
       <Flex

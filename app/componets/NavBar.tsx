@@ -10,7 +10,8 @@ import {
 import { FiMenu, FiPlus, FiSearch } from "react-icons/fi";
 import Icons from "./Icons";
 
-const NavBar = () => {
+const NavBar = (props: { indicater: any; setter: any }) => {
+  const { indicater, setter } = props;
   return (
     <nav>
       <Flex
@@ -21,20 +22,21 @@ const NavBar = () => {
       >
         <Flex gap={"3"}>
           <Icons>
-            <FiMenu size={25} />
+            <FiMenu
+              size={25}
+              onClick={() => {
+                console.log("indicator is " + indicater);
+                setter(!indicater);
+              }}
+            />
           </Icons>
 
-          <Flex
-            className=" bg-gray-600 py-0.5 px-2 rounded-md"
-            align={"center"}
-          >
-            <Button variant="ghost" color="gray">
-              <Flex justify={"center"} align={"center"} gapX={"2"}>
-                <FiPlus color="#ffffff" size={15} />
-                <Text className=" text-white font-sans  ">Create</Text>
-              </Flex>
-            </Button>
-          </Flex>
+          <Button variant="solid" color="brown">
+            <Flex justify={"center"} align={"center"} gapX={"2"}>
+              <FiPlus color="#ffffff" size={15} />
+              <Text className=" text-white font-sans  ">Create</Text>
+            </Flex>
+          </Button>
         </Flex>
 
         <Box className=" bg-gray-600 w-1/2 rounded-md text-white">

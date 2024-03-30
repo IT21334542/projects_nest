@@ -6,8 +6,7 @@ export default function MyApp() {
   return (
     <>
       <Flex className=" h-screen w-screen m-o p-0 " direction={"column"}>
-        <NavBar />
-        <SideBar />
+        this is home we have login here
       </Flex>
     </>
   );
