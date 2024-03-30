@@ -1,17 +1,23 @@
+"use client";
 import {
   Avatar,
+  Badge,
   Box,
   Button,
+  Container,
   DropdownMenu,
   Flex,
+  Grid,
   Tabs,
   Text,
+  TextField,
   Tooltip,
 } from "@radix-ui/themes";
-import React from "react";
+import React, { useState } from "react";
 import {
   FiArrowDownCircle,
   FiBox,
+  FiCheck,
   FiChevronDown,
   FiClipboard,
   FiLayout,
@@ -61,40 +67,85 @@ const DropMenu = ({ title }: { title: String }) => {
 
 const OverviewPage = () => {
   return (
-    <Flex direction={"column"} className=" w-full h-full">
+    <Grid>
       <Text className=" text-white">We overview</Text>
-    </Flex>
+    </Grid>
   );
 };
 
 const TasksPage = () => {
+  const [_ClickedName, _SetName] = useState<boolean>(true);
   return (
-    <Flex direction={"column"} className=" w-full h-full">
-      <Text className=" text-white">We Taslks</Text>
-    </Flex>
+    <Grid justify={"center"}>
+      <Flex direction={"column"}>
+        <Flex className=" border-b-2 border-white  border-opacity-50 mx-3  mb-6 pb-3">
+          <Button color="brown">Add task</Button>
+        </Flex>
+        <Flex direction={"column"}>
+          <Box className=" border border-yellow-700 p-2 rounded-md cursor-pointer">
+            <Flex justify={"between"} align={"center"}>
+              <Flex gap={"2"}>
+                <FiCheck
+                  color="#ffffff"
+                  className=" border-white rounded-full border border-dashed border-spacing-4"
+                  size={"1.5em"}
+                />
+                <Box
+                  onMouseEnter={() => {
+                    _SetName(true);
+                  }}
+                >
+                  <TextField.Root
+                    disabled={!_ClickedName}
+                    className=" text-white"
+                    onBlur={() => {
+                      _SetName(false);
+                    }}
+                  />
+                </Box>
+              </Flex>
+              <Flex>
+                <Avatar
+                  src="https://plus.unsplash.com/premium_photo-1709999650590-deeb1b76d2a4?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                  fallback="A"
+                />
+              </Flex>
+              <Flex>
+                <Text className=" text-white">Due Date</Text>
+              </Flex>
+              <Flex align={"center"}>
+                <Badge color="violet" variant="solid">
+                  HIGH
+                </Badge>
+              </Flex>
+            </Flex>
+          </Box>
+        </Flex>
+      </Flex>
+    </Grid>
   );
 };
 
 const MessagesPage = () => {
   return (
-    <Flex direction={"column"} className=" w-full h-full">
+    <Grid>
       <Text className=" text-white">We Messages</Text>
-    </Flex>
+    </Grid>
   );
 };
 
 const FilesPage = () => {
   return (
-    <Flex direction={"column"} className=" w-full h-full">
+    <Grid>
       <Text className=" text-white">We Files</Text>
-    </Flex>
+    </Grid>
   );
 };
 
 const ProjectPage = () => {
   return (
     <Flex
-      className=" bg-[#1E1F21] w-full h-full py-4 px-5"
+      className=" bg-[#1E1F21] w-full overflow-hidden h-full py-4 px-5"
       direction={"column"}
       gap={"2"}
     >
@@ -134,8 +185,10 @@ const ProjectPage = () => {
       </Flex>
 
       {/* Tabs */}
-      <Flex className="  w-full ">
-        <Tabs.Root className=" w-full">
+
+      <Tabs.Root className=" max-h-full w-full  ">
+        {/* list of tabls*/}
+        <Flex className="  w-full  mb-5  " direction={"column"}>
           <Tabs.List
             color="brown"
             justify={"center"}
@@ -166,6 +219,13 @@ const ProjectPage = () => {
               </Flex>
             </Tabs.Trigger>
           </Tabs.List>
+        </Flex>
+
+        {/* content pages */}
+        <Flex
+          direction={"column"}
+          className="  overflow-scroll md:max-h-[500px]"
+        >
           <Tabs.Content value="overview">
             <OverviewPage />
           </Tabs.Content>
@@ -178,8 +238,8 @@ const ProjectPage = () => {
           <Tabs.Content value="Resources">
             <FilesPage />
           </Tabs.Content>
-        </Tabs.Root>
-      </Flex>
+        </Flex>
+      </Tabs.Root>
     </Flex>
   );
 };
