@@ -35,3 +35,14 @@ export async function POST(req:NextRequest)
     },{status:201})
     
 }
+
+export async function GET(req:NextRequest) 
+{
+    const Spaces =await prisma.space.findMany()
+
+    return NextResponse.json({
+        message:"Request Sucess",
+        data:Spaces
+    },{status:200})
+    
+}
