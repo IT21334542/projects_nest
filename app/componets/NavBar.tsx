@@ -2,6 +2,7 @@ import {
   Avatar,
   Box,
   Button,
+  DropdownMenu,
   Flex,
   HoverCard,
   Text,
@@ -9,6 +10,7 @@ import {
 } from "@radix-ui/themes";
 import { FiMenu, FiPlus, FiSearch } from "react-icons/fi";
 import Icons from "./Icons";
+import Link from "next/link";
 
 const NavBar = (props: { indicater: any; setter: any }) => {
   const { indicater, setter } = props;
@@ -47,18 +49,32 @@ const NavBar = (props: { indicater: any; setter: any }) => {
           </TextField.Root>
         </Box>
 
-        <HoverCard.Root>
-          <HoverCard.Trigger>
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger>
             <Flex className=" bg-orange-300 rounded-md ">
-              <Avatar src="" fallback />
+              <Avatar src="" fallback="?" />
             </Flex>
-          </HoverCard.Trigger>
-          <HoverCard.Content>
-            <Box className=" w-32 h-fit">
-              <Text>Hello</Text>
-            </Box>
-          </HoverCard.Content>
-        </HoverCard.Root>
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Content align="center">
+            <DropdownMenu.Label>
+              <Flex>
+                <Text weight={"medium"} size={"2"}>
+                  UserName
+                </Text>
+              </Flex>
+            </DropdownMenu.Label>
+            <DropdownMenu.Label>
+              <Flex>
+                <Text weight={"medium"} size={"2"}>
+                  UserName.email
+                </Text>
+              </Flex>
+            </DropdownMenu.Label>
+            <DropdownMenu.Item color="red">
+              <Link href={"/api/auth/signout"}>Sign Out</Link>
+            </DropdownMenu.Item>
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
       </Flex>
     </nav>
   );

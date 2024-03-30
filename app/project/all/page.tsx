@@ -1,7 +1,10 @@
+"use client";
 import { Button, Flex, Separator, Table, Text } from "@radix-ui/themes";
+import { useRouter } from "next/navigation";
 import { FiLayout, FiPlus } from "react-icons/fi";
 
 const Projectspage = () => {
+  const router = useRouter();
   return (
     <Flex
       className=" bg-[#1E1F21] w-full h-full py-4 px-5"
@@ -44,7 +47,12 @@ const Projectspage = () => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          <Table.Row className=" border border-white border-r-0 border-l-0 cursor-pointer">
+          <Table.Row
+            className=" border border-white border-r-0 border-l-0 cursor-pointer"
+            onClick={() => {
+              router.push("/project/1");
+            }}
+          >
             <Table.RowHeaderCell className=" text-white">
               <Flex align={"end"} gap={"2"}>
                 <FiLayout color="#ffffff" size={"2em"} />

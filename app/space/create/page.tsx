@@ -7,6 +7,7 @@ import {
   TextArea,
   TextField,
 } from "@radix-ui/themes";
+import Link from "next/link";
 import React from "react";
 import { FiArrowLeft, FiChevronsLeft, FiPlus } from "react-icons/fi";
 
@@ -15,11 +16,13 @@ const page = () => {
     <Flex className=" bg-[#292A2C] w-screen h-screen" direction={"column"}>
       <Grid columns={"2"} height={"100%"}>
         <Box p={"6"}>
-          <FiArrowLeft
-            color="#ffffff"
-            size={30}
-            className=" border border-white px-0.5 py-1 mb-6"
-          />
+          <Link href={"/space/all"}>
+            <FiArrowLeft
+              color="#ffffff"
+              size={30}
+              className=" border border-white px-0.5 py-1 mb-6"
+            />
+          </Link>
           <Text className=" text-white text-2xl">Create new WorkSpace</Text>
           <br />
           <Box className=" mt-9">

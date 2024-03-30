@@ -1,5 +1,6 @@
 "use client";
 import { Box, Flex, Separator, Text } from "@radix-ui/themes";
+import Link from "next/link";
 import React, { ReactNode, useEffect, useState } from "react";
 import {
   FiBell,
@@ -11,6 +12,7 @@ import {
   FiPlus,
   FiPlusSquare,
 } from "react-icons/fi";
+import { Url } from "url";
 interface Tiles {
   title: String;
   icons: ReactNode;
@@ -44,7 +46,7 @@ const BarItems = ({ title, icons }: Tiles) => {
   );
 };
 
-const BarTitles = ({ title }: { title: String }) => {
+const BarTitles = ({ title, href }: { title: String; href: string }) => {
   const [_Hover, _setHover] = useState<boolean>(false);
   const [_Click, _setClick] = useState<boolean>(true);
   const Result: Tiles[] = [
@@ -53,7 +55,7 @@ const BarTitles = ({ title }: { title: String }) => {
       icons: <FiHome color="#ffffff" />,
     },
     {
-      title: "MyTaks",
+      title: "MyTask",
       icons: <FiBookmark color="#ffffff" />,
     },
     {
@@ -74,7 +76,21 @@ const BarTitles = ({ title }: { title: String }) => {
           _setHover(false);
         }}
       >
-        <Text className=" text-white font-semibold">{title}</Text>
+        <Text
+          className={
+            _Hover
+              ? "text-white font-semibold underline"
+              : " text-white font-semibold"
+          }
+        >
+          <Link
+            href={{
+              pathname: href,
+            }}
+          >
+            {title}
+          </Link>
+        </Text>
         <Flex>
           <FiPlusSquare color="#ffffff" />
           {_Hover && !_Click && (
@@ -129,8 +145,8 @@ const SideBar = ({ indicator }: { indicator: any }) => {
         })}
         <br />
         <Box className=" w-full h-3/5  overflow-x-hidden overflow-y-scroll">
-          <BarTitles title={"Spaces"} />
-          <BarTitles title={"Projects"} />
+          <BarTitles title={"Spaces"} href="/space/all" />
+          <BarTitles title={"Projects"} href="/project/all" />
         </Box>
       </Flex>
     );

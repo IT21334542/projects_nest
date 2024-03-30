@@ -1,5 +1,6 @@
 import { Button, Card, Flex, Grid, Separator, Text } from "@radix-ui/themes";
 import { randomInt } from "crypto";
+import Link from "next/link";
 import React from "react";
 import { AiFillFolder } from "react-icons/ai";
 import { FiFolder, FiPlus } from "react-icons/fi";
@@ -11,7 +12,7 @@ const SpaceCard = ({ title }: { title: String }) => {
     "bg-yellow-100",
     "bg-pink-500",
   ];
-  const rand = randomInt(0, 3);
+  const rand = randomInt(4);
 
   return (
     <>
@@ -48,18 +49,24 @@ const SpaceComponets = () => {
         }}
       />
       <Flex justify={"end"} m={"2"}>
-        <Button color="brown">
-          <FiPlus color="#ffffff" />
-          New WorkSpace
-        </Button>
+        <Link href={"/space/create"}>
+          <Button color="brown">
+            <FiPlus color="#ffffff" />
+            New WorkSpace
+          </Button>
+        </Link>
       </Flex>
 
       <Grid columns={"4"} p={"6"} gap={"6"}>
-        <SpaceCard title={"New Project"} />
-        <SpaceCard title={"New Project"} />
-        <SpaceCard title={"New Project"} />
-        <SpaceCard title={"New Project"} />
-        <SpaceCard title={"New Project"} />
+        <Link href={"/space/1"}>
+          <SpaceCard title={"New Project"} />
+        </Link>
+        <Link href={"/space/1"}>
+          <SpaceCard title={"New Project"} />
+        </Link>
+        <Link href={"/space/1"}>
+          <SpaceCard title={"New Project"} />
+        </Link>
       </Grid>
     </Flex>
   );
