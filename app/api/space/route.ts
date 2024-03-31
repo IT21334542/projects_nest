@@ -1,21 +1,16 @@
 
 import prisma from "@/prisma/PrismaClient";
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
+import { SpaceCreateSchema } from "../../ValidationSchemas/SpaceValidationSchema";
 
-const SpaceRequestSchema = z.object({
-    id:z.string().min(1,"Id is required"),
-    name:z.string().min(1,"Name is Required"),
-    description:z.string().optional(),
-    createdby:z.string()
-    
-})
 
 
 export async function POST(req:NextRequest)
 {
+    
     const body =await req.json();
-    const Validation =await SpaceRequestSchema.safeParse(body);
+    const Validation =await SpaceCreateSchema.safeParse(body);
+   
     
     if(!Validation.success)
     {
@@ -25,8 +20,15 @@ export async function POST(req:NextRequest)
        },{status:400})
     }
 
+   
+
     const SpaceNew = await prisma.space.create({
-        data:body
+        data:{
+            id:body.id,
+            name:body.name,
+            description:body.description,
+            createdby:body.createdby
+        }
     })
 
     return NextResponse.json({

@@ -1,9 +1,20 @@
+"use client";
 import { Button, Card, Flex, Grid, Separator, Text } from "@radix-ui/themes";
+import axios from "axios";
 import { randomInt } from "crypto";
+
+import { useSession } from "next-auth/react";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { AiFillFolder } from "react-icons/ai";
 import { FiFolder, FiPlus } from "react-icons/fi";
+
+interface Space {
+  name: String;
+  id: String;
+  description: String;
+  createdby: String;
+}
 
 const SpaceCard = ({ title }: { title: String }) => {
   const colorlist: String[] = [
@@ -12,13 +23,12 @@ const SpaceCard = ({ title }: { title: String }) => {
     "bg-yellow-100",
     "bg-pink-500",
   ];
-  const rand = randomInt(4);
 
   return (
     <>
       <Flex direction={"column"}>
         <Card
-          className={`w-44 h-36 max-w-44 max-h-36 ${colorlist[rand]}`}
+          className={`w-44 h-36 max-w-44 max-h-36 ${colorlist[2]}`}
           variant="ghost"
         >
           <FiFolder size={"100%"} />
@@ -31,6 +41,26 @@ const SpaceCard = ({ title }: { title: String }) => {
 };
 
 const SpaceComponets = () => {
+  const [_SpaceList, _setSpaceList] = useState<Space[]>([
+    {
+      id: "",
+      description: "",
+      createdby: "",
+      name: "",
+    },
+  ]);
+
+  useEffect(() => {
+    axios
+      .get("/api/space")
+      .then((value) => {
+        _setSpaceList(value.data.data);
+      })
+      .catch((err) => {
+        console.log("Log.D error in fetching Spaces :" + err);
+      });
+  }, []);
+
   return (
     <Flex
       className=" bg-[#1E1F21] w-full h-full py-4 px-5"
@@ -58,15 +88,11 @@ const SpaceComponets = () => {
       </Flex>
 
       <Grid columns={"4"} p={"6"} gap={"6"}>
-        <Link href={"/space/1"}>
-          <SpaceCard title={"New Project"} />
-        </Link>
-        <Link href={"/space/1"}>
-          <SpaceCard title={"New Project"} />
-        </Link>
-        <Link href={"/space/1"}>
-          <SpaceCard title={"New Project"} />
-        </Link>
+        {_SpaceList.map((space, index) => (
+          <Link key={index} href={"/space/" + space.id}>
+            <SpaceCard title={space.name} />
+          </Link>
+        ))}
       </Grid>
     </Flex>
   );

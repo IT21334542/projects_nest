@@ -16,6 +16,7 @@ import { useSession } from "next-auth/react";
 const NavBar = (props: { indicater: any; setter: any }) => {
   const { indicater, setter } = props;
   const { data } = useSession();
+
   return (
     <nav>
       <Flex

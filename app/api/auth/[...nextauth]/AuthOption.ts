@@ -13,9 +13,10 @@ const AuthOption:AuthOptions = {
             clientId: process.env.GOOGLE_CLIENT_ID!,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
             profile(profile) {
+                console.log("Google"+profile.sub+" "+profile.email)
                 return {
                     id:profile.sub,
-                    name:profile.given_name+profile.family_name,
+                    name:profile.given_name+" "+profile.family_name,
                     email:profile.email,
                     image:profile.picture,
                     isMaster:profile.isMaster?profile.isMaster:false
@@ -34,6 +35,7 @@ const AuthOption:AuthOptions = {
         },
         async session({session,token}) {
 
+            session.user.id = token.id;
              session.user.isMaster = token.isMaster;
              return session;
 

@@ -1,5 +1,6 @@
 "use client";
 import { Box, Flex, Separator, Text } from "@radix-ui/themes";
+import axios from "axios";
 import Link from "next/link";
 import React, { ReactNode, useEffect, useState } from "react";
 import {
@@ -8,14 +9,23 @@ import {
   FiChevronDown,
   FiChevronLeft,
   FiChevronRight,
+  FiFolder,
   FiHome,
   FiPlus,
   FiPlusSquare,
 } from "react-icons/fi";
 import { Url } from "url";
+
 interface Tiles {
   title: String;
   icons: ReactNode;
+}
+
+interface GroupTiles {
+  id: String;
+  name: String;
+  description: String;
+  createdby: String;
 }
 
 const BarTiles: Tiles[] = [
@@ -46,23 +56,22 @@ const BarItems = ({ title, icons }: Tiles) => {
   );
 };
 
-const BarTitles = ({ title, href }: { title: String; href: string }) => {
+const BarTitles = ({
+  title,
+  href,
+  Result,
+  itemhref,
+  icon,
+}: {
+  title: String;
+  href: string;
+  itemhref: string;
+  Result: GroupTiles[];
+  icon: ReactNode;
+}) => {
   const [_Hover, _setHover] = useState<boolean>(false);
   const [_Click, _setClick] = useState<boolean>(true);
-  const Result: Tiles[] = [
-    {
-      title: "Home",
-      icons: <FiHome color="#ffffff" />,
-    },
-    {
-      title: "MyTask",
-      icons: <FiBookmark color="#ffffff" />,
-    },
-    {
-      title: "Inbox",
-      icons: <FiBell color="#ffffff" />,
-    },
-  ];
+
   return (
     <Box className=" w-full  border-t-2 border-white border-opacity-25 mt-3">
       <Flex
@@ -115,7 +124,9 @@ const BarTitles = ({ title, href }: { title: String; href: string }) => {
         {_Click &&
           Result.map((result, index) => {
             return (
-              <BarItems key={index} title={result.title} icons={result.icons} />
+              <Link href={itemhref + result.id}>
+                <BarItems key={index} title={result.name} icons={icon} />
+              </Link>
             );
           })}
       </Flex>
@@ -125,6 +136,19 @@ const BarTitles = ({ title, href }: { title: String; href: string }) => {
 
 const SideBar = ({ indicator }: { indicator: any }) => {
   const [_ShowBar, _setShowBar] = useState<boolean>(true);
+  const [_Spaces, _SetSpaces] = useState<GroupTiles[]>([]);
+
+  useEffect(() => {
+    axios
+      .get("/api/space")
+      .then((value) => {
+        _SetSpaces(value.data.data);
+      })
+      .catch((err) => {
+        console.log("Log.D error in fetching Spaces :" + err);
+      });
+  }, []);
+
   useEffect(() => {
     _setShowBar(indicator);
   }, [indicator]);
@@ -145,8 +169,14 @@ const SideBar = ({ indicator }: { indicator: any }) => {
         })}
         <br />
         <Box className=" w-full h-3/5  overflow-x-hidden overflow-y-scroll">
-          <BarTitles title={"Spaces"} href="/space/all" />
-          <BarTitles title={"Projects"} href="/project/all" />
+          <BarTitles
+            title={"Spaces"}
+            href="/space/all"
+            Result={_Spaces}
+            itemhref="/space/"
+            icon={<FiFolder color="#ffffff" />}
+          ></BarTitles>
+          {/* <BarTitles title={"Projects"} href="/project/all" /> */}
         </Box>
       </Flex>
     );
