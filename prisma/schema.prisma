@@ -27,6 +27,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   Space         Space[]
+  Project       Project[]
 }
 
 model Space {
@@ -72,13 +73,15 @@ model SpaceRole {
 model Project {
   id           String         @unique @db.VarChar(255)
   name         String         @db.VarChar(255)
-  description  String?        @db.Text
+  description  String?        @default("") @db.Text
   dueDate      DateTime?
   status       ProjectStatus  @default(OPEN)
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
-  spaceid      Space          @relation(fields: [spaceId], references: [id])
   spaceId      String         @db.VarChar(255)
+  spaceid      Space          @relation(fields: [spaceId], references: [id])
+  OwnerId      String
+  Ownerid      User           @relation(fields: [OwnerId], references: [id])
   Tasks        Tasks[]
   Collabrators Collabrators[]
   ProjectRole  ProjectRole[]

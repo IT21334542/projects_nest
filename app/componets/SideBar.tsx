@@ -11,6 +11,7 @@ import {
   FiChevronRight,
   FiFolder,
   FiHome,
+  FiLayout,
   FiPlus,
   FiPlusSquare,
 } from "react-icons/fi";
@@ -101,7 +102,9 @@ const BarTitles = ({
           </Link>
         </Text>
         <Flex>
-          <FiPlusSquare color="#ffffff" />
+          <Link href={itemhref + "create"}>
+            <FiPlusSquare color="#ffffff" />
+          </Link>
           {_Hover && !_Click && (
             <FiChevronLeft
               color="#ffffff"
@@ -124,7 +127,7 @@ const BarTitles = ({
         {_Click &&
           Result.map((result, index) => {
             return (
-              <Link href={itemhref + result.id}>
+              <Link key={index} href={itemhref + result.id}>
                 <BarItems key={index} title={result.name} icons={icon} />
               </Link>
             );
@@ -137,6 +140,7 @@ const BarTitles = ({
 const SideBar = ({ indicator }: { indicator: any }) => {
   const [_ShowBar, _setShowBar] = useState<boolean>(true);
   const [_Spaces, _SetSpaces] = useState<GroupTiles[]>([]);
+  const [_Project, _SetProject] = useState<GroupTiles[]>([]);
 
   useEffect(() => {
     axios
@@ -145,7 +149,18 @@ const SideBar = ({ indicator }: { indicator: any }) => {
         _SetSpaces(value.data.data);
       })
       .catch((err) => {
-        console.log("Log.D error in fetching Spaces :" + err);
+        console.log("Log.D error in fetching  Spaces in NavB :" + err);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get("/api/projects")
+      .then((response) => {
+        _SetProject(response.data.data);
+      })
+      .catch((err) => {
+        console.log("LOg.D Error in fetching-Frontend in navB" + err);
       });
   }, []);
 
@@ -176,7 +191,13 @@ const SideBar = ({ indicator }: { indicator: any }) => {
             itemhref="/space/"
             icon={<FiFolder color="#ffffff" />}
           ></BarTitles>
-          {/* <BarTitles title={"Projects"} href="/project/all" /> */}
+          <BarTitles
+            title={"Projects"}
+            href="/project/all"
+            Result={_Project}
+            itemhref="/project/"
+            icon={<FiLayout color="#ffffff" />}
+          />
         </Box>
       </Flex>
     );

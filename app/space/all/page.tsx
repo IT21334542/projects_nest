@@ -28,7 +28,9 @@ const SpaceCard = ({ title }: { title: String }) => {
     <>
       <Flex direction={"column"}>
         <Card
-          className={`w-44 h-36 max-w-44 max-h-36 ${colorlist[2]}`}
+          className={`w-44 h-36 max-w-44 max-h-36 ${
+            colorlist[Math.floor(Math.random() * colorlist.length)]
+          }`}
           variant="ghost"
         >
           <FiFolder size={"100%"} />
