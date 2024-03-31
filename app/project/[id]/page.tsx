@@ -76,7 +76,7 @@ const OverviewPage = () => {
 
 const TasksPage = (props: { setFun: any }) => {
   const { setFun } = props;
-  const [_ClickedName, _SetName] = useState<boolean>(true);
+  const [_ClickedName, _SetName] = useState<boolean>(false);
   return (
     <Grid justify={"center"}>
       <Flex direction={"column"}>
@@ -86,11 +86,12 @@ const TasksPage = (props: { setFun: any }) => {
         <Flex direction={"column"}>
           <Box
             onClick={() => {
-              setFun("i kill");
+              if (!_ClickedName) setFun("Taskid replace this");
             }}
             className=" border border-yellow-700 p-2 rounded-md cursor-pointer"
           >
             <Flex justify={"between"} align={"center"}>
+              {/* Taskname */}
               <Flex gap={"2"}>
                 <FiCheck
                   color="#ffffff"
@@ -111,15 +112,18 @@ const TasksPage = (props: { setFun: any }) => {
                   />
                 </Box>
               </Flex>
+              {/* Members */}
               <Flex>
                 <Avatar
                   src="https://plus.unsplash.com/premium_photo-1709999650590-deeb1b76d2a4?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                   fallback="A"
                 />
               </Flex>
+              {/* Duedate */}
               <Flex>
                 <Text className=" text-white">Due Date</Text>
               </Flex>
+              {/* proprity */}
               <Flex align={"center"}>
                 <Badge color="violet" variant="solid">
                   HIGH
@@ -149,7 +153,7 @@ const FilesPage = () => {
   );
 };
 
-const ProjectPage = () => {
+const ProjectPage = ({ params: { id } }: { params: { id: String } }) => {
   const [_Task, _setTask] = useState<String | null>(null);
   return (
     <Flex

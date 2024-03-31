@@ -28,6 +28,7 @@ model User {
   sessions      Session[]
   Space         Space[]
   Project       Project[]
+  AssignedBy    Tasks[]        @relation("AssignedBy")
 }
 
 model Space {
@@ -93,8 +94,9 @@ model Tasks {
   description String?      @db.Text
   prority     TaskPriority @default(LOW)
   assigned_By String       @db.VarChar(255)
-  assignedTo  User         @relation(fields: [assigned_To], references: [id])
-  assigned_To String       @db.VarChar(255)
+  assignedBy  User         @relation("AssignedBy", fields: [assigned_By], references: [id])
+  assigned_To String?      @db.VarChar(255)
+  assignedTo  User?        @relation(fields: [assigned_To], references: [id])
   projectid   Project      @relation(fields: [projectId], references: [id])
   projectId   String       @db.VarChar(255)
   subtask     subtask[]
