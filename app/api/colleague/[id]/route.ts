@@ -8,7 +8,8 @@ export async function GET(req:NextRequest,{params:{id}}:{params:{id:string}}) {
     try {
         const colle =await prisma.colleague.findMany({
             include:{
-               roleId:true
+               roleId:true,
+               userID:true
             },
             where:{
                 spaceid:id

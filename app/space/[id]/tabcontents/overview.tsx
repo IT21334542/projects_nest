@@ -26,6 +26,12 @@ interface Colleg {
     name: string;
     spaceId: String;
   };
+  userID: {
+    id: String;
+    name: string;
+    email: String;
+    image: string;
+  };
 }
 
 const ColleagueCard = ({
@@ -55,11 +61,26 @@ const ColleagueCard = ({
     </Box>
   );
 };
+interface Space {
+  id: String;
+  name: String;
+  description: String;
+  createdby: String;
+}
 
-const OverviewCompoent = ({ spaceid }: { spaceid: String }) => {
+const OverviewCompoent = ({
+  spaceid,
+  _SpaceDiscription,
+  _setChangeMade,
+}: {
+  spaceid: String;
+  _SpaceDiscription: string;
+  _setChangeMade: any;
+}) => {
   const [isEdited, _setEditstatus] = useState<boolean>(false);
   const [isInviting, _setInvitings] = useState<boolean>(false);
   const [_Colle, _setCollege] = useState<Colleg[] | null>();
+  const [SHANGE, _SHANGE] = useState<string | null>(null);
 
   useEffect(() => {
     axios
@@ -78,6 +99,10 @@ const OverviewCompoent = ({ spaceid }: { spaceid: String }) => {
         <Box>
           <TextArea
             disabled={!isEdited}
+            defaultValue={_SpaceDiscription}
+            onChange={(e) => {
+              _SHANGE(e.currentTarget.value);
+            }}
             placeholder=" descrption"
             size={"3"}
             style={{
@@ -100,6 +125,7 @@ const OverviewCompoent = ({ spaceid }: { spaceid: String }) => {
               <Button
                 color="red"
                 onClick={() => {
+                  _setChangeMade(SHANGE);
                   _setEditstatus(false);
                 }}
               >
@@ -130,8 +156,12 @@ const OverviewCompoent = ({ spaceid }: { spaceid: String }) => {
           {_Colle?.map((c, index) => (
             <ColleagueCard
               key={index}
-              title={c.email}
-              picture={""}
+              title={c.userID ? c.userID.name : c.email}
+              picture={
+                c.userID
+                  ? c.userID.image
+                  : "https://img.icons8.com/?size=256&id=mtfWz20b5AxB&format=png"
+              }
               role={c.roleId.name}
             />
           ))}

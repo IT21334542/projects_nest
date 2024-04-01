@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `colleague` MODIFY `invite` ENUM('ACCEPTED', 'PENDING', 'REJECTED') NOT NULL DEFAULT 'PENDING';

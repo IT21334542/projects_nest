@@ -63,10 +63,44 @@ const DropMenu = ({ title }: { title: String }) => {
   );
 };
 
+interface Space {
+  id: string;
+  name: string;
+  description: string;
+  createdby: string;
+}
+
 const SingleSpacePage = ({ params: { id } }: { params: { id: String } }) => {
   const [_Project, _setProject] = useState<String | null>(null);
+  const [_Space, _setSpace] = useState<Space | null>(null);
+  const [isChangeMade, _setChangeMade] = useState<string | null>();
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    axios
+      .get("/api/space/" + id)
+      .then((value) => {
+        _setSpace(value.data.data);
+      })
+      .catch((err) => {
+        console.log("ERROR Front" + err);
+      });
+  }, []);
+
+  useEffect(() => {
+    const Sp = {
+      id: _Space?.id,
+      name: _Space?.name,
+      description: isChangeMade,
+      createdby: _Space?.createdby,
+    };
+
+    axios
+      .put("/api/space/" + id, Sp)
+      .then((value) => {})
+      .catch((err) => {
+        console.log("ERROR Front" + err);
+      });
+  }, [isChangeMade]);
 
   return (
     <Flex
@@ -83,7 +117,7 @@ const SingleSpacePage = ({ params: { id } }: { params: { id: String } }) => {
           >
             <Flex gap={"1"} align={"end"} pb={"1"}>
               <FiFolder color="#d9f99d" size={"3em"} />
-              <DropMenu title={"Name"} />
+              <DropMenu title={_Space?.name!} />
             </Flex>
             <Flex gap={"2"} align={"center"}>
               <Avatar
@@ -147,7 +181,13 @@ const SingleSpacePage = ({ params: { id } }: { params: { id: String } }) => {
               className="  overflow-scroll md:max-h-[500px]"
             >
               <Tabs.Content value="overview">
-                <OverviewCompoent spaceid={id} />
+                {_Space && (
+                  <OverviewCompoent
+                    spaceid={id}
+                    _SpaceDiscription={_Space ? _Space.description : "Loading"}
+                    _setChangeMade={_setChangeMade}
+                  />
+                )}
               </Tabs.Content>
 
               <Tabs.Content value="Tasks"></Tabs.Content>
