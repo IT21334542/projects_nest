@@ -14,21 +14,22 @@ datasource db {
 }
 
 model User {
-  id            String         @id @default(cuid())
+  id            String      @id @default(cuid())
   name          String?
-  email         String?        @unique
+  email         String?     @unique
   emailVerified DateTime?
   image         String?
-  isMaster      Boolean        @default(false)
+  isMaster      Boolean     @default(false)
+  isAdmin       Boolean     @default(false)
   Membersof     Members[]
   Tasks         Tasks[]
   subtask       subtask[]
-  Collabrators  Collabrators[]
   accounts      Account[]
   sessions      Session[]
   Space         Space[]
   Project       Project[]
-  AssignedBy    Tasks[]        @relation("AssignedBy")
+  AssignedBy    Tasks[]     @relation("AssignedBy")
+  colleague     colleague[]
 }
 
 model Space {
@@ -37,15 +38,14 @@ model Space {
   description String      @default("") @db.Text
   createdby   String
   createduser User        @relation(fields: [createdby], references: [id])
-  Team        Team[]
   SpaceRole   SpaceRole[]
   Project     Project[]
+  colleague   colleague[]
 }
 
 model Team {
   id        String    @unique @db.VarChar(255)
   name      String    @db.VarChar(255)
-  spaceid   Space     @relation(fields: [spaceId], references: [id])
   createdAt DateTime  @default(now())
   spaceId   String    @db.VarChar(255)
   Members   Members[]
@@ -63,12 +63,33 @@ model Members {
   @@id([teamId, userId])
 }
 
+model colleague {
+  id      String      @id @db.VarChar(255)
+  email   String
+  invite  InviteState @default(PENDING)
+  roleid  String
+  roleId  SpaceRole   @relation(fields: [roleid], references: [id])
+  spaceid String
+  spaceId Space       @relation(fields: [spaceid], references: [id])
+  userid  String?
+  userID  User?       @relation(fields: [userid], references: [id])
+
+  @@unique([email, spaceid])
+}
+
+enum InviteState {
+  ACCEPTED
+  PENDING
+  REJECTED
+}
+
 model SpaceRole {
-  id      String    @unique @db.VarChar(255)
-  name    String    @db.VarChar(255)
-  spaceid Space     @relation(fields: [spaceId], references: [id])
-  spaceId String    @db.VarChar(255)
-  Members Members[]
+  id        String      @unique @db.VarChar(255)
+  name      String      @db.VarChar(255)
+  spaceid   Space       @relation(fields: [spaceId], references: [id])
+  spaceId   String      @db.VarChar(255)
+  Members   Members[]
+  colleague colleague[]
 }
 
 model Project {
@@ -119,8 +140,7 @@ model Collabrators {
   id            String      @unique @db.VarChar(255)
   projectid     Project     @relation(fields: [projectId], references: [id])
   projectId     String      @db.VarChar(255)
-  userid        User        @relation(fields: [userId], references: [id])
-  userId        String      @db.VarChar(255)
+  email         String
   roleid        ProjectRole @relation(fields: [projectRoleId], references: [id])
   projectRoleId String      @db.VarChar(255)
 }
