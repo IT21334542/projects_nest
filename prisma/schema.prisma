@@ -14,13 +14,13 @@ datasource db {
 }
 
 model User {
-  id            String      @id @default(cuid())
+  id            String         @id @default(cuid())
   name          String?
-  email         String?     @unique
+  email         String?        @unique
   emailVerified DateTime?
   image         String?
-  isMaster      Boolean     @default(false)
-  isAdmin       Boolean     @default(false)
+  isMaster      Boolean        @default(false)
+  isAdmin       Boolean        @default(false)
   Membersof     Members[]
   Tasks         Tasks[]
   subtask       subtask[]
@@ -28,8 +28,9 @@ model User {
   sessions      Session[]
   Space         Space[]
   Project       Project[]
-  AssignedBy    Tasks[]     @relation("AssignedBy")
+  AssignedBy    Tasks[]        @relation("AssignedBy")
   colleague     colleague[]
+  Collabrators  Collabrators[]
 }
 
 model Space {
@@ -140,7 +141,8 @@ model Collabrators {
   id            String      @unique @db.VarChar(255)
   projectid     Project     @relation(fields: [projectId], references: [id])
   projectId     String      @db.VarChar(255)
-  email         String
+  userid        String
+  userID        User        @relation(fields: [userid], references: [id])
   roleid        ProjectRole @relation(fields: [projectRoleId], references: [id])
   projectRoleId String      @db.VarChar(255)
 }

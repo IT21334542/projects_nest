@@ -1,11 +1,18 @@
 import { ProjectValidationSchema } from "@/app/ValidationSchemas/ProjectValidationSchema";
 import prisma from "@/prisma/PrismaClient"
 import { NextRequest, NextResponse } from "next/server"
+import { randomUUID } from "crypto";
 
 export async function GET(req:NextRequest) 
 {
     try {
-        const Spaces =await prisma.project.findMany()
+        const Spaces =await prisma.project.findMany({
+            include:{
+                Tasks:true,
+                Collabrators:true,
+                
+            }
+        })
     
         return NextResponse.json({
             message:"Request Sucess",
@@ -24,6 +31,8 @@ export async function GET(req:NextRequest)
 export async function POST(req:NextRequest) {
 
     const body =await req.json();
+    const Roleid  =await randomUUID();
+    const ColabID  =await randomUUID();
     
     const validation = await ProjectValidationSchema.safeParse(body)
     if(!validation.success)
@@ -46,10 +55,34 @@ export async function POST(req:NextRequest) {
             }
         })
 
-        return NextResponse.json({
-            message : "Project Created Successfully",
-            CreatedSpace:ProjectNew
-        },{status:201})
+
+        if(ProjectNew)
+        {
+            const ProjectOwner = await prisma.projectRole.create({
+                data:{
+                    id:Roleid,
+                    name:"Project Owner",
+                    projectid:ProjectNew.id
+                }
+            })
+
+
+            const Collabrator = await prisma.collabrators.create({
+                data:{
+                    id:ColabID,
+                    projectId:ProjectNew.id,
+                    userid:ProjectNew.OwnerId,
+                    projectRoleId:ProjectOwner.id
+                }
+            })
+
+
+            return NextResponse.json({
+                message : "Project Created Successfully",
+                CreatedSpace:ProjectNew
+            },{status:201})
+        }
+
 
     } catch (error) {
         
@@ -61,9 +94,4 @@ export async function POST(req:NextRequest) {
         
     }
 
-
-
-
-
-    
 }

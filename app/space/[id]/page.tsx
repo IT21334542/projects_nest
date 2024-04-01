@@ -22,6 +22,7 @@ import {
 } from "react-icons/fi";
 import ProjectSideComponent from "./project";
 import OverviewCompoent from "./tabcontents/overview";
+import ProjectsPageComponent from "./tabcontents/projects";
 import axios from "axios";
 
 const DropMenu = ({ title }: { title: String }) => {
@@ -160,7 +161,7 @@ const SingleSpacePage = ({ params: { id } }: { params: { id: String } }) => {
                     <Text className=" text-white">Overview</Text>
                   </Flex>
                 </Tabs.Trigger>
-                <Tabs.Trigger value="Tasks">
+                <Tabs.Trigger value="Projects">
                   <Flex align={"center"} gap={"1"}>
                     <FiClipboard color="#ffffff" />
                     <Text className=" text-white">Projects</Text>
@@ -190,7 +191,9 @@ const SingleSpacePage = ({ params: { id } }: { params: { id: String } }) => {
                 )}
               </Tabs.Content>
 
-              <Tabs.Content value="Tasks"></Tabs.Content>
+              <Tabs.Content value="Projects">
+                <ProjectsPageComponent spaceid={id} />
+              </Tabs.Content>
               <Tabs.Content value="Resources"></Tabs.Content>
             </Flex>
           </Tabs.Root>
