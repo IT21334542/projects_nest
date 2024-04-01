@@ -8,8 +8,14 @@ export async function GET(req:NextRequest)
     try {
         const Spaces =await prisma.project.findMany({
             include:{
+                Ownerid:true,
                 Tasks:true,
-                Collabrators:true,
+                Collabrators:{
+                    include:{
+                        userID:true,
+                        roleid:true
+                    }
+                },
                 
             }
         })

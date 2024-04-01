@@ -14,6 +14,14 @@ export async function GET(req:NextRequest,{params:{id}}:{params:{id:string}}){
 
     try {
         const SPace = await prisma.space.findFirst({
+            include:{
+                Project:{
+                    include:{
+                        Collabrators:true,
+                        Ownerid:true
+                    }
+                }
+            },
             where:{
                 id:id
             }
