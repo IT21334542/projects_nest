@@ -17,7 +17,11 @@ export async function GET(req:NextRequest,{params:{id}}:{params:{id:string}}){
             include:{
                 Project:{
                     include:{
-                        Collabrators:true,
+                        Collabrators:{
+                            include:{
+                                userID:true
+                            }
+                        },
                         Ownerid:true
                     }
                 }

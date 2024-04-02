@@ -2,6 +2,7 @@ import prisma from "@/prisma/PrismaClient";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { AuthOptions, getServerSession } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import { use } from "react";
 
 const AuthOption:AuthOptions = {
     session:{
@@ -31,6 +32,11 @@ const AuthOption:AuthOptions = {
         
             const {email} = user;
             return true
+        },
+
+        async redirect({url,baseUrl}) {
+
+            return baseUrl
         },
           //called when useSession hook is called or ServerSessionhook called
         async jwt({token,user})
