@@ -1,5 +1,5 @@
 import prisma from "@/prisma/PrismaClient";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request:NextRequest){
     const {searchParams} = new URL(request.url);
@@ -19,10 +19,17 @@ export async function GET(request:NextRequest){
 
         if(User)
         {
-            
+            return NextResponse.json({
+                message:"User Found",
+                data:User
+            }) 
         }
 
     } catch (error) {
+        return NextResponse.json({
+            errorCode:"DB ERROR",
+            error:error
+        })
         
     }
 }

@@ -1,15 +1,10 @@
 "use client";
-import { Flex, Text, Button, Spinner } from "@radix-ui/themes";
-import NavBar from "./componets/NavBar";
-import SideBar from "./componets/SideBar";
-import Link from "next/link";
-import { getServerSession } from "next-auth";
-import { useRouter } from "next/navigation";
+import { Flex, Text } from "@radix-ui/themes";
+import axios from "axios";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BarLoader, ScaleLoader } from "react-spinners";
-import axios from "axios";
-import { error } from "console";
 
 export default function MyApp() {
   const { data, status } = useSession();
@@ -35,11 +30,17 @@ export default function MyApp() {
           },
         })
         .then((value) => {
+          //IF THE INVITE IS AVAILABLE
           router.push("/invite");
         })
         .catch((err) => {
           //IF ADMIN AND NO REQUEST GO TO SPACE ID PAGE
           if (data.user.isAdmin) {
+            router.push("/project/all");
+          }
+
+          //IF USER IS STAFF AND NO INVITE AVAILABLE
+          if (data.user) {
           }
         });
     }

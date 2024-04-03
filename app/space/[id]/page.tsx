@@ -24,6 +24,7 @@ import ProjectSideComponent from "./project";
 import OverviewCompoent from "./tabcontents/overview";
 import ProjectsPageComponent from "./tabcontents/projects";
 import axios from "axios";
+import SelectSpace from "./componets/SelectSpace";
 
 const DropMenu = ({ title }: { title: String }) => {
   return (
@@ -121,28 +122,7 @@ const SingleSpacePage = ({ params: { id } }: { params: { id: String } }) => {
               <DropMenu title={_Space?.name!} />
             </Flex>
             <Flex gap={"2"} align={"center"}>
-              <Avatar
-                src="https://plus.unsplash.com/premium_photo-1709999650590-deeb1b76d2a4?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                fallback="A"
-              />
-              <Avatar
-                variant="solid"
-                color="brown"
-                fallback={
-                  <Tooltip content="Add New Member">
-                    <Box width="24px" height="24px">
-                      <svg viewBox="0 0 64 64" fill="currentColor">
-                        <path d="M41.5 14c4.687 0 8.5 4.038 8.5 9s-3.813 9-8.5 9S33 27.962 33 23 36.813 14 41.5 14zM56.289 43.609C57.254 46.21 55.3 49 52.506 49c-2.759 0-11.035 0-11.035 0 .689-5.371-4.525-10.747-8.541-13.03 2.388-1.171 5.149-1.834 8.07-1.834C48.044 34.136 54.187 37.944 56.289 43.609zM37.289 46.609C38.254 49.21 36.3 52 33.506 52c-5.753 0-17.259 0-23.012 0-2.782 0-4.753-2.779-3.783-5.392 2.102-5.665 8.245-9.472 15.289-9.472S35.187 40.944 37.289 46.609zM21.5 17c4.687 0 8.5 4.038 8.5 9s-3.813 9-8.5 9S13 30.962 13 26 16.813 17 21.5 17z" />
-                      </svg>
-                    </Box>
-                  </Tooltip>
-                }
-              />
-
-              <Button color="violet">
-                <FiMail color="#ffffff" size={"1.3em"} />
-                Invite to Space
-              </Button>
+              <SelectSpace />
             </Flex>
           </Flex>
 
