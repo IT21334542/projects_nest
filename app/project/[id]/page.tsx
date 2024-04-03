@@ -8,6 +8,7 @@ import {
   DropdownMenu,
   Flex,
   Grid,
+  Table,
   Tabs,
   Text,
   TextField,
@@ -75,8 +76,6 @@ const OverviewPage = () => {
 };
 
 const TasksPage = (props: { setFun: any }) => {
-  const { setFun } = props;
-  const [_ClickedName, _SetName] = useState<boolean>(false);
   return (
     <Grid justify={"center"}>
       <Flex direction={"column"}>
@@ -84,53 +83,99 @@ const TasksPage = (props: { setFun: any }) => {
           <Button color="brown">Add task</Button>
         </Flex>
         <Flex direction={"column"}>
-          <Box
-            onClick={() => {
-              if (!_ClickedName) setFun("Taskid replace this");
-            }}
-            className=" border border-yellow-700 p-2 rounded-md cursor-pointer"
-          >
-            <Flex justify={"between"} align={"center"}>
-              {/* Taskname */}
-              <Flex gap={"2"}>
-                <FiCheck
-                  color="#ffffff"
-                  className=" border-white rounded-full border border-dashed border-spacing-4"
-                  size={"1.5em"}
-                />
-                <Box
-                  onMouseEnter={() => {
-                    _SetName(true);
-                  }}
-                >
-                  <TextField.Root
-                    disabled={!_ClickedName}
-                    className=" text-white"
-                    onBlur={() => {
-                      _SetName(false);
-                    }}
+          <Table.Root>
+            <Table.Header>
+              <Table.Row>
+                <Table.ColumnHeaderCell className=" text-white">
+                  <Text>TASK NAME</Text>
+                </Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell className=" text-white">
+                  <Text>ASSIGNEE</Text>
+                </Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell className=" text-white">
+                  <Text>DUE DATE</Text>
+                </Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell className=" text-white">
+                  <Text>STATUS</Text>
+                </Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell className=" text-white">
+                  <Text>PRORITY</Text>
+                </Table.ColumnHeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              <Table.Row align="center">
+                {/* TASK NAME */}
+                <Table.RowHeaderCell className=" text-white" maxWidth={"100px"}>
+                  <Flex align={"center"} gap={"2"}>
+                    <FiCheck
+                      color="#ffffff"
+                      size={"1.5em"}
+                      className=" border-2  p-0.5 border-dashed rounded-full border-white hover:border-green-300 hover:bg-gray-900 "
+                      onClick={() => {
+                        console.log("COMPLETED");
+                      }}
+                    />
+                    <TextField.Root
+                      placeholder=""
+                      className=" w-96 max-w-xl"
+                      onClick={() => {
+                        console.log("NAME");
+                      }}
+                    ></TextField.Root>
+                  </Flex>
+                </Table.RowHeaderCell>
+
+                {/* TASK ASSIGNEE */}
+                <Table.Cell className=" text-white" align="justify">
+                  <Avatar
+                    size={"2"}
+                    variant="solid"
+                    src=""
+                    fallback={
+                      <Avatar
+                        color="brown"
+                        variant="solid"
+                        src=""
+                        fallback={
+                          <Tooltip content="Add New Member">
+                            <Box width="24px" height="24px">
+                              <svg viewBox="0 0 64 64" fill="currentColor">
+                                <path d="M41.5 14c4.687 0 8.5 4.038 8.5 9s-3.813 9-8.5 9S33 27.962 33 23 36.813 14 41.5 14zM56.289 43.609C57.254 46.21 55.3 49 52.506 49c-2.759 0-11.035 0-11.035 0 .689-5.371-4.525-10.747-8.541-13.03 2.388-1.171 5.149-1.834 8.07-1.834C48.044 34.136 54.187 37.944 56.289 43.609zM37.289 46.609C38.254 49.21 36.3 52 33.506 52c-5.753 0-17.259 0-23.012 0-2.782 0-4.753-2.779-3.783-5.392 2.102-5.665 8.245-9.472 15.289-9.472S35.187 40.944 37.289 46.609zM21.5 17c4.687 0 8.5 4.038 8.5 9s-3.813 9-8.5 9S13 30.962 13 26 16.813 17 21.5 17z" />
+                              </svg>
+                            </Box>
+                          </Tooltip>
+                        }
+                      />
+                    }
                   />
-                </Box>
-              </Flex>
-              {/* Members */}
-              <Flex>
-                <Avatar
-                  src="https://plus.unsplash.com/premium_photo-1709999650590-deeb1b76d2a4?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                  fallback="A"
-                />
-              </Flex>
-              {/* Duedate */}
-              <Flex>
-                <Text className=" text-white">Due Date</Text>
-              </Flex>
-              {/* proprity */}
-              <Flex align={"center"}>
-                <Badge color="violet" variant="solid">
-                  HIGH
-                </Badge>
-              </Flex>
-            </Flex>
-          </Box>
+                </Table.Cell>
+
+                {/* DATE DUE */}
+                <Table.Cell className=" text-white">
+                  <Flex>Test</Flex>
+                </Table.Cell>
+
+                {/* TASK STATUS */}
+                <Table.Cell className=" text-white">
+                  <Flex>
+                    <Badge variant="solid" color="violet">
+                      OPEN
+                    </Badge>
+                  </Flex>
+                </Table.Cell>
+
+                {/* Task prorotiy */}
+                <Table.Cell className=" text-white">
+                  <Flex>
+                    <Badge variant="solid" color="red">
+                      HIGH
+                    </Badge>
+                  </Flex>
+                </Table.Cell>
+              </Table.Row>
+            </Table.Body>
+          </Table.Root>
         </Flex>
       </Flex>
     </Grid>
@@ -170,7 +215,7 @@ const ProjectPage = ({ params: { id } }: { params: { id: String } }) => {
           >
             <Flex gap={"1"} align={"end"} pb={"1"}>
               <FiLayout color="#d9f99d" size={"3em"} />
-              <DropMenu title={"Name"} />
+              <DropMenu title={"Name2"} />
             </Flex>
             <Flex gap={"2"} align={"center"}>
               <Avatar

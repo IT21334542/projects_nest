@@ -122,7 +122,7 @@ const SingleSpacePage = ({ params: { id } }: { params: { id: String } }) => {
               <DropMenu title={_Space?.name!} />
             </Flex>
             <Flex gap={"2"} align={"center"}>
-              <SelectSpace />
+              <SelectSpace id={id} />
             </Flex>
           </Flex>
 

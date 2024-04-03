@@ -87,7 +87,7 @@ const ProjectsPageComponent = ({ spaceid }: { spaceid: String }) => {
                     <Flex gap={"1"}>
                       {Project.Collabrators.map((Colbs: any, inde: number) => {
                         return (
-                          <Tooltip content={Colbs.userID.name}>
+                          <Tooltip content={Colbs.userID.name} key={inde}>
                             <Avatar
                               size={"2"}
                               radius="full"

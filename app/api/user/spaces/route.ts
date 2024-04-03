@@ -6,6 +6,7 @@ export async function GET(request:NextRequest){
     const Userid = searchParams.get("id");
 
 
+
     try {
         
         const User = await prisma.user.findFirst({
@@ -22,14 +23,14 @@ export async function GET(request:NextRequest){
             return NextResponse.json({
                 message:"User Found",
                 data:User
-            }) 
+            },{status:200}) 
         }
 
     } catch (error) {
         return NextResponse.json({
             errorCode:"DB ERROR",
             error:error
-        })
+        },{status:400})
         
     }
 }
