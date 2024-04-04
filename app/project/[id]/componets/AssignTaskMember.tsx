@@ -45,10 +45,10 @@ const AssignTaskMember = ({
             variant="soft"
             className=" hover:bg-[#292A2C] bg-[#292A2C] hover:border border-orange-300 hover:cursor-pointer"
             onMouseOver={(e) => {
-              e.currentTarget.style.backgroundColor = "#292A2C";
+              // e.currentTarget.style.backgroundColor = "#292A2C";
             }}
             onMouseOut={(e) => {
-              e.currentTarget.style.backgroundColor = "#1E1F21";
+              // e.currentTarget.style.backgroundColor = "#1E1F21";
             }}
             style={{
               background: "#1E1F21",
@@ -82,7 +82,7 @@ const AssignTaskMember = ({
               />
             </Tooltip>
           </Select.Trigger>
-          <Select.Content color="violet">
+          <Select.Content color="violet" highContrast={false}>
             <Select.Group>
               <Select.Label>Collabrators</Select.Label>
               <Select.Separator />

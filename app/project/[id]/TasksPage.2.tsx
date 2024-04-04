@@ -7,6 +7,7 @@ import {
   Flex,
   Grid,
   Popover,
+  Select,
   Table,
   Text,
   TextField,
@@ -17,11 +18,67 @@ import { FiCheckCircle } from "react-icons/fi";
 import AssignTaskMember from "./componets/AssignTaskMember";
 import Calendar from "react-calendar";
 
+const ProrityCompoent = () => {
+  return (
+    <Select.Root defaultValue="Low">
+      <Select.Trigger variant="ghost" color="violet" />
+      <Select.Content
+        color="violet"
+        highContrast={false}
+        style={{
+          background: "#292A2C",
+          color: "Background",
+        }}
+      >
+        <Select.Item value="Low">
+          <Badge size={"2"} variant="solid" color="green">
+            Low
+          </Badge>
+        </Select.Item>
+        <Select.Item value="close">
+          <Badge size={"2"} variant="solid" color="yellow">
+            Medium
+          </Badge>
+        </Select.Item>
+        <Select.Item value="onprocess">
+          <Badge size={"2"} variant="solid" color="red">
+            High
+          </Badge>
+        </Select.Item>
+      </Select.Content>
+    </Select.Root>
+  );
+};
+
 const StatusComponent = () => {
   return (
-    <Badge size={"2"} variant="solid" color="cyan">
-      OPEN
-    </Badge>
+    <Select.Root defaultValue="open">
+      <Select.Trigger variant="ghost" />
+      <Select.Content
+        highContrast={false}
+        style={{
+          background: "#292A2C",
+          color: "Background",
+        }}
+        color="violet"
+      >
+        <Select.Item value="open">
+          <Badge size={"2"} variant="solid" color="grass">
+            OPEN
+          </Badge>
+        </Select.Item>
+        <Select.Item value="close">
+          <Badge size={"2"} variant="solid" color="cyan">
+            Close
+          </Badge>
+        </Select.Item>
+        <Select.Item value="onprocess">
+          <Badge size={"2"} variant="solid" color="plum">
+            On progress
+          </Badge>
+        </Select.Item>
+      </Select.Content>
+    </Select.Root>
   );
 };
 
@@ -86,9 +143,21 @@ const DueDateCompoent = () => {
           }}
           className={""}
         />
-        <Popover.Close>
-          <Button color="brown">Close</Button>
-        </Popover.Close>
+        <Flex justify={"between"} mt={"3"}>
+          <Popover.Close>
+            <Button color="brown">Close</Button>
+          </Popover.Close>
+          <Popover.Close>
+            <Button
+              color="bronze"
+              onClick={() => {
+                setDate(null);
+              }}
+            >
+              Do not assign Due
+            </Button>
+          </Popover.Close>
+        </Flex>
       </Popover.Content>
     </Popover.Root>
   );
@@ -211,11 +280,7 @@ export const TasksPage = (props: { setFun: any; Id: string }) => {
 
                 {/* Task prorotiy */}
                 <Table.Cell className=" text-white hover:border border-white">
-                  <Flex>
-                    <Badge variant="solid" color="red">
-                      HIGH
-                    </Badge>
-                  </Flex>
+                  <ProrityCompoent />
                 </Table.Cell>
               </Table.Row>
             </Table.Body>
