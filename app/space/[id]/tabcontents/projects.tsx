@@ -98,15 +98,6 @@ const ProjectsPageComponent = ({ spaceid }: { spaceid: String }) => {
                           </Tooltip>
                         );
                       })}
-                      <Tooltip content="Add New Member">
-                        <Avatar
-                          onClick={() => {}}
-                          size={"2"}
-                          radius="full"
-                          src="https://previews.123rf.com/images/bestvectorelements/bestvectorelements1707/bestvectorelements170703821/82405739-vector-illustration-of-business-symbol-on-add-member-icon.jpg"
-                          fallback="?"
-                        />
-                      </Tooltip>
                     </Flex>
                   </Table.Cell>
                   <Table.Cell className=" text-white">

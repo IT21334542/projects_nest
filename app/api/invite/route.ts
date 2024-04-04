@@ -4,14 +4,22 @@ import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request:NextRequest){
-    const {searchParams} = new URL(request.url);
+    const {searchParams} =await new URL(request.url);
 
     try {
         
-        const Invite = await prisma.colleague.findFirst({
+        const Invite = await prisma.colleague.findMany({
             where:{
+                invite:"PENDING",
                 email:searchParams.get("id")!,
-                invite:"PENDING"
+            },
+            include:{
+                spaceId:{
+                    include:{
+                        createduser:true
+                    }
+                },
+                roleId:true
             }
         })
     
@@ -48,6 +56,7 @@ export async function PATCH(request:NextRequest) {
     
     const {searchParams} = new URL(request.url);
     const Uid = searchParams.get('Uid');
+    const Iid = searchParams.get('Iid');
     const session =await getServerSession();
     const User = session?.user;
     try{
@@ -55,6 +64,7 @@ export async function PATCH(request:NextRequest) {
         where:{
             invite:"PENDING",
             email:User?.email!,
+            id:Iid!
         },
         include:{
             roleId:true
@@ -82,7 +92,8 @@ export async function PATCH(request:NextRequest) {
                 id:Uid!
             },
             data:{
-                isAdmin:true
+                isAdmin:true,
+                
             }
         })
 

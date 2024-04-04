@@ -138,13 +138,13 @@ model subtask {
 }
 
 model Collabrators {
-  id            String      @unique @db.VarChar(255)
-  projectid     Project     @relation(fields: [projectId], references: [id])
-  projectId     String      @db.VarChar(255)
+  id            String       @unique @db.VarChar(255)
+  projectid     Project      @relation(fields: [projectId], references: [id])
+  projectId     String       @db.VarChar(255)
   userid        String
-  userID        User        @relation(fields: [userid], references: [id])
-  roleid        ProjectRole @relation(fields: [projectRoleId], references: [id])
-  projectRoleId String      @db.VarChar(255)
+  userID        User         @relation(fields: [userid], references: [id])
+  roleid        ProjectRole? @relation(fields: [projectRoleId], references: [id])
+  projectRoleId String?      @db.VarChar(255)
 }
 
 model ProjectRole {

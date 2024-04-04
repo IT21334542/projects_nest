@@ -20,29 +20,47 @@ export default function MyApp() {
       _setConfiguring(true);
       //IF MASTER GO TO ALL SPACE PAGE
       if (data.user.isMaster) {
+        console.log("MASTER");
         router.push("/space/all");
         _setConfiguring(false);
-      }
-      axios
-        .get("/api/invite", {
-          params: {
-            id: data.user.email,
-          },
-        })
-        .then((value) => {
-          //IF THE INVITE IS AVAILABLE
-          router.push("/invite");
-        })
-        .catch((err) => {
-          //IF ADMIN AND NO REQUEST GO TO SPACE ID PAGE
-          if (data.user.isAdmin) {
-            router.push("/project/all");
-          }
+      } else {
+        axios
+          .get("/api/invite", {
+            params: {
+              id: data.user.email,
+            },
+          })
+          .then((value) => {
+            //IF THE INVITE IS AVAILABLE and Valid email
+            if (value.status == 200) {
+              const DATA: [] = value.data.data;
 
-          //IF USER IS STAFF AND NO INVITE AVAILABLE
-          if (data.user) {
-          }
-        });
+              //if Invite is Available not an empty find
+              if (DATA.length != 0) {
+                console.log("VALUE" + JSON.stringify(value.data.data));
+                router.push("/invite");
+                return;
+              } else {
+                //Request sucess and no invite available
+
+                //check is User isAdmin for any
+                if (data.user.isAdmin) {
+                  router.push("/project/all");
+                }
+
+                //is user is staff
+                if (data.user) {
+                }
+              }
+            }
+          })
+          .catch((err) => {
+            //IF ADMIN AND NO REQUEST GO TO SPACE ID PAGE
+            //IF USER IS STAFF AND NO INVITE AVAILABLE
+
+            console.error("FRONT ERR myApp-p ;" + err);
+          });
+      }
     }
   }, [data, status]);
 

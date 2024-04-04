@@ -32,7 +32,6 @@ const SelectSpace = ({ id }: { id: String }) => {
         .then((value) => {
           _setSpaces(value.data.data);
           if (_Spaces) {
-            console.log("TREE " + JSON.stringify(_Spaces));
             _setLoading(false);
           }
         })

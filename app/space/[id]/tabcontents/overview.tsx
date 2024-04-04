@@ -47,7 +47,17 @@ const ColleagueCard = ({
     <Box maxWidth="240px">
       <Card>
         <Flex gap="3" align="center">
-          <Avatar size="3" src={picture} radius="full" fallback="?" />
+          <Avatar
+            size="3"
+            src={picture.toString()}
+            radius="full"
+            fallback={
+              <Avatar
+                src="https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg"
+                fallback
+              />
+            }
+          />
           <Box>
             <Text as="div" size="2" weight="bold">
               {title}

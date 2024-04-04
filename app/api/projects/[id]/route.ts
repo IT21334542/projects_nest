@@ -8,6 +8,17 @@ export async function GET(req:NextRequest,{params:{id}}:{params:{id:string}}){
         const Projects = await prisma.project.findFirst({
             where:{
                 id:id
+            },
+            include:{
+                spaceid:{
+                    include:{
+                        colleague:{
+                            include:{
+                                userID:true
+                            }
+                        }
+                    }
+                }
             }
         })
 
