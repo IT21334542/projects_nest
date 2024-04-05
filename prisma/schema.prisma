@@ -112,16 +112,24 @@ model Project {
 
 model Tasks {
   id          String       @unique @db.VarChar(255)
-  taskname    String       @db.Text
+  taskname    String?      @db.Text
   description String?      @db.Text
   prority     TaskPriority @default(LOW)
-  assigned_By String       @db.VarChar(255)
-  assignedBy  User         @relation("AssignedBy", fields: [assigned_By], references: [id])
+  status      TaskStatus   @default(OPEN)
+  duedate     DateTime?
+  assigned_By String?      @db.VarChar(255)
+  assignedBy  User?        @relation("AssignedBy", fields: [assigned_By], references: [id])
   assigned_To String?      @db.VarChar(255)
   assignedTo  User?        @relation(fields: [assigned_To], references: [id])
   projectid   Project      @relation(fields: [projectId], references: [id])
   projectId   String       @db.VarChar(255)
   subtask     subtask[]
+}
+
+enum TaskStatus {
+  OPEN
+  ON_PROCESS
+  CLOSE
 }
 
 model subtask {

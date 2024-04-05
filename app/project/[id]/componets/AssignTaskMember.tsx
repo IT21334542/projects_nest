@@ -6,13 +6,15 @@ import React, { useEffect, useState } from "react";
 const AssignTaskMember = ({
   id,
   _SetASSIGNEECHANGE,
+  colabid,
 }: {
   id: string;
   _SetASSIGNEECHANGE: any;
+  colabid: string;
 }) => {
   const [_src, _setSrc] = useState<string>("");
   const [_Collabrators, _setCollabs] = useState<any>();
-
+  const [DefaultColab, setDefaultCal] = useState<string | null>(null);
   useEffect(() => {
     axios
       .get("/api/collab", {
@@ -23,15 +25,27 @@ const AssignTaskMember = ({
       .then((value) => {
         if (value.status == 200) {
           _setCollabs(value.data.data);
+          //
         }
       })
       .catch((err) => {});
   }, []);
+
+  useEffect(() => {
+    if (_Collabrators) {
+      _Collabrators.map((e: any) => {
+        if (e.userID.id == colabid) {
+          setDefaultCal(e.id);
+        }
+      });
+    }
+  }, [_Collabrators]);
+
   return (
     <>
       {_Collabrators && (
         <Select.Root
-          defaultValue="none"
+          defaultValue={DefaultColab ? DefaultColab : "none"}
           onValueChange={(e) => {
             const Coll = _Collabrators.find((impl: any) => {
               if (impl.id == e) return impl;
@@ -44,6 +58,7 @@ const AssignTaskMember = ({
           <Select.Trigger
             variant="soft"
             className=" hover:bg-[#292A2C] bg-[#292A2C] hover:border border-orange-300 hover:cursor-pointer"
+            onClick={() => {}}
             onMouseOver={(e) => {
               // e.currentTarget.style.backgroundColor = "#292A2C";
             }}
@@ -52,6 +67,8 @@ const AssignTaskMember = ({
             }}
             style={{
               background: "#1E1F21",
+              width: "100%",
+              height: "100%",
             }}
           >
             <Tooltip content="Assign Task">
