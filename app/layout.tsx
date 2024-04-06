@@ -8,8 +8,8 @@ import AuthProvider from "./auth/AuthProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Projects Nest",
-  description: "Manage Projects with ProjectsNest",
+  title: "Canvonest",
+  description: "powered and developed under Wie-Developments.co.uk",
 };
 
 export default function RootLayout({

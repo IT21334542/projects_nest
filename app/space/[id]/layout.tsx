@@ -6,7 +6,7 @@ import SideBar from "../../componets/SideBar";
 import SpaceComponets from "./page";
 
 const SpacePage = ({ children }: { children: ReactNode }) => {
-  const [_menuOpen, _setMenuOpen] = useState<boolean>(true);
+  const [_menuOpen, _setMenuOpen] = useState<boolean>(false);
   return (
     <Flex className=" h-screen w-screen m-o p-0 " direction={"column"}>
       <NavBar indicater={_menuOpen} setter={_setMenuOpen} />

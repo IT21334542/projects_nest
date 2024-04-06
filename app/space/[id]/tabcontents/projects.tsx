@@ -6,14 +6,14 @@ import {
   Button,
   Flex,
   Grid,
+  Link,
   Table,
   Text,
   Tooltip,
 } from "@radix-ui/themes";
 import axios from "axios";
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { FiLayout, FiPlus } from "react-icons/fi";
+import { FiCalendar, FiLayout, FiPlus } from "react-icons/fi";
 
 // interface Projects {}
 
@@ -26,6 +26,7 @@ import { FiLayout, FiPlus } from "react-icons/fi";
 
 const ProjectsPageComponent = ({ spaceid }: { spaceid: String }) => {
   const [_Space, _setSpace] = useState<any | null>(null);
+  const [ProjectSelected, setProjectSelected] = useState<string | null>(null);
 
   useEffect(() => {
     axios
@@ -71,17 +72,38 @@ const ProjectsPageComponent = ({ spaceid }: { spaceid: String }) => {
             </Table.Row>
           </Table.Header>
           <Table.Body>
+            {_Space.Project.length == 0 && (
+              <Flex className=" w-full h-full justify-center items-center flex-col">
+                <FiLayout color="#ffffff" size={"5em"} />
+                <Text className=" text-white" size={"4"}>
+                  no Projects available , create new project
+                </Text>
+              </Flex>
+            )}
             {_Space.Project.map((Project: any, index: number) => {
               return (
                 <Table.Row key={index}>
                   <Table.RowHeaderCell className=" text-white">
-                    <Flex align={"end"} gap={"2"}>
+                    <Flex align={"end"} gap={"2"} className=" cursor-pointer ">
                       <FiLayout color="#ffffff" size={"2em"} />
-                      {Project.name}
+                      <Link href={"/project/" + Project.id} underline="hover">
+                        <Text className=" text-white hover:underline">
+                          {Project.name}
+                        </Text>
+                      </Link>
                     </Flex>
                   </Table.RowHeaderCell>
                   <Table.Cell className=" text-white">
-                    {Project.Ownerid.name}
+                    <Flex gap={"2"} align={"center"}>
+                      <Avatar
+                        size={"2"}
+                        color="brown"
+                        src={Project.Ownerid.image}
+                        fallback="?"
+                        radius="full"
+                      />
+                      {Project.Ownerid.name}
+                    </Flex>
                   </Table.Cell>
                   <Table.Cell className=" text-white">
                     <Flex gap={"1"}>
@@ -104,7 +126,12 @@ const ProjectsPageComponent = ({ spaceid }: { spaceid: String }) => {
                     {Project.dueDate ? (
                       Project.dueDate
                     ) : (
-                      <Text className=" text-yellow-600">Not Defined</Text>
+                      <FiCalendar
+                        color="#ffffff"
+                        size={"2em"}
+                        width={"100%"}
+                        height={"100%"}
+                      />
                     )}
                   </Table.Cell>
                   <Table.Cell className=" text-white">

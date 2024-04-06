@@ -25,6 +25,7 @@ import OverviewCompoent from "./tabcontents/overview";
 import ProjectsPageComponent from "./tabcontents/projects";
 import axios from "axios";
 import SelectSpace from "./componets/SelectSpace";
+import FilesCompSpace from "./tabcontents/Files";
 
 const DropMenu = ({ title }: { title: String }) => {
   return (
@@ -174,7 +175,9 @@ const SingleSpacePage = ({ params: { id } }: { params: { id: String } }) => {
               <Tabs.Content value="Projects">
                 <ProjectsPageComponent spaceid={id} />
               </Tabs.Content>
-              <Tabs.Content value="Resources"></Tabs.Content>
+              <Tabs.Content value="Resources">
+                <FilesCompSpace id={id} />
+              </Tabs.Content>
             </Flex>
           </Tabs.Root>
         </Flex>

@@ -5,7 +5,7 @@ export default withAuth({
     authorized: async ({req,token})=>{
 
 
-        if(req.nextUrl.pathname.startsWith('/master'))
+        if(req.nextUrl.pathname.startsWith('/space'))
             return (token?.isMaster==true)
         return true;
     }

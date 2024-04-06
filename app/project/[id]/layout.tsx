@@ -5,7 +5,7 @@ import NavBar from "../../componets/NavBar";
 import SideBar from "../../componets/SideBar";
 
 const SpacePage = ({ children }: { children: ReactNode }) => {
-  const [_menuOpen, _setMenuOpen] = useState<boolean>(true);
+  const [_menuOpen, _setMenuOpen] = useState<boolean>(false);
   return (
     <Flex
       className=" h-screen w-screen m-o p-0 overflow-clip "

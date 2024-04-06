@@ -1,5 +1,13 @@
 "use client";
-import { Button, Card, Flex, Grid, Separator, Text } from "@radix-ui/themes";
+import {
+  Button,
+  Card,
+  Flex,
+  Grid,
+  Separator,
+  Strong,
+  Text,
+} from "@radix-ui/themes";
 import axios from "axios";
 import { randomInt } from "crypto";
 
@@ -8,6 +16,10 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { AiFillFolder } from "react-icons/ai";
 import { FiFolder, FiPlus } from "react-icons/fi";
+
+function capitalizeFirstLetter(s: String) {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
 
 interface Space {
   name: String;
@@ -18,10 +30,10 @@ interface Space {
 
 const SpaceCard = ({ title }: { title: String }) => {
   const colorlist: String[] = [
-    "bg-red-200",
-    "bg-green-200",
-    "bg-yellow-100",
-    "bg-pink-500",
+    "bg-[#53B365]",
+    "bg-[#978365]",
+    "bg-[#B658C4]",
+    "bg-[#9EB1FF]",
   ];
 
   return (
@@ -88,14 +100,34 @@ const SpaceComponets = () => {
           </Button>
         </Link>
       </Flex>
+      {_SpaceList.length == 0 && (
+        <Flex
+          className=" h-full w-full"
+          align={"center"}
+          justify={"center"}
+          direction={"column"}
+        >
+          <FiFolder color="#ffffff" size={"4em"} className=" m-3" />
+          <Text className=" text-white" size={"4"} weight={"light"}>
+            {" "}
+            No any Workspaces available
+          </Text>
+          <Text className=" text-white" size={"4"} weight={"light"}>
+            {" "}
+            Create a <Strong>new Workspace</Strong>
+          </Text>
+        </Flex>
+      )}
 
-      <Grid columns={"4"} p={"6"} gap={"6"}>
-        {_SpaceList.map((space, index) => (
-          <Link key={index} href={"/space/" + space.id}>
-            <SpaceCard title={space.name} />
-          </Link>
-        ))}
-      </Grid>
+      {_SpaceList.length != 0 && (
+        <Grid columns={"4"} p={"6"} gap={"6"}>
+          {_SpaceList.map((space, index) => (
+            <Link key={index} href={"/space/" + space.id}>
+              <SpaceCard title={capitalizeFirstLetter(space.name)} />
+            </Link>
+          ))}
+        </Grid>
+      )}
     </Flex>
   );
 };

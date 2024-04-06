@@ -32,7 +32,6 @@ const ProrityCompoent = ({
       defaultValue={prority}
       onValueChange={(e: TaskPriority) => {
         changetrigger(e);
-        console.log("Priority", e);
       }}
     >
       <Select.Trigger variant="ghost" color="violet" />
@@ -67,9 +66,15 @@ const ProrityCompoent = ({
 const StatusComponent = ({
   status,
   cngTrigger,
+  _setIsblur,
+  task,
+  _setTASKSELECTED,
 }: {
   status: TaskStatus;
   cngTrigger: any;
+  _setTASKSELECTED: any;
+  _setIsblur: any;
+  task: any;
 }) => {
   return (
     <Select.Root
@@ -243,27 +248,15 @@ export const TasksPage = (props: { setFun: any; Id: string }) => {
 
   //track row and update db
   useEffect(() => {
-    console.log("Mouse outing 0");
     if (_TASKSELECTED) {
-      console.log("Mouse outing 1");
       //no changes present
       if (!ischanged) {
-        console.log("Mouse outing is not changed");
-        console.log("Setting new Row");
         _setNameChange(_TASKSELECTED?.taskname!);
         _setASSIGNEECHANGE(_TASKSELECTED?.assigned_To!);
         _setCHANGEDDATE(_TASKSELECTED?.duedate!);
         _setSTATUSCHANGE(_TASKSELECTED?.status!);
         _setPRORITYCHANGE(_TASKSELECTED?.prority!);
-        console.log(
-          "Updating priority",
-          _TASKSELECTED?.prority!,
-          _TASKSELECTED?.taskname
-        );
       } else {
-        console.log("mouse outing is changed");
-        //change present
-        console.log("Submitting arc");
         const NewTask = {
           id: _TASKSELECTED?.id,
           taskname: _NameChanged,
@@ -275,7 +268,7 @@ export const TasksPage = (props: { setFun: any; Id: string }) => {
           assigned_To: _ASSIGNEECHANGED,
           projectId: _TASKSELECTED?.projectId,
         };
-        console.log("New Task", NewTask, _PRORITYCHANGE);
+
         axios
           .put("/api/task", NewTask)
           .then((v) => {
@@ -296,7 +289,6 @@ export const TasksPage = (props: { setFun: any; Id: string }) => {
           });
       }
     }
-    console.log("Mouse is outing finish");
   }, [_TASKSELECTED, _isBlur]);
 
   //track change
@@ -341,7 +333,7 @@ export const TasksPage = (props: { setFun: any; Id: string }) => {
             Add task
           </Button>
         </Flex>
-        <Flex direction={"column"} onBlur={() => _setIsblur(false)}>
+        <Flex direction={"column"}>
           <Table.Root>
             <Table.Header>
               <Table.Row className=" border-t border-b  border-white border-opacity-45">
@@ -374,12 +366,10 @@ export const TasksPage = (props: { setFun: any; Id: string }) => {
                         onClick={() => {
                           _setTASKSELECTED(task);
                           _setIsblur(true);
-                          console.log("Setting is blur to 1");
                         }}
                         onBlur={() => {
                           _setTASKSELECTED(task);
                           _setIsblur(false);
-                          console.log("Mouse is outing", task);
                         }}
                       >
                         {/* TASK NAME */}
@@ -434,7 +424,6 @@ export const TasksPage = (props: { setFun: any; Id: string }) => {
                               }}
                               onChange={(e) => {
                                 _setNameChange(e.currentTarget.value);
-                                console.log("Onchange:", _NameChanged);
                               }}
                             ></TextField.Root>
                           </Flex>
@@ -465,6 +454,9 @@ export const TasksPage = (props: { setFun: any; Id: string }) => {
                           <StatusComponent
                             status={task.status}
                             cngTrigger={_setSTATUSCHANGE}
+                            _setIsblur={_setIsblur}
+                            task={task}
+                            _setTASKSELECTED={_setTASKSELECTED}
                           />
                         </Table.Cell>
 
