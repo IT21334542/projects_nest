@@ -22,7 +22,6 @@ model User {
   isMaster      Boolean        @default(false)
   isAdmin       Boolean        @default(false)
   Membersof     Members[]
-  subtask       subtask[]
   accounts      Account[]
   sessions      Session[]
   Space         Space[]
@@ -125,6 +124,7 @@ model Tasks {
   projectid   Project       @relation(fields: [projectId], references: [id])
   projectId   String        @db.VarChar(255)
   subtask     subtask[]
+  Files       Files[]
 }
 
 enum TaskStatus {
@@ -134,16 +134,17 @@ enum TaskStatus {
 }
 
 model subtask {
-  id                 String       @unique @db.VarChar(255)
-  taskname           String       @db.Text
-  description        String?      @db.Text
-  prority            TaskPriority @default(LOW)
-  assigned_By        String       @db.VarChar(255)
-  assignedTo         User         @relation(fields: [assigned_To], references: [id])
-  assigned_To        String       @db.VarChar(255)
-  parentTask         Tasks        @relation(fields: [tasksId], references: [id])
-  tasksId            String       @db.VarChar(255)
-  parent_sub_task_id String
+  id                 String        @unique @db.VarChar(255)
+  taskname           String?       @db.Text
+  description        String?       @db.Text
+  prority            TaskPriority  @default(LOW)
+  assignedTo         Collabrators? @relation(fields: [assigned_To], references: [id])
+  assigned_To        String?       @db.VarChar(255)
+  parentTask         Tasks         @relation(fields: [tasksId], references: [id])
+  tasksId            String        @db.VarChar(255)
+  parent_sub_task_id subtask?      @relation("Sub", fields: [subtaskId], references: [id])
+  subtask            subtask[]     @relation("Sub")
+  subtaskId          String?       @db.VarChar(255)
 }
 
 model Collabrators {
@@ -155,6 +156,7 @@ model Collabrators {
   roleid        ProjectRole? @relation(fields: [projectRoleId], references: [id])
   projectRoleId String?      @db.VarChar(255)
   Tasks         Tasks[]
+  subtask       subtask[]
 }
 
 model ProjectRole {
@@ -213,6 +215,8 @@ model Files {
   spaceid   Space    @relation(fields: [spaceId], references: [id])
   projectid Project? @relation(fields: [projectId], references: [id])
   projectId String?  @db.VarChar(255)
+  Taskid    Tasks?   @relation(fields: [tasksId], references: [id])
+  tasksId   String?  @db.VarChar(255)
 }
 
 model VerificationToken {
