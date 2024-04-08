@@ -1,4 +1,5 @@
 import prisma from "@/prisma/PrismaClient";
+import { error } from "console";
 import { NextRequest, NextResponse } from "next/server";
 import { TaskStatus , Tasks} from "prisma/prisma-client";
 
@@ -21,13 +22,20 @@ export  async function GET(req:NextRequest){
                 id:Taskid
             },
             include:{
+                projectid:{
+                    include:{
+                        spaceid:true
+                    }
+                },
                 assignedTo:{
                     include:{
                         userID:true
                     }
                 },
                 assignedBy:true,
-                subtask:true
+                subtask:true,
+                Files:true,
+
             },
             orderBy:{
                 taskname:'asc'
@@ -57,4 +65,48 @@ export  async function GET(req:NextRequest){
 
     }
 
+}
+
+
+
+export async function PATCH(req:NextRequest) {
+    const body =await req.json();
+    const {searchParams} = new URL(req.url);
+    const desckPatch = searchParams.get('Disc');
+
+    if(desckPatch)
+        {
+            try {
+                const newTASk = await prisma.tasks.update({
+                    where:{
+                        id:body.id
+                    },
+                    data:{
+                        description:body.description
+
+                    }
+                });
+
+                if(newTASk)
+                    {
+                        return NextResponse.json({
+                            message:"updated Success",
+                            data:newTASk
+                        },{status:200})
+                    }
+
+            } catch (error) {
+                return NextResponse.json({
+                    errorCode:" DB ERROR",
+                    error:error
+                },{status:500})
+                
+            }
+    }
+
+
+   
+
+
+    
 }
