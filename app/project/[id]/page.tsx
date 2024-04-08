@@ -179,7 +179,7 @@ const ProjectPage = ({ params: { id } }: { params: { id: String } }) => {
             </Flex>
           </Tabs.Root>
         </Flex>
-        {_Task && <Tasks taskopen={_setTask} />}
+        {_Task && <Tasks taskopen={_setTask} task={_Task} />}
       </Grid>
     </Flex>
   );
