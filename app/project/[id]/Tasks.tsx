@@ -1,3 +1,4 @@
+"use client";
 import {
   Avatar,
   Box,
@@ -8,11 +9,31 @@ import {
   TextArea,
   Tooltip,
 } from "@radix-ui/themes";
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { FiArrowLeftCircle, FiArrowRight, FiCheck } from "react-icons/fi";
+import { TaskStatus, Tasks as T } from "prisma/prisma-client";
 
-const Tasks = (props: { taskopen: any }) => {
+const Tasks = (props: { taskopen: any; task: String }) => {
   const { taskopen } = props;
+  const [Tsk, setTsk] = useState<any>();
+  useEffect(() => {
+    axios
+      .get("/api/task/Tasks", {
+        params: {
+          id: props.task,
+        },
+      })
+      .then((v) => {
+        if (v.status == 200) {
+          setTsk(v.data.data);
+        }
+      })
+      .catch((Err) => {
+        console.error("Front error " + Err);
+      });
+  }, []);
+
   return (
     <Flex
       className=" h-full ml-3 border-l-2 border-white border-opacity-30"
@@ -33,7 +54,7 @@ const Tasks = (props: { taskopen: any }) => {
             />
           </Tooltip>
           <Text className=" text-white font-lg" weight={"medium"}>
-            NAme{" "}
+            {Tsk ? Tsk.taskname : " No"}
           </Text>
         </Flex>
         <Flex>
@@ -57,7 +78,7 @@ const Tasks = (props: { taskopen: any }) => {
               </Table.RowHeaderCell>
               <Table.Cell className=" text-white">
                 <Avatar
-                  src="https://plus.unsplash.com/premium_photo-1709999650590-deeb1b76d2a4?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                  src={Tsk ? Tsk.assignedTo.userID.image : ""}
                   fallback="a"
                 />
               </Table.Cell>

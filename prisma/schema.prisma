@@ -22,7 +22,6 @@ model User {
   isMaster      Boolean        @default(false)
   isAdmin       Boolean        @default(false)
   Membersof     Members[]
-  Tasks         Tasks[]
   subtask       subtask[]
   accounts      Account[]
   sessions      Session[]
@@ -113,18 +112,18 @@ model Project {
 }
 
 model Tasks {
-  id          String       @unique @db.VarChar(255)
-  taskname    String?      @db.Text
-  description String?      @db.Text
-  prority     TaskPriority @default(LOW)
-  status      TaskStatus   @default(OPEN)
+  id          String        @unique @db.VarChar(255)
+  taskname    String?       @db.Text
+  description String?       @db.Text
+  prority     TaskPriority  @default(LOW)
+  status      TaskStatus    @default(OPEN)
   duedate     DateTime?
-  assigned_By String?      @db.VarChar(255)
-  assignedBy  User?        @relation("AssignedBy", fields: [assigned_By], references: [id])
-  assigned_To String?      @db.VarChar(255)
-  assignedTo  User?        @relation(fields: [assigned_To], references: [id])
-  projectid   Project      @relation(fields: [projectId], references: [id])
-  projectId   String       @db.VarChar(255)
+  assigned_By String?       @db.VarChar(255)
+  assignedBy  User?         @relation("AssignedBy", fields: [assigned_By], references: [id])
+  assigned_To String?       @db.VarChar(255)
+  assignedTo  Collabrators? @relation(fields: [assigned_To], references: [id])
+  projectid   Project       @relation(fields: [projectId], references: [id])
+  projectId   String        @db.VarChar(255)
   subtask     subtask[]
 }
 
@@ -155,6 +154,7 @@ model Collabrators {
   userID        User         @relation(fields: [userid], references: [id])
   roleid        ProjectRole? @relation(fields: [projectRoleId], references: [id])
   projectRoleId String?      @db.VarChar(255)
+  Tasks         Tasks[]
 }
 
 model ProjectRole {

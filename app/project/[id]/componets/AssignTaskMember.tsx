@@ -1,16 +1,23 @@
 "use client";
 import { Avatar, Box, Flex, Select, Tooltip, Text } from "@radix-ui/themes";
 import axios from "axios";
+import { Tasks } from "prisma/prisma-client";
 import React, { useEffect, useState } from "react";
 
 const AssignTaskMember = ({
   id,
-  _SetASSIGNEECHANGE,
-  colabid,
+  AssignedColId,
+  AssignedColsrc,
+  isChange,
+  task,
+  updateSelect,
 }: {
   id: string;
-  _SetASSIGNEECHANGE: any;
-  colabid: string;
+  AssignedColId: string;
+  AssignedColsrc: string;
+  task: any;
+  isChange: any;
+  updateSelect: any;
 }) => {
   const [_src, _setSrc] = useState<string>("");
   const [_Collabrators, _setCollabs] = useState<any>();
@@ -25,7 +32,8 @@ const AssignTaskMember = ({
       .then((value) => {
         if (value.status == 200) {
           _setCollabs(value.data.data);
-          //
+          setDefaultCal(AssignedColId);
+          _setSrc(AssignedColsrc);
         }
       })
       .catch((err) => {});
@@ -33,11 +41,7 @@ const AssignTaskMember = ({
 
   useEffect(() => {
     if (_Collabrators) {
-      _Collabrators.map((e: any) => {
-        if (e.userID.id == colabid) {
-          setDefaultCal(e.id);
-        }
-      });
+      _Collabrators.map((e: any) => {});
     }
   }, [_Collabrators]);
 
@@ -51,8 +55,22 @@ const AssignTaskMember = ({
               if (impl.id == e) return impl;
             });
 
-            _SetASSIGNEECHANGE(Coll ? Coll.userID.id : null);
             _setSrc(Coll ? Coll.userID.image : "");
+            const Ut: Tasks = {
+              id: task.id,
+              taskname: task.taskname,
+              status: task.status,
+              prority: task.prority,
+              projectId: id,
+              duedate: task.duedate,
+              description: task.description,
+              assigned_By: task.assigned_By,
+              assigned_To: Coll.id,
+            };
+            task.assigned_To = Coll.id;
+            console.log("ASSIN : " + JSON.stringify(Ut));
+            updateSelect(Ut);
+            isChange(true);
           }}
         >
           <Select.Trigger
