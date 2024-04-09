@@ -6,7 +6,7 @@ import Logo from "../componets/Logo";
 import { AiFillGoogleSquare } from "react-icons/ai";
 import { FiGithub, FiInfo, FiTwitter, FiXSquare } from "react-icons/fi";
 
-const page = () => {
+const SignupPage = () => {
   const [error, seterror] = useState<boolean>(false);
 
   return (
@@ -51,8 +51,8 @@ const page = () => {
         Sign up and join the <Strong>Canvonest</Strong> community!
       </Text>
       <Text className=" text-white" weight={"light"} size={"3"}>
-        "Ready to dive in? Create your account today and start experiencing all
-        the features."
+        &quot;Ready to dive in? Create your account today and start experiencing
+        all the features.&quot;
       </Text>
       <br />
       <Logo w={200} h={200} />
@@ -97,4 +97,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default SignupPage;

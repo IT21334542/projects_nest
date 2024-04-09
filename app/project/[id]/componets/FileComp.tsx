@@ -1,6 +1,7 @@
 "use client";
 import { Button, Flex, Text } from "@radix-ui/themes";
 import axios from "axios";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { FiTrash2 } from "react-icons/fi";
 
@@ -36,12 +37,12 @@ const FileComp = ({
       .catch((err) => {
         console.error("Error in fetching space files inside the rtask" + err);
       });
-  }, []);
+  }, [spaceid]);
 
   useEffect(() => {
     SelectionArray(FilesSelected);
     console.log("2ND @ISER");
-  }, [FilesSelected]);
+  }, [FilesSelected, SelectionArray]);
 
   function getSrc(type: string) {
     let view: string | null = "";
@@ -77,7 +78,8 @@ const FileComp = ({
                   justify={"center"}
                   align={"center"}
                 >
-                  <img
+                  <Image
+                    alt=""
                     src={getSrc(file.type) ? getSrc(file.type) : file.url}
                     className=" object-cover w-full aspect-video h-full"
                   />

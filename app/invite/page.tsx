@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import Logo from "../componets/Logo";
 import Link from "next/link";
+import Image from "next/image";
 
 const Invitepage = () => {
   const { data } = useSession();
@@ -43,7 +44,7 @@ const Invitepage = () => {
           console.error("FRONT ERROR INVITE-P " + err);
         });
     }
-  }, [_Refresh]);
+  }, [_Refresh, data, Router]);
 
   function AcceptRequest(Iid: string) {
     axios
@@ -91,7 +92,7 @@ const Invitepage = () => {
                 >
                   <Flex direction={"column"} gapY={"2"}>
                     <Inset clip="padding-box" side="top" pb="current">
-                      <img
+                      <Image
                         src="https://images.pexels.com/photos/1679618/pexels-photo-1679618.jpeg?auto=compress&cs=tinysrgb&w=600"
                         alt="Invite Image"
                         style={{
