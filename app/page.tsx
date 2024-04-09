@@ -88,7 +88,7 @@ export default function MyApp() {
 
       //IF MASTER GO TO ALL SPACE PAGE
     }
-  }, [data, status, router]);
+  }, [data]);
 
   return (
     <>
