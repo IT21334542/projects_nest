@@ -62,23 +62,25 @@ const SpaceComponets = () => {
 
   useEffect(() => {
     setisLoading(true);
-    axios
-      .get("/api/space", {
-        params: {
-          Ur: data?.user.id,
-        },
-      })
-      .then((value) => {
-        if (value.status == 200) {
-          _setSpaceList(value.data.data);
+    if (data) {
+      axios
+        .get("/api/space", {
+          params: {
+            Ur: data?.user.id,
+          },
+        })
+        .then((value) => {
+          if (value.status == 200) {
+            _setSpaceList(value.data.data);
+            setisLoading(false);
+          }
+        })
+        .catch((err) => {
+          console.log("Log.D error in fetching Spaces :" + err);
           setisLoading(false);
-        }
-      })
-      .catch((err) => {
-        console.log("Log.D error in fetching Spaces :" + err);
-        setisLoading(false);
-      });
-  }, [data]);
+        });
+    }
+  }, [data, _SpaceList]);
 
   return (
     <Flex
