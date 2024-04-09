@@ -88,7 +88,7 @@ export default function MyApp() {
 
       //IF MASTER GO TO ALL SPACE PAGE
     }
-  }, [data, status]);
+  }, [data, status, router]);
 
   return (
     <>
@@ -106,7 +106,7 @@ export default function MyApp() {
             align={"center"}
           >
             <Text className=" text-white" weight={"light"} size={"9"}>
-              "Welcome to <Strong>Canvonest</Strong>!{" "}
+              &quot;Welcome to <Strong>Canvonest</Strong>!{" "}
             </Text>
             <Text className=" text-white" size={"5"}>
               {" "}
@@ -130,7 +130,7 @@ export default function MyApp() {
             align={"center"}
           >
             <Text className=" text-white" weight={"light"} size={"9"}>
-              "Welcome to <Strong>Canvonest</Strong>!{" "}
+              &quot;Welcome to <Strong>Canvonest</Strong>!{" "}
             </Text>
             <Text className=" text-white" size={"5"}>
               {" "}

@@ -31,6 +31,7 @@ import { TasksPage } from "./TasksPage.2";
 import axios from "axios";
 import MessagenoIcon from "./componets/MessagenoIcon";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const DropMenu = ({ title }: { title: String }) => {
   return (
@@ -100,7 +101,11 @@ const FilesPage = ({ project }: { project: any }) => {
   return (
     <Grid>
       <Flex className=" h-full w-full" direction={"column"} align={"center"}>
-        <img src="/nofiles.png" className=" object-contain aspect-auto w-1/3" />
+        <Image
+          alt=""
+          src="/nofiles.png"
+          className=" object-contain aspect-auto w-1/3"
+        />
         <Flex
           className=" w-full"
           gap={"5"}
@@ -149,7 +154,7 @@ const ProjectPage = ({ params: { id } }: { params: { id: String } }) => {
       .catch((err) => {
         console.error("Errr proj p " + err);
       });
-  }, []);
+  }, [id]);
 
   return (
     <Flex

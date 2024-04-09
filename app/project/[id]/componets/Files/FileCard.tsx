@@ -1,5 +1,6 @@
 import { Flex, Text } from "@radix-ui/themes";
 import axios from "axios";
+import Image from "next/image";
 import React, { useState } from "react";
 import { FiTrash, FiTrash2, FiXOctagon } from "react-icons/fi";
 
@@ -38,7 +39,8 @@ const FileCard = ({
     <Flex className=" w-64 rounded-md  h-16 bg-white rounded-l-md">
       <Flex className=" w-full h-full bg-zinc-200 bg-opacity-30 rounded-l-md ">
         <Flex className=" w-3/12 rounded-xl h-full rounded-l-md border">
-          <img
+          <Image
+            alt=""
             className=" object-cover aspect-video w-full rounded-l-md cursor-pointer "
             src={getSrc(type) ? getSrc(type)! : url}
             onClick={() => {

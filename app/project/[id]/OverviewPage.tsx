@@ -40,7 +40,7 @@ export const OverviewPage = ({ prj, desc }: { prj: string; desc: string }) => {
       .catch((err) => {
         console.error("Front errov OverPrj L" + err);
       });
-  }, []);
+  }, [prj]);
 
   return (
     <Grid justify={"center"}>

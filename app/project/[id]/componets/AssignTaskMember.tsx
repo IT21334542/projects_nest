@@ -37,7 +37,7 @@ const AssignTaskMember = ({
         }
       })
       .catch((err) => {});
-  }, []);
+  }, [AssignedColId, AssignedColsrc, id]);
 
   useEffect(() => {
     if (_Collabrators) {
