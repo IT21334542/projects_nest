@@ -85,6 +85,20 @@ export async function PATCH(request:NextRequest) {
         }
     })
 
+
+    await prisma.user.update({
+        where:{
+            id:Uid!
+        },
+        data:{
+            isMaster:false,
+            
+        }
+    })
+
+   
+
+
     if(INVITE?.roleId.name.toLocaleLowerCase().includes("admin"))
     {
         await prisma.user.update({
@@ -102,6 +116,12 @@ export async function PATCH(request:NextRequest) {
             message:UPDATEDINVITE
         },{status:200})
     }
+    
+    return NextResponse.json({
+        Message:"Invite Accepted",
+        message:UPDATEDINVITE
+    },{status:200})
+
 
     }catch(err)
     {

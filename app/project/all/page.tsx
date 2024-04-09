@@ -1,6 +1,15 @@
 "use client";
-import { Button, Flex, Separator, Table, Text } from "@radix-ui/themes";
+import {
+  Avatar,
+  Button,
+  Flex,
+  Separator,
+  Table,
+  Text,
+  Tooltip,
+} from "@radix-ui/themes";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -16,26 +25,23 @@ interface Project {
 
 const Projectspage = () => {
   const router = useRouter();
-  const [_ProjectsList, _SetProjectsList] = useState<Project[]>([
-    {
-      id: "",
-      name: "",
-      OwnerId: "",
-      Members: "",
-      spaceId: "",
-    },
-  ]);
+  const { data } = useSession();
+  const [_ProjectsList, _SetProjectsList] = useState<any[] | null>();
 
   useEffect(() => {
     axios
-      .get("/api/projects")
+      .get("/api/projects", {
+        params: {
+          Ur: data?.user.id,
+        },
+      })
       .then((response) => {
         _SetProjectsList(response.data.data);
       })
       .catch((err) => {
         console.log("LOg.D Error in fetching-Frontend" + err);
       });
-  }, []);
+  }, [data]);
 
   return (
     <Flex
@@ -81,33 +87,59 @@ const Projectspage = () => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {_ProjectsList.map((project, index) => {
-            return (
-              <Table.Row
-                key={index}
-                className=" border border-white border-r-0 border-l-0 cursor-pointer"
-                onClick={() => {
-                  router.push("/project/" + project.id);
-                }}
-              >
-                <Table.RowHeaderCell className=" text-white">
-                  <Flex align={"end"} gap={"2"}>
-                    <FiLayout color="#ffffff" size={"2em"} />
-                    {project.name}
-                  </Flex>
-                </Table.RowHeaderCell>
-                <Table.Cell className=" text-white">
-                  {project.OwnerId}
-                </Table.Cell>
-                <Table.Cell className=" text-white">
-                  {project.Members}
-                </Table.Cell>
-                <Table.Cell className=" text-white">
-                  {project.spaceId}
-                </Table.Cell>
-              </Table.Row>
-            );
-          })}
+          <>
+            {_ProjectsList && (
+              <>
+                {_ProjectsList.map((project: any, index: number) => {
+                  return (
+                    <Table.Row
+                      key={index}
+                      className=" border border-white border-r-0 border-l-0 cursor-pointer"
+                      onClick={() => {
+                        router.push("/project/" + project.id);
+                      }}
+                    >
+                      <Table.RowHeaderCell className=" text-white">
+                        <Flex align={"end"} gap={"2"}>
+                          <FiLayout color="#ffffff" size={"2em"} />
+                          {project.name}
+                        </Flex>
+                      </Table.RowHeaderCell>
+                      <Table.Cell className=" text-white">
+                        {project.Ownerid.name}
+                      </Table.Cell>
+                      <Table.Cell className=" text-white">
+                        {project.Collabrators && (
+                          <>
+                            {project.Collabrators.map(
+                              (col: any, index: number) => {
+                                return (
+                                  <Tooltip
+                                    key={index}
+                                    content={col.userID.name}
+                                  >
+                                    <Avatar
+                                      src={col.userID.image}
+                                      fallback="?"
+                                      radius="full"
+                                      size={"2"}
+                                    />
+                                  </Tooltip>
+                                );
+                              }
+                            )}
+                          </>
+                        )}
+                      </Table.Cell>
+                      <Table.Cell className=" text-white">
+                        {project.spaceid.name}
+                      </Table.Cell>
+                    </Table.Row>
+                  );
+                })}
+              </>
+            )}
+          </>
         </Table.Body>
       </Table.Root>
     </Flex>

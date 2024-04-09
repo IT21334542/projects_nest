@@ -19,7 +19,7 @@ model User {
   email         String?        @unique
   emailVerified DateTime?
   image         String?
-  isMaster      Boolean        @default(false)
+  isMaster      Boolean        @default(true)
   isAdmin       Boolean        @default(false)
   Membersof     Members[]
   accounts      Account[]

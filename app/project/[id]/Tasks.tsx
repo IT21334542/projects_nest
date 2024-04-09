@@ -7,6 +7,7 @@ import {
   Flex,
   Grid,
   Popover,
+  Spinner,
   Table,
   Text,
   TextArea,
@@ -35,10 +36,36 @@ import FileCard from "./componets/Files/FileCard";
 import Calendar from "react-calendar";
 import { CiShoppingBasket } from "react-icons/ci";
 import FileComp from "./componets/FileComp";
+import { FileUpload } from "primereact/fileupload";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { FbaseApp } from "@/app/componets/FirebaseConfig";
+import Logo from "@/app/componets/Logo";
+import { BarLoader } from "react-spinners";
+interface UploadC {
+  name: string;
+  type: string;
+  url: string;
+  spaceId: string;
+  projectId: string;
+  tasksId: string;
+}
+
+function generateRandomString(length: number) {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
+  const charactersLength = characters.length;
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
 
 const Tasks = (props: { taskopen: any; task: String }) => {
   const [_FilesMap, _setFilesMap] = useState<any[]>();
   const Scroll = useScroll();
+  const firebaseApp = FbaseApp;
+  const Storage = getStorage(firebaseApp);
   const { taskopen } = props;
   const [Tsk, setTsk] = useState<any>();
   const [imageSel, setImageselection] = useState<boolean>(false);
@@ -47,6 +74,73 @@ const Tasks = (props: { taskopen: any; task: String }) => {
   const [isAdd, setIsAdd] = useState<boolean>(false);
   const [isFilesadded, setFilesAdded] = useState<boolean>(false);
   const [DEsc, setDesc] = useState<string | null>(null);
+  const [Farr, setFA] = useState<UploadC[] | null>(null);
+  const [isUploadingdb, setIsUploaddb] = useState<boolean>(false);
+  const [isUploading, setIsUpload] = useState<boolean>(false);
+
+  //SUBTASKs
+  const [STnamechanged, STsetNameChanged] = useState<string | null>(null);
+  const [STrow, STsetRow] = useState<String | null>(null);
+  const [STpreRow, STsetPreRow] = useState<String | null>(null);
+
+  useEffect(() => {
+    if (STrow) {
+      console.log("Entered row number" + STrow);
+      STsetPreRow(STrow);
+    } else {
+      if (STnamechanged) {
+        axios
+          .patch(
+            "/api/subtask",
+            {
+              taskname: STnamechanged,
+            },
+            {
+              params: {
+                SubtaskId: STpreRow,
+              },
+            }
+          )
+          .then((v) => {
+            if (v.status == 200) {
+              setFilesAdded(true);
+            }
+          })
+          .catch((err) => {
+            console.error("object" + err);
+          });
+        console.log(
+          "Saving name of Row" + STpreRow + ".... name is" + STnamechanged
+        );
+      }
+    }
+  }, [STrow]);
+
+  //related files upload , upload url of the uploaded file to db (called after file is added to fire store)
+  useEffect(() => {
+    if (isUploadingdb && Farr) {
+      axios
+        .post("/api/files", Farr, {
+          params: {
+            space: Tsk.projectid.spaceid.id,
+          },
+        })
+        .then((d) => {
+          if (d.status == 201) {
+            setFA(null);
+            setIsUpload(false);
+            setIsUploaddb(false);
+            setFilesAdded(true);
+          }
+        })
+        .catch((err) => {
+          console.error("front error files space:p" + err);
+        });
+    } else {
+    }
+  }, [isUploadingdb, Farr]);
+
+  //setiing task details to varible by fetching
   useEffect(() => {
     axios
       .get("/api/task/Tasks", {
@@ -66,6 +160,7 @@ const Tasks = (props: { taskopen: any; task: String }) => {
       });
   }, [isSubadded, isFilesadded]);
 
+  // Adding new Subtask
   useEffect(() => {
     if (isAdd) {
       axios
@@ -249,7 +344,50 @@ const Tasks = (props: { taskopen: any; task: String }) => {
               <Tooltip content="Upload new file">
                 <Button color="brown" className=" hover:cursor-pointer">
                   <FiUploadCloud color="#ffffff" />
-                  Upload
+                  {isUploading && <Spinner />}
+                  <FileUpload
+                    multiple
+                    auto
+                    mode="basic"
+                    chooseLabel="Upload"
+                    onUpload={(event) => {
+                      setIsUpload(true);
+                      const filearry: UploadC[] = [];
+                      const MultiFiles = event.files;
+                      MultiFiles.map((File, index) => {
+                        const StorageRef = ref(
+                          Storage,
+                          "filesofCANVONEST/" + generateRandomString(5)
+                        );
+                        uploadBytes(StorageRef, File)
+                          .then((res) => {
+                            getDownloadURL(res.ref)
+                              .then((res) => {
+                                const F: UploadC = {
+                                  name: File.name,
+                                  type: File.type,
+                                  url: res,
+                                  spaceId: Tsk.projectid.spaceid.id,
+                                  projectId: Tsk.projectid.id,
+                                  tasksId: Tsk.id,
+                                };
+
+                                filearry.push(F);
+                                if (index == MultiFiles.length - 1) {
+                                  setFA(filearry);
+                                  setIsUploaddb(true);
+                                }
+                              })
+                              .catch((err) => {
+                                console.error("Download url error " + err);
+                              });
+                          })
+                          .catch((err) => {
+                            console.error("Upload Error" + err);
+                          });
+                      });
+                    }}
+                  />
                 </Button>
               </Tooltip>
             </Flex>
@@ -391,6 +529,7 @@ const Tasks = (props: { taskopen: any; task: String }) => {
                         name={file.name}
                         url={file.url}
                         type={file.type}
+                        setAdded={setFilesAdded}
                       />
                     );
                   })}
@@ -398,6 +537,8 @@ const Tasks = (props: { taskopen: any; task: String }) => {
               </Flex>
             )}
           </Flex>
+
+          {/* Subtasks */}
 
           <Flex direction={"column"} className=" text-white">
             <Text
@@ -407,7 +548,7 @@ const Tasks = (props: { taskopen: any; task: String }) => {
             >
               SubTasks
             </Text>
-            <Flex className=" w-full border" direction={"column"}>
+            <Flex className=" w-full " direction={"column"}>
               {/* Btn Add subtask */}
               <Flex
                 className=" w-full h-14 mb-2 border-b"
@@ -432,52 +573,83 @@ const Tasks = (props: { taskopen: any; task: String }) => {
                     <Table.ColumnHeaderCell className=" border-b border-t">
                       Name
                     </Table.ColumnHeaderCell>
-                    <Table.ColumnHeaderCell className=" border-b border-t">
-                      DueDate
-                    </Table.ColumnHeaderCell>
                   </Table.Header>
                   <Table.Body>
-                    <Table.Row>
-                      <Table.Cell
-                        className=" text-white hover:border"
-                        colSpan={2}
-                      >
-                        <TextField.Root
-                          className=" hover:border"
-                          placeholder=""
-                          variant="soft"
-                          color="brown"
-                          defaultValue={"kumar"}
-                          style={{
-                            backgroundColor: "#292A2C",
-                            color: "white",
-                          }}
-                        />
-                      </Table.Cell>
-                      <Table.Cell
-                        className=" text-white hover:border"
-                        colSpan={1}
-                      >
-                        <Popover.Root>
-                          <Popover.Trigger>
-                            <Button variant="soft">
-                              <FiCalendar width="16" height="16" />
-                            </Button>
-                          </Popover.Trigger>
-                          <Popover.Content>
-                            <Popover.Close>
-                              <Button>Clopse</Button>
-                            </Popover.Close>
-                          </Popover.Content>
-                        </Popover.Root>
-                      </Table.Cell>
-                    </Table.Row>
+                    {Tsk.subtask && (
+                      <>
+                        {Tsk.subtask.map((Stsk: any, index: any) => {
+                          return (
+                            <Table.Row
+                              key={index}
+                              onClick={() => {
+                                STsetRow(Stsk.id);
+                              }}
+                              onBlur={() => {
+                                STsetRow(null);
+                              }}
+                            >
+                              <Table.Cell
+                                className=" text-white hover:border"
+                                colSpan={2}
+                              >
+                                <TextField.Root
+                                  className=" hover:border"
+                                  onChange={(e) => {
+                                    STsetNameChanged(e.currentTarget.value);
+                                  }}
+                                  placeholder=""
+                                  variant="soft"
+                                  color="brown"
+                                  defaultValue={
+                                    Stsk.taskname ? Stsk.taskname : ""
+                                  }
+                                  style={{
+                                    backgroundColor: "#292A2C",
+                                    color: "white",
+                                  }}
+                                />
+                              </Table.Cell>
+                              {/* Due date - hidden for V1 */}
+                              {/* <Table.Cell
+                                className=" text-white hover:border"
+                                colSpan={1}
+                              >
+                                <Popover.Root>
+                                  <Popover.Trigger>
+                                    <Button variant="soft">
+                                      <FiCalendar width="16" height="16" />
+                                    </Button>
+                                  </Popover.Trigger>
+                                  <Popover.Content>
+                                    <Popover.Close>
+                                      <Button>Clopse</Button>
+                                    </Popover.Close>
+                                  </Popover.Content>
+                                </Popover.Root>
+                              </Table.Cell> */}
+                            </Table.Row>
+                          );
+                        })}
+                      </>
+                    )}
                   </Table.Body>
                 </Table.Root>
               </Flex>
             </Flex>
           </Flex>
         </Grid>
+      )}
+      {!Tsk && (
+        <motion.div>
+          <Flex
+            className=" w-full h-full justify-center items-center text-white"
+            direction={"column"}
+          >
+            <Logo w={200} h={200} />
+            <Text>Loading...</Text>
+            <BarLoader color="#ffffff" />
+          </Flex>
+        </motion.div>
       )}
     </Flex>
   );

@@ -16,6 +16,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { AiFillFolder } from "react-icons/ai";
 import { FiFolder, FiPlus } from "react-icons/fi";
+import { BarLoader } from "react-spinners";
 
 function capitalizeFirstLetter(s: String) {
   return s.charAt(0).toUpperCase() + s.slice(1);
@@ -55,25 +56,29 @@ const SpaceCard = ({ title }: { title: String }) => {
 };
 
 const SpaceComponets = () => {
-  const [_SpaceList, _setSpaceList] = useState<Space[]>([
-    {
-      id: "",
-      description: "",
-      createdby: "",
-      name: "",
-    },
-  ]);
+  const { data } = useSession();
+  const [_SpaceList, _setSpaceList] = useState<Space[] | null>(null);
+  const [isloading, setisLoading] = useState<boolean>(false);
 
   useEffect(() => {
+    setisLoading(true);
     axios
-      .get("/api/space")
+      .get("/api/space", {
+        params: {
+          Ur: data?.user.id,
+        },
+      })
       .then((value) => {
-        _setSpaceList(value.data.data);
+        if (value.status == 200) {
+          _setSpaceList(value.data.data);
+          setisLoading(false);
+        }
       })
       .catch((err) => {
         console.log("Log.D error in fetching Spaces :" + err);
+        setisLoading(false);
       });
-  }, []);
+  }, [data]);
 
   return (
     <Flex
@@ -100,7 +105,17 @@ const SpaceComponets = () => {
           </Button>
         </Link>
       </Flex>
-      {_SpaceList.length == 0 && (
+      {isloading && (
+        <Flex
+          className=" w-full h-full"
+          justify={"center"}
+          align={"center"}
+          mt={"8"}
+        >
+          <BarLoader color="#ffffff" />
+        </Flex>
+      )}
+      {!_SpaceList && !isloading && (
         <Flex
           className=" h-full w-full"
           align={"center"}
@@ -119,14 +134,18 @@ const SpaceComponets = () => {
         </Flex>
       )}
 
-      {_SpaceList.length != 0 && (
-        <Grid columns={"4"} p={"6"} gap={"6"}>
-          {_SpaceList.map((space, index) => (
-            <Link key={index} href={"/space/" + space.id}>
-              <SpaceCard title={capitalizeFirstLetter(space.name)} />
-            </Link>
-          ))}
-        </Grid>
+      {_SpaceList && !isloading && (
+        <>
+          {_SpaceList.length != 0 && (
+            <Grid columns={"4"} p={"6"} gap={"6"}>
+              {_SpaceList.map((space, index) => (
+                <Link key={index} href={"/space/" + space.id}>
+                  <SpaceCard title={capitalizeFirstLetter(space.name)} />
+                </Link>
+              ))}
+            </Grid>
+          )}
+        </>
       )}
     </Flex>
   );

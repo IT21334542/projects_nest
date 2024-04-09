@@ -14,7 +14,21 @@ export async function GET(request:NextRequest){
                 id:Userid!
             },
             include:{
-                Space:true
+                Space:true,
+                colleague:{
+                    include:{
+                        spaceId:true
+                    }
+                },
+                Collabrators:{
+                    include:{
+                        projectid:{
+                            include:{
+                                spaceid:true
+                            }
+                        }
+                    }
+                }
             }
         })
 

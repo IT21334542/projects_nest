@@ -142,6 +142,31 @@ export async function PATCH(req:NextRequest){
             }
 
     }
+
+
+    if(updateaction == "RvmTask"){
+        try {
+            const Updated=await prisma.files.update({
+                data:{
+                    tasksId:null
+                },
+                where:{
+                    id:body.taskid
+                }
+            })
+
+            if(Updated)
+            return NextResponse.json({
+            message:"Updated"},{status:200})
+            
+        } catch (error) {
+            console.error("Error db"+ error);
+            return NextResponse.json({
+                errorcode:"Db error",
+                error: error
+            },{status:500})
+        }
+    }
     
 
 
