@@ -95,7 +95,7 @@ model SpaceRole {
 model Project {
   id           String         @unique @db.VarChar(255)
   name         String         @db.VarChar(255)
-  description  String?        @default("") @db.Text
+  description  String?        @default("_") @db.Text
   dueDate      DateTime?
   status       ProjectStatus  @default(OPEN)
   createdAt    DateTime       @default(now())
