@@ -79,30 +79,36 @@ const SingleSpacePage = ({ params: { id } }: { params: { id: String } }) => {
   const [isChangeMade, _setChangeMade] = useState<string | null>();
 
   useEffect(() => {
-    axios
-      .get("/api/space/" + id)
-      .then((value) => {
-        _setSpace(value.data.data);
-      })
-      .catch((err) => {
-        console.log("ERROR Front" + err);
-      });
-  }, []);
+    if (!isChangeMade) {
+      axios
+        .get("/api/space/" + id)
+        .then((value) => {
+          _setSpace(value.data.data);
+        })
+        .catch((err) => {
+          console.log("ERROR Front" + err);
+        });
+    }
+  }, [isChangeMade]);
 
   useEffect(() => {
-    const Sp = {
-      id: _Space?.id,
-      name: _Space?.name,
-      description: isChangeMade,
-      createdby: _Space?.createdby,
-    };
+    if (isChangeMade) {
+      const Sp = {
+        id: _Space?.id,
+        name: _Space?.name,
+        description: isChangeMade,
+        createdby: _Space?.createdby,
+      };
 
-    axios
-      .put("/api/space/" + id, Sp)
-      .then((value) => {})
-      .catch((err) => {
-        console.log("ERROR Front" + err);
-      });
+      axios
+        .put("/api/space/" + id, Sp)
+        .then((value) => {
+          _setChangeMade(null);
+        })
+        .catch((err) => {
+          console.log("ERROR Front" + err);
+        });
+    }
   }, [isChangeMade]);
 
   return (
