@@ -72,6 +72,7 @@ const SpaceComponets = () => {
         .then((value) => {
           if (value.status == 200) {
             _setSpaceList(value.data.data);
+            console.log("has list of space");
             setisLoading(false);
           }
         })
