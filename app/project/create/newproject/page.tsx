@@ -49,15 +49,20 @@ const BlankProjectpage = () => {
   const router = useRouter();
 
   useEffect(() => {
+    axios;
     axios
-      .get("/api/space")
+      .get("/api/space", {
+        params: {
+          Ur: Session.data?.user.id,
+        },
+      })
       .then((value) => {
         _setSpaceList(value.data.data);
       })
       .catch((err) => {
         console.log("Log.D error in fetching Spaces :" + err);
       });
-  }, []);
+  }, [Session]);
 
   return (
     <Flex

@@ -49,3 +49,50 @@ export async function POST(req:NextRequest) {
 
     
 }
+
+export async function PATCH(req:NextRequest) {
+    const {searchParams} = new URL(req.url);
+    const body = await req.json();
+    const Subtaskid  = searchParams.get("SubtaskId");
+
+
+
+    if(!Subtaskid){
+        return NextResponse.json({
+            messg: "No valid request",
+            error:" no id of subbtask"
+        },{status:400})
+
+    }
+
+    try {
+        const Updated = await prisma.subtask.update({
+            data:{
+                taskname:body.taskname
+            },
+            where:{
+                id:Subtaskid
+            }
+        })
+
+
+        if(Updated)
+            {
+                return NextResponse.json({
+                    message: "Creation successful",
+                    data:Updated
+                },{status:200});
+            }
+        
+    } catch (error) {
+        console.error("Error db subtask"+error);
+        return NextResponse.json({
+            mess:"err db",
+            error:error
+        },{status:500})
+        
+    }
+ 
+
+    
+}

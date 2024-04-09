@@ -20,6 +20,8 @@ import AssignTaskMember from "./componets/AssignTaskMember";
 import Calendar from "react-calendar";
 import axios from "axios";
 import { TaskPriority, TaskStatus, Tasks } from "prisma/prisma-client";
+import { BarLoader, SyncLoader } from "react-spinners";
+import { motion } from "framer-motion";
 
 const ProrityCompoent = ({
   prority,
@@ -278,6 +280,9 @@ export const TasksPage = (props: { setFun: any; Id: string }) => {
   const [isSubmiting, setSubmiting] = useState<boolean>(false);
   const [SubmitError, SetSubmiterror] = useState<boolean>(false);
 
+  //loading spinner until fetch
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   useEffect(() => {
     if (isChanged) {
       if (!isSubmiting) {
@@ -307,6 +312,7 @@ export const TasksPage = (props: { setFun: any; Id: string }) => {
 
   //get tasks
   useEffect(() => {
+    setIsLoading(true);
     axios
       .get("/api/task/", {
         params: {
@@ -316,10 +322,12 @@ export const TasksPage = (props: { setFun: any; Id: string }) => {
       .then((value) => {
         if (value.status == 200) {
           setAllTAsks(value.data.data);
+          setIsLoading(false);
         }
       })
       .catch((err) => {
         console.error("Front error task:p " + err);
+        setIsLoading(false);
       });
   }, [isTaskAdded]);
 
@@ -374,147 +382,176 @@ export const TasksPage = (props: { setFun: any; Id: string }) => {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {!TasksAll && <Spinner size={"3"} />}
-              {TasksAll && (
+              {TasksAll && !isLoading && (
                 <>
-                  {TasksAll.map((task: any, index: number) => {
-                    return (
-                      <Table.Row
-                        key={index}
-                        align="center"
-                        className="  rounded-full hover:bg-[#292A2C] cursor-pointer mt-2"
+                  <>
+                    {TasksAll.length == 0 && (
+                      <Flex
+                        className=" w-full h-72"
+                        justify={"center"}
+                        align={"center"}
                       >
-                        {/* TASK NAME */}
-                        <Table.RowHeaderCell
-                          className=" text-white hover:border "
-                          onClick={() => {
-                            if (!_isElement) {
-                              props.setFun(task.id);
-                            }
-                          }}
+                        <SyncLoader color="#ffffff" size={"20"} />
+                      </Flex>
+                    )}
+                  </>
+                  <>
+                    {TasksAll.map((task: any, index: number) => {
+                      return (
+                        <Table.Row
+                          key={index}
+                          align="center"
+                          className="  rounded-full hover:bg-[#292A2C] cursor-pointer mt-2"
                         >
-                          <Flex align={"center"} gap={"2"}>
-                            <Tooltip
-                              content="Mark As Complete"
-                              style={{
-                                color: "#ffffff",
-                                backgroundColor: "#ffffff",
-                              }}
-                              className=" text-white"
-                            >
-                              <FiCheckCircle
-                                color="#ffffff"
-                                size={"2em"}
+                          {/* TASK NAME */}
+                          <Table.RowHeaderCell
+                            className=" text-white hover:border "
+                            onClick={() => {
+                              if (!_isElement) {
+                                props.setFun(task.id);
+                              }
+                            }}
+                          >
+                            <Flex align={"center"} gap={"2"}>
+                              <Tooltip
+                                content="Mark As Complete"
+                                style={{
+                                  color: "#ffffff",
+                                  backgroundColor: "#ffffff",
+                                }}
+                                className=" text-white"
+                              >
+                                <FiCheckCircle
+                                  color="#ffffff"
+                                  size={"2em"}
+                                  onMouseEnter={() => {
+                                    _setIsElement(true);
+                                  }}
+                                  onMouseLeave={() => {
+                                    _setIsElement(false);
+                                  }}
+                                  className=" border-2 px-0.5  rounded-md border-white border-opacity-0 hover:border-opacity-45 "
+                                  onClick={() => {
+                                    console.log("COMPLETED");
+                                  }}
+                                />
+                              </Tooltip>
+                              <TextField.Root
+                                onChange={(e) => {
+                                  _setNameChange(e.currentTarget.value);
+                                }}
+                                variant="soft"
+                                color="violet"
+                                className=" hover:border border-white border-opacity-20 "
+                                defaultValue={task.taskname}
+                                style={{
+                                  color: "#ffffff",
+                                  background: "#292A2C",
+                                  width: "350px",
+                                }}
+                                placeholder="enter task name..."
+                                onBlur={() => {
+                                  task.taskname = _NameChanged;
+                                  const Ut: Tasks = {
+                                    id: task.id,
+                                    taskname: _NameChanged!,
+                                    status: task.status,
+                                    prority: task.prority,
+                                    projectId: props.Id,
+                                    duedate: task.duedate,
+                                    description: task.description,
+                                    assigned_By: task.assigned_By,
+                                    assigned_To: task.assigned_To,
+                                  };
+                                  console.log("NAME : " + JSON.stringify(Ut));
+                                  SetTaskSelected(Ut);
+                                  setisChange(true);
+                                }}
                                 onMouseEnter={() => {
                                   _setIsElement(true);
                                 }}
                                 onMouseLeave={() => {
                                   _setIsElement(false);
                                 }}
-                                className=" border-2 px-0.5  rounded-md border-white border-opacity-0 hover:border-opacity-45 "
-                                onClick={() => {
-                                  console.log("COMPLETED");
-                                }}
-                              />
-                            </Tooltip>
-                            <TextField.Root
-                              onChange={(e) => {
-                                _setNameChange(e.currentTarget.value);
-                              }}
-                              variant="soft"
-                              color="violet"
-                              className=" hover:border border-white border-opacity-20 "
-                              defaultValue={task.taskname}
-                              style={{
-                                color: "#ffffff",
-                                background: "#292A2C",
-                                width: "350px",
-                              }}
-                              placeholder="enter task name..."
-                              onBlur={() => {
-                                task.taskname = _NameChanged;
-                                const Ut: Tasks = {
-                                  id: task.id,
-                                  taskname: _NameChanged!,
-                                  status: task.status,
-                                  prority: task.prority,
-                                  projectId: props.Id,
-                                  duedate: task.duedate,
-                                  description: task.description,
-                                  assigned_By: task.assigned_By,
-                                  assigned_To: task.assigned_To,
-                                };
-                                console.log("NAME : " + JSON.stringify(Ut));
-                                SetTaskSelected(Ut);
-                                setisChange(true);
-                              }}
-                              onMouseEnter={() => {
-                                _setIsElement(true);
-                              }}
-                              onMouseLeave={() => {
-                                _setIsElement(false);
-                              }}
-                            ></TextField.Root>
-                          </Flex>
-                        </Table.RowHeaderCell>
+                              ></TextField.Root>
+                            </Flex>
+                          </Table.RowHeaderCell>
 
-                        {/* TASK ASSIGNEE */}
-                        <Table.Cell
-                          p={"2"}
-                          className=" text-white hover:border border-white col-span-1"
-                        >
-                          <AssignTaskMember
-                            id={props.Id}
-                            AssignedColId={
-                              task.assignedTo ? task.assignedTo.id : ""
-                            }
-                            AssignedColsrc={
-                              task.assignedTo
-                                ? task.assignedTo.userID.image
-                                : ""
-                            }
-                            task={task}
-                            updateSelect={SetTaskSelected}
-                            isChange={setisChange}
-                          />
-                        </Table.Cell>
+                          {/* TASK ASSIGNEE */}
+                          <Table.Cell
+                            p={"2"}
+                            className=" text-white hover:border border-white col-span-1"
+                          >
+                            <AssignTaskMember
+                              id={props.Id}
+                              AssignedColId={
+                                task.assignedTo ? task.assignedTo.id : ""
+                              }
+                              AssignedColsrc={
+                                task.assignedTo
+                                  ? task.assignedTo.userID.image
+                                  : ""
+                              }
+                              task={task}
+                              updateSelect={SetTaskSelected}
+                              isChange={setisChange}
+                            />
+                          </Table.Cell>
 
-                        {/* DATE DUE */}
-                        <Table.Cell className=" text-white hover:border border-white">
-                          <DueDateCompoent
-                            Exdate={task.duedate ? task.duedate : null}
-                            task={task}
-                            isChange={setisChange}
-                            updateSelect={SetTaskSelected}
-                          />
-                        </Table.Cell>
+                          {/* DATE DUE */}
+                          <Table.Cell className=" text-white hover:border border-white">
+                            <DueDateCompoent
+                              Exdate={task.duedate ? task.duedate : null}
+                              task={task}
+                              isChange={setisChange}
+                              updateSelect={SetTaskSelected}
+                            />
+                          </Table.Cell>
 
-                        {/* TASK STATUS */}
-                        <Table.Cell className=" text-white hover:border border-white">
-                          <StatusComponent
-                            status={task.status}
-                            task={task}
-                            isChange={setisChange}
-                            updateSelect={SetTaskSelected}
-                          />
-                        </Table.Cell>
+                          {/* TASK STATUS */}
+                          <Table.Cell className=" text-white hover:border border-white">
+                            <StatusComponent
+                              status={task.status}
+                              task={task}
+                              isChange={setisChange}
+                              updateSelect={SetTaskSelected}
+                            />
+                          </Table.Cell>
 
-                        {/* Task prorotiy */}
-                        <Table.Cell className=" text-white hover:border border-white">
-                          <ProrityCompoent
-                            prority={task.prority}
-                            task={task}
-                            isChange={setisChange}
-                            updateSelect={SetTaskSelected}
-                          />
-                        </Table.Cell>
-                      </Table.Row>
-                    );
-                  })}
+                          {/* Task prorotiy */}
+                          <Table.Cell className=" text-white hover:border border-white">
+                            <ProrityCompoent
+                              prority={task.prority}
+                              task={task}
+                              isChange={setisChange}
+                              updateSelect={SetTaskSelected}
+                            />
+                          </Table.Cell>
+                        </Table.Row>
+                      );
+                    })}
+                  </>
                 </>
               )}
             </Table.Body>
           </Table.Root>
+          {!TasksAll && !isLoading && (
+            <motion.div>
+              <Flex
+                className=" w-full h-96 mt-10"
+                justify={"center"}
+                align={"center"}
+              >
+                <img src="/vector1.png" className=" object-center  w-1/6" />
+              </Flex>
+            </motion.div>
+          )}
+
+          {isLoading && (
+            <Flex className=" w-full h-72" justify={"center"} align={"center"}>
+              <SyncLoader color="#ffffff" size={"20"} />
+            </Flex>
+          )}
         </Flex>
       </Flex>
     </Grid>

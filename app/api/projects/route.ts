@@ -5,11 +5,33 @@ import { randomUUID } from "crypto";
 
 export async function GET(req:NextRequest) 
 {
+    const {searchParams} = new URL(req.url);
+    const Ur = searchParams.get('Ur');
+
+    if(!Ur)
+        {
+            return NextResponse.json({
+                ErrorCode : "Bad Request",
+                Errors:"No user id"
+               },{status:400})
+
+        }
     try {
         const Spaces =await prisma.project.findMany({
+            where:{
+                Collabrators:{
+                    some:{
+                        userID:{
+                            id:Ur
+                        }
+                    }
+                }
+
+            },
             include:{
                 Ownerid:true,
                 Tasks:true,
+                spaceid:true,
                 Collabrators:{
                     include:{
                         userID:true,

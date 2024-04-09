@@ -1,4 +1,5 @@
 import { Flex, Text } from "@radix-ui/themes";
+import axios from "axios";
 import React, { useState } from "react";
 import { FiTrash, FiTrash2, FiXOctagon } from "react-icons/fi";
 
@@ -7,11 +8,13 @@ const FileCard = ({
   url,
   type,
   id,
+  setAdded,
 }: {
   name: string;
   url: string;
   type: string;
   id: string;
+  setAdded: any;
 }) => {
   const [over, setover] = useState<boolean>(false);
   function getSrc(type: string) {
@@ -55,6 +58,24 @@ const FileCard = ({
           className=" w-2/12  h-full bg-slate-400 bg-opacity-35 border-l border-black  hover:bg-zinc-700 hover:bg-opacity-40"
           align={"center"}
           justify={"center"}
+          onClick={() => {
+            axios
+              .patch(
+                "/api/files",
+                {
+                  taskid: id,
+                },
+                {
+                  params: {
+                    action: "RvmTask",
+                  },
+                }
+              )
+              .then((v) => {
+                if (v.status == 200) setAdded(true);
+              })
+              .catch((e) => {});
+          }}
           onMouseOver={() => {
             setover(true);
           }}

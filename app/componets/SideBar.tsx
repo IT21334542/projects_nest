@@ -1,6 +1,7 @@
 "use client";
 import { Box, Flex, Separator, Text } from "@radix-ui/themes";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React, { ReactNode, useEffect, useState } from "react";
 import {
@@ -141,28 +142,37 @@ const SideBar = ({ indicator }: { indicator: any }) => {
   const [_ShowBar, _setShowBar] = useState<boolean>(true);
   const [_Spaces, _SetSpaces] = useState<GroupTiles[]>([]);
   const [_Project, _SetProject] = useState<GroupTiles[]>([]);
+  const Session = useSession();
 
   useEffect(() => {
     axios
-      .get("/api/space")
+      .get("/api/space", {
+        params: {
+          Ur: Session.data?.user.id,
+        },
+      })
       .then((value) => {
         _SetSpaces(value.data.data);
       })
       .catch((err) => {
         console.log("Log.D error in fetching  Spaces in NavB :" + err);
       });
-  }, []);
+  }, [Session]);
 
   useEffect(() => {
     axios
-      .get("/api/projects")
+      .get("/api/projects", {
+        params: {
+          Ur: Session.data?.user.id,
+        },
+      })
       .then((response) => {
         _SetProject(response.data.data);
       })
       .catch((err) => {
         console.log("LOg.D Error in fetching-Frontend in navB" + err);
       });
-  }, []);
+  }, [Session]);
 
   useEffect(() => {
     _setShowBar(indicator);
