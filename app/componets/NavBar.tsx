@@ -62,34 +62,32 @@ const NavBar = (props: { indicater: any; setter: any }) => {
           </TextField.Root>
         </Box>
 
-        {user && (
-          <DropdownMenu.Root>
-            <DropdownMenu.Trigger>
-              <Flex className=" bg-orange-300 rounded-md ">
-                <Avatar src={user.image} fallback="?" />
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger>
+            <Flex className=" bg-orange-300 rounded-md ">
+              <Avatar src={data?.user.image!} fallback="?" />
+            </Flex>
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Content align="center">
+            <DropdownMenu.Label>
+              <Flex>
+                <Text weight={"medium"} size={"2"}>
+                  {data?.user.name!}
+                </Text>
               </Flex>
-            </DropdownMenu.Trigger>
-            <DropdownMenu.Content align="center">
-              <DropdownMenu.Label>
-                <Flex>
-                  <Text weight={"medium"} size={"2"}>
-                    {user.name}
-                  </Text>
-                </Flex>
-              </DropdownMenu.Label>
-              <DropdownMenu.Label>
-                <Flex>
-                  <Text weight={"medium"} size={"2"}>
-                    {user.email}
-                  </Text>
-                </Flex>
-              </DropdownMenu.Label>
-              <DropdownMenu.Item color="red">
-                <Link href={"/api/auth/signout"}>Sign Out</Link>
-              </DropdownMenu.Item>
-            </DropdownMenu.Content>
-          </DropdownMenu.Root>
-        )}
+            </DropdownMenu.Label>
+            <DropdownMenu.Label>
+              <Flex>
+                <Text weight={"medium"} size={"2"}>
+                  {data?.user.email}
+                </Text>
+              </Flex>
+            </DropdownMenu.Label>
+            <DropdownMenu.Item color="red">
+              <Link href={"/api/auth/signout"}>Sign Out</Link>
+            </DropdownMenu.Item>
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
       </Flex>
     </nav>
   );
