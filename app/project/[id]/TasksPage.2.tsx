@@ -8,6 +8,7 @@ import {
   Grid,
   Popover,
   Select,
+  Spinner,
   Table,
   Text,
   TextField,
@@ -19,19 +20,39 @@ import AssignTaskMember from "./componets/AssignTaskMember";
 import Calendar from "react-calendar";
 import axios from "axios";
 import { TaskPriority, TaskStatus, Tasks } from "prisma/prisma-client";
+import { BarLoader, SyncLoader } from "react-spinners";
+import { motion } from "framer-motion";
 
 const ProrityCompoent = ({
   prority,
-  changetrigger,
+  task,
+  isChange,
+  updateSelect,
 }: {
   prority: TaskPriority;
-  changetrigger: any;
+  task: any;
+  isChange: any;
+  updateSelect: any;
 }) => {
   return (
     <Select.Root
       defaultValue={prority}
       onValueChange={(e: TaskPriority) => {
-        changetrigger(e);
+        const Ut: Tasks = {
+          id: task.id,
+          taskname: task.taskname,
+          status: task.status,
+          prority: e,
+          projectId: task.projectId,
+          duedate: task.duedate,
+          description: task.description,
+          assigned_By: task.assigned_By,
+          assigned_To: task.assigned_To,
+        };
+        task.prority = e;
+        console.log("PRo : " + JSON.stringify(Ut));
+        updateSelect(Ut);
+        isChange(true);
       }}
     >
       <Select.Trigger variant="ghost" color="violet" />
@@ -65,22 +86,34 @@ const ProrityCompoent = ({
 
 const StatusComponent = ({
   status,
-  cngTrigger,
-  _setIsblur,
   task,
-  _setTASKSELECTED,
+  isChange,
+  updateSelect,
 }: {
   status: TaskStatus;
-  cngTrigger: any;
-  _setTASKSELECTED: any;
-  _setIsblur: any;
   task: any;
+  isChange: any;
+  updateSelect: any;
 }) => {
   return (
     <Select.Root
       defaultValue={status}
       onValueChange={(e: TaskStatus) => {
-        cngTrigger(e);
+        const Ut: Tasks = {
+          id: task.id,
+          taskname: task.taskname,
+          status: e,
+          prority: task.prority,
+          projectId: task.projectId,
+          duedate: task.duedate,
+          description: task.description,
+          assigned_By: task.assigned_By,
+          assigned_To: task.assigned_To,
+        };
+        task.status = e;
+        console.log("Status : " + JSON.stringify(Ut));
+        updateSelect(Ut);
+        isChange(true);
       }}
     >
       <Select.Trigger variant="ghost" />
@@ -113,13 +146,20 @@ const StatusComponent = ({
 };
 
 const DueDateCompoent = ({
-  existingDate,
-  setTrigger,
+  Exdate,
+  task,
+  isChange,
+  updateSelect,
 }: {
-  existingDate: any;
-  setTrigger: any;
+  Exdate: string;
+  task: any;
+  isChange: any;
+  updateSelect: any;
 }) => {
-  const [date, setDate] = useState<Date | null>(existingDate);
+  const [date, setDate] = useState<Date | null>(null);
+  useEffect(() => {
+    if (Exdate) setDate(new Date(Exdate));
+  }, []);
   return (
     <Popover.Root>
       <Popover.Trigger>
@@ -184,7 +224,21 @@ const DueDateCompoent = ({
             <Button
               color="brown"
               onClick={() => {
-                setTrigger(date);
+                const Ut: Tasks = {
+                  id: task.id,
+                  taskname: task.taskname,
+                  status: task.status,
+                  prority: task.prority,
+                  projectId: task.projectid,
+                  duedate: date,
+                  description: task.description,
+                  assigned_By: task.assigned_By,
+                  assigned_To: task.assigned_To,
+                };
+                task.duedate = date;
+                console.log("DATE : " + JSON.stringify(Ut));
+                updateSelect(Ut);
+                isChange(true);
               }}
             >
               Close
@@ -195,7 +249,6 @@ const DueDateCompoent = ({
               color="bronze"
               onClick={() => {
                 setDate(null);
-                setTrigger(null);
               }}
             >
               Do not assign Due
@@ -209,29 +262,57 @@ const DueDateCompoent = ({
 
 export const TasksPage = (props: { setFun: any; Id: string }) => {
   const [_isElement, _setIsElement] = useState<boolean>(false);
-  const [_isBlur, _setIsblur] = useState<boolean>(false);
-  const [isTaskAdded, _setTaskAdding] = useState<string>("");
-  //All TASK HOLDER
-  const [TasksAll, setAllTAsks] = useState<any | null>(null);
 
-  //TRACK THE SELECTED ROW
-  const [_TASKSELECTED, _setTASKSELECTED] = useState<Tasks | null>(null);
+  //New task components
+  const [TasksAll, setAllTAsks] = useState<any | null>(null);
+  const [isTaskAdded, _setTaskAdding] = useState<string>("");
 
   //row values
-  const [_NameChanged, _setNameChange] = useState<String>();
-  const [_ASSIGNEECHANGED, _setASSIGNEECHANGE] = useState<String>();
-  const [_CHANGEDDATE, _setCHANGEDDATE] = useState<Date | null>();
-  const [_STATUSCHANGE, _setSTATUSCHANGE] = useState<TaskStatus | null>();
-  const [_PRORITYCHANGE, _setPRORITYCHANGE] = useState<TaskPriority | null>();
+  const [_NameChanged, _setNameChange] = useState<string>();
 
   //change tracker
-  const [ischanged, setChanged] = useState<boolean>(false);
+  const [isChanged, setisChange] = useState<boolean>(false);
+  const [isBluredRow, setIsBlur] = useState<string | null>();
 
-  const [_SubmitElement, _setSubmit] = useState<any>(null);
-  const [MakeSubmit, _SetMakeSubmit] = useState<boolean>(false);
+  //selectedTask
+  const [TaskSelected, SetTaskSelected] = useState<Tasks | null>(null);
+
+  const [isSubmiting, setSubmiting] = useState<boolean>(false);
+  const [SubmitError, SetSubmiterror] = useState<boolean>(false);
+
+  //loading spinner until fetch
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isChanged) {
+      if (!isSubmiting) {
+        SetSubmiterror(true);
+        setSubmiting(true);
+        axios
+          .put("/api/task", TaskSelected)
+          .then((v) => {
+            if (v.status == 200) {
+              _setTaskAdding(
+                new Date().getMilliseconds.toString() +
+                  new Date().getUTCSeconds.toString()
+              );
+              setSubmiting(false);
+              setisChange(false);
+              SetSubmiterror(false);
+            }
+          })
+          .catch((err) => {
+            console.error("FRONT CALL p:Task \t" + err);
+          });
+      } else {
+        // SetSubmiterror(true);
+      }
+    }
+  }, [isChanged]);
 
   //get tasks
   useEffect(() => {
+    setIsLoading(true);
     axios
       .get("/api/task/", {
         params: {
@@ -239,71 +320,16 @@ export const TasksPage = (props: { setFun: any; Id: string }) => {
         },
       })
       .then((value) => {
-        setAllTAsks(value.data.data);
+        if (value.status == 200) {
+          setAllTAsks(value.data.data);
+          setIsLoading(false);
+        }
       })
       .catch((err) => {
         console.error("Front error task:p " + err);
+        setIsLoading(false);
       });
   }, [isTaskAdded]);
-
-  //track row and update db
-  useEffect(() => {
-    if (_TASKSELECTED) {
-      //no changes present
-      if (!ischanged) {
-        _setNameChange(_TASKSELECTED?.taskname!);
-        _setASSIGNEECHANGE(_TASKSELECTED?.assigned_To!);
-        _setCHANGEDDATE(_TASKSELECTED?.duedate!);
-        _setSTATUSCHANGE(_TASKSELECTED?.status!);
-        _setPRORITYCHANGE(_TASKSELECTED?.prority!);
-      } else {
-        const NewTask = {
-          id: _TASKSELECTED?.id,
-          taskname: _NameChanged,
-          description: _TASKSELECTED?.description,
-          duedate: _CHANGEDDATE,
-          prority: _PRORITYCHANGE,
-          status: _STATUSCHANGE,
-          assigned_By: _TASKSELECTED?.assigned_By,
-          assigned_To: _ASSIGNEECHANGED,
-          projectId: _TASKSELECTED?.projectId,
-        };
-
-        axios
-          .put("/api/task", NewTask)
-          .then((v) => {
-            console.log("Clearing data");
-            setChanged(false);
-            _setTASKSELECTED(null);
-
-            //Refrsh
-            _setASSIGNEECHANGE("");
-            _setNameChange("");
-            _setCHANGEDDATE(null);
-            _setSTATUSCHANGE(null);
-            _setPRORITYCHANGE(null);
-            _setTaskAdding(v.data.data.id);
-          })
-          .catch((err) => {
-            console.error("front error :" + err);
-          });
-      }
-    }
-  }, [_TASKSELECTED, _isBlur]);
-
-  //track change
-  useEffect(() => {
-    if (_TASKSELECTED) {
-      console.log("Tracking started");
-      setChanged(true);
-    }
-  }, [
-    _NameChanged,
-    _ASSIGNEECHANGED,
-    _CHANGEDDATE,
-    _STATUSCHANGE,
-    _PRORITYCHANGE,
-  ]);
 
   return (
     <Grid justify={"center"}>
@@ -323,6 +349,7 @@ export const TasksPage = (props: { setFun: any; Id: string }) => {
                   }
                 )
                 .then((v) => {
+                  setAllTAsks([]);
                   _setTaskAdding(v.data.data.id);
                 })
                 .catch((err) => {
@@ -355,125 +382,176 @@ export const TasksPage = (props: { setFun: any; Id: string }) => {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {TasksAll && (
+              {TasksAll && !isLoading && (
                 <>
-                  {TasksAll.map((task: any, index: number) => {
-                    return (
-                      <Table.Row
-                        key={index}
-                        align="center"
-                        className="  rounded-full hover:bg-[#292A2C] cursor-pointer mt-2"
-                        onClick={() => {
-                          _setTASKSELECTED(task);
-                          _setIsblur(true);
-                        }}
-                        onBlur={() => {
-                          _setTASKSELECTED(task);
-                          _setIsblur(false);
-                        }}
+                  <>
+                    {TasksAll.length == 0 && (
+                      <Flex
+                        className=" w-full h-72"
+                        justify={"center"}
+                        align={"center"}
                       >
-                        {/* TASK NAME */}
-                        <Table.RowHeaderCell
-                          className=" text-white hover:border "
-                          onClick={() => {
-                            if (!_isElement) {
-                              props.setFun(true);
-                            }
-                          }}
+                        <SyncLoader color="#ffffff" size={"20"} />
+                      </Flex>
+                    )}
+                  </>
+                  <>
+                    {TasksAll.map((task: any, index: number) => {
+                      return (
+                        <Table.Row
+                          key={index}
+                          align="center"
+                          className="  rounded-full hover:bg-[#292A2C] cursor-pointer mt-2"
                         >
-                          <Flex align={"center"} gap={"2"}>
-                            <Tooltip
-                              content="Mark As Complete"
-                              style={{
-                                color: "#ffffff",
-                                backgroundColor: "#ffffff",
-                              }}
-                              className=" text-white"
-                            >
-                              <FiCheckCircle
-                                color="#ffffff"
-                                size={"2em"}
+                          {/* TASK NAME */}
+                          <Table.RowHeaderCell
+                            className=" text-white hover:border "
+                            onClick={() => {
+                              if (!_isElement) {
+                                props.setFun(task.id);
+                              }
+                            }}
+                          >
+                            <Flex align={"center"} gap={"2"}>
+                              <Tooltip
+                                content="Mark As Complete"
+                                style={{
+                                  color: "#ffffff",
+                                  backgroundColor: "#ffffff",
+                                }}
+                                className=" text-white"
+                              >
+                                <FiCheckCircle
+                                  color="#ffffff"
+                                  size={"2em"}
+                                  onMouseEnter={() => {
+                                    _setIsElement(true);
+                                  }}
+                                  onMouseLeave={() => {
+                                    _setIsElement(false);
+                                  }}
+                                  className=" border-2 px-0.5  rounded-md border-white border-opacity-0 hover:border-opacity-45 "
+                                  onClick={() => {
+                                    console.log("COMPLETED");
+                                  }}
+                                />
+                              </Tooltip>
+                              <TextField.Root
+                                onChange={(e) => {
+                                  _setNameChange(e.currentTarget.value);
+                                }}
+                                variant="soft"
+                                color="violet"
+                                className=" hover:border border-white border-opacity-20 "
+                                defaultValue={task.taskname}
+                                style={{
+                                  color: "#ffffff",
+                                  background: "#292A2C",
+                                  width: "350px",
+                                }}
+                                placeholder="enter task name..."
+                                onBlur={() => {
+                                  task.taskname = _NameChanged;
+                                  const Ut: Tasks = {
+                                    id: task.id,
+                                    taskname: _NameChanged!,
+                                    status: task.status,
+                                    prority: task.prority,
+                                    projectId: props.Id,
+                                    duedate: task.duedate,
+                                    description: task.description,
+                                    assigned_By: task.assigned_By,
+                                    assigned_To: task.assigned_To,
+                                  };
+                                  console.log("NAME : " + JSON.stringify(Ut));
+                                  SetTaskSelected(Ut);
+                                  setisChange(true);
+                                }}
                                 onMouseEnter={() => {
                                   _setIsElement(true);
                                 }}
                                 onMouseLeave={() => {
                                   _setIsElement(false);
                                 }}
-                                className=" border-2 px-0.5  rounded-md border-white border-opacity-0 hover:border-opacity-45 "
-                                onClick={() => {
-                                  console.log("COMPLETED");
-                                }}
-                              />
-                            </Tooltip>
-                            <TextField.Root
-                              variant="soft"
-                              color="violet"
-                              className=" hover:border border-white border-opacity-20 "
-                              defaultValue={task ? task.taskname : ""}
-                              style={{
-                                color: "#ffffff",
-                                background: " #292A2C",
-                                width: "350px",
-                              }}
-                              placeholder="enter task name..."
-                              onMouseEnter={() => {
-                                _setIsElement(true);
-                              }}
-                              onMouseLeave={() => {
-                                _setIsElement(false);
-                              }}
-                              onChange={(e) => {
-                                _setNameChange(e.currentTarget.value);
-                              }}
-                            ></TextField.Root>
-                          </Flex>
-                        </Table.RowHeaderCell>
+                              ></TextField.Root>
+                            </Flex>
+                          </Table.RowHeaderCell>
 
-                        {/* TASK ASSIGNEE */}
-                        <Table.Cell
-                          p={"2"}
-                          className=" text-white hover:border border-white col-span-1"
-                        >
-                          <AssignTaskMember
-                            colabid={task.assignedTo ? task.assignedTo.id : ""}
-                            id={props.Id}
-                            _SetASSIGNEECHANGE={_setASSIGNEECHANGE}
-                          />
-                        </Table.Cell>
+                          {/* TASK ASSIGNEE */}
+                          <Table.Cell
+                            p={"2"}
+                            className=" text-white hover:border border-white col-span-1"
+                          >
+                            <AssignTaskMember
+                              id={props.Id}
+                              AssignedColId={
+                                task.assignedTo ? task.assignedTo.id : ""
+                              }
+                              AssignedColsrc={
+                                task.assignedTo
+                                  ? task.assignedTo.userID.image
+                                  : ""
+                              }
+                              task={task}
+                              updateSelect={SetTaskSelected}
+                              isChange={setisChange}
+                            />
+                          </Table.Cell>
 
-                        {/* DATE DUE */}
-                        <Table.Cell className=" text-white hover:border border-white">
-                          <DueDateCompoent
-                            existingDate={_CHANGEDDATE}
-                            setTrigger={_setCHANGEDDATE}
-                          />
-                        </Table.Cell>
+                          {/* DATE DUE */}
+                          <Table.Cell className=" text-white hover:border border-white">
+                            <DueDateCompoent
+                              Exdate={task.duedate ? task.duedate : null}
+                              task={task}
+                              isChange={setisChange}
+                              updateSelect={SetTaskSelected}
+                            />
+                          </Table.Cell>
 
-                        {/* TASK STATUS */}
-                        <Table.Cell className=" text-white hover:border border-white">
-                          <StatusComponent
-                            status={task.status}
-                            cngTrigger={_setSTATUSCHANGE}
-                            _setIsblur={_setIsblur}
-                            task={task}
-                            _setTASKSELECTED={_setTASKSELECTED}
-                          />
-                        </Table.Cell>
+                          {/* TASK STATUS */}
+                          <Table.Cell className=" text-white hover:border border-white">
+                            <StatusComponent
+                              status={task.status}
+                              task={task}
+                              isChange={setisChange}
+                              updateSelect={SetTaskSelected}
+                            />
+                          </Table.Cell>
 
-                        {/* Task prorotiy */}
-                        <Table.Cell className=" text-white hover:border border-white">
-                          <ProrityCompoent
-                            prority={task.prority}
-                            changetrigger={_setPRORITYCHANGE}
-                          />
-                        </Table.Cell>
-                      </Table.Row>
-                    );
-                  })}
+                          {/* Task prorotiy */}
+                          <Table.Cell className=" text-white hover:border border-white">
+                            <ProrityCompoent
+                              prority={task.prority}
+                              task={task}
+                              isChange={setisChange}
+                              updateSelect={SetTaskSelected}
+                            />
+                          </Table.Cell>
+                        </Table.Row>
+                      );
+                    })}
+                  </>
                 </>
               )}
             </Table.Body>
           </Table.Root>
+          {!TasksAll && !isLoading && (
+            <motion.div>
+              <Flex
+                className=" w-full h-96 mt-10"
+                justify={"center"}
+                align={"center"}
+              >
+                <img src="/vector1.png" className=" object-center  w-1/6" />
+              </Flex>
+            </motion.div>
+          )}
+
+          {isLoading && (
+            <Flex className=" w-full h-72" justify={"center"} align={"center"}>
+              <SyncLoader color="#ffffff" size={"20"} />
+            </Flex>
+          )}
         </Flex>
       </Flex>
     </Grid>

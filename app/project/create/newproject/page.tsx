@@ -13,6 +13,7 @@ import {
 import axios from "axios";
 import { randomInt } from "crypto";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -49,15 +50,20 @@ const BlankProjectpage = () => {
   const router = useRouter();
 
   useEffect(() => {
+    axios;
     axios
-      .get("/api/space")
+      .get("/api/space", {
+        params: {
+          Ur: Session.data?.user.id,
+        },
+      })
       .then((value) => {
         _setSpaceList(value.data.data);
       })
       .catch((err) => {
         console.log("Log.D error in fetching Spaces :" + err);
       });
-  }, []);
+  }, [Session]);
 
   return (
     <Flex
@@ -167,7 +173,7 @@ const BlankProjectpage = () => {
           </Box>
         </form>
         <Flex className=" w-full h-full ">
-          <img src={PicArry[0]} />
+          <Image alt="" src={PicArry[0]} />
         </Flex>
       </Grid>
     </Flex>

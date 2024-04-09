@@ -89,7 +89,29 @@ export async function POST(req:NextRequest)
 
 export async function GET(req:NextRequest) 
 {
-    const Spaces =await prisma.space.findMany()
+    const {searchParams} = new URL(req.url);
+    const Ur = searchParams.get('Ur');
+
+    if(!Ur)
+        {
+            return NextResponse.json({
+                ErrorCode : "Bad Request",
+                Errors:"No user id"
+               },{status:400})
+
+        }
+
+    const Spaces =await prisma.space.findMany({
+        where:{
+            colleague:{
+                some:{
+                    userID:{
+                        id:Ur!
+                    }
+                }
+            }
+        }
+    })
 
     return NextResponse.json({
         message:"Request Sucess",

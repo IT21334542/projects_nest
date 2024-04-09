@@ -1,6 +1,6 @@
 "use client";
 import { Flex, Strong, Text } from "@radix-ui/themes";
-import axios from "axios";
+import axios, { Axios } from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -20,53 +20,75 @@ export default function MyApp() {
     if (status == "authenticated") {
       setTimeout(() => {
         _setConfiguring(true);
-        if (data.user.isMaster) {
-          console.log("MASTER");
-          router.push("/space/all");
-          _setConfiguring(false);
-        } else {
-          axios
-            .get("/api/invite", {
-              params: {
-                id: data.user.email,
-              },
-            })
-            .then((value) => {
-              //IF THE INVITE IS AVAILABLE and Valid email
-              if (value.status == 200) {
-                const DATA: [] = value.data.data;
+        // if (data.user.isMaster) {
+        //   console.log("MASTER");
+        //   router.push("/space/all");
+        //   _setConfiguring(false);
+        // } else {
+        axios
+          .get("/api/invite", {
+            params: {
+              id: data.user.email,
+            },
+          })
+          .then((value) => {
+            //IF THE INVITE IS AVAILABLE and Valid email
+            if (value.status == 200) {
+              const DATA: [] = value.data.data;
 
-                //if Invite is Available not an empty find
-                if (DATA.length != 0) {
-                  console.log("VALUE" + JSON.stringify(value.data.data));
-                  router.push("/invite");
-                  return;
+              //if Invite is Available not an empty find
+              if (DATA.length != 0) {
+                console.log("VALUE" + JSON.stringify(value.data.data));
+                router.push("/invite");
+                return;
+              } else {
+                if (data.user.isMaster) {
+                  console.log("MASTER");
+                  router.push("/space/all");
+                  _setConfiguring(false);
                 } else {
-                  //Request sucess and no invite available
+                  console.log("User id inital" + data.user.id);
+                  axios
+                    .get("/api/user/spaces", {
+                      params: {
+                        id: data.user.id,
+                      },
+                    })
+                    .then((v) => {
+                      if (v.status == 200) {
+                        const User = v.data.data;
+                        if (data.user.isAdmin) {
+                          router.push("/space/" + User.colleague[0].spaceId.id);
+                        }
 
-                  //check is User isAdmin for any
-                  if (data.user.isAdmin) {
-                    router.push("/project/all");
-                  }
-
-                  //is user is staff
-                  if (data.user) {
-                  }
+                        //is user is staff
+                        if (data.user) {
+                          router.push("/space/" + User.colleague[0].spaceId.id);
+                        }
+                      } else {
+                        console.error(
+                          "Error Jeev : \t\n" + v.status + v.statusText
+                        );
+                      }
+                    });
                 }
-              }
-            })
-            .catch((err) => {
-              //IF ADMIN AND NO REQUEST GO TO SPACE ID PAGE
-              //IF USER IS STAFF AND NO INVITE AVAILABLE
+                //Request sucess and no invite available
 
-              console.error("FRONT ERR myApp-p ;" + err);
-            });
-        }
+                //check is User isAdmin for any
+              }
+            }
+          })
+          .catch((err) => {
+            //IF ADMIN AND NO REQUEST GO TO SPACE ID PAGE
+            //IF USER IS STAFF AND NO INVITE AVAILABLE
+
+            console.error("FRONT ERR myApp-p ;" + err);
+          });
       }, 2000);
 
       //IF MASTER GO TO ALL SPACE PAGE
     }
-  }, [data, status]);
+  }, [data, status, router]);
 
   return (
     <>
@@ -84,7 +106,7 @@ export default function MyApp() {
             align={"center"}
           >
             <Text className=" text-white" weight={"light"} size={"9"}>
-              "Welcome to <Strong>Canvonest</Strong>!{" "}
+              &quot;Welcome to <Strong>Canvonest</Strong>!{" "}
             </Text>
             <Text className=" text-white" size={"5"}>
               {" "}
@@ -108,7 +130,7 @@ export default function MyApp() {
             align={"center"}
           >
             <Text className=" text-white" weight={"light"} size={"9"}>
-              "Welcome to <Strong>Canvonest</Strong>!{" "}
+              &quot;Welcome to <Strong>Canvonest</Strong>!{" "}
             </Text>
             <Text className=" text-white" size={"5"}>
               {" "}

@@ -32,7 +32,7 @@ const ColleguesSelect = ({
       .catch((err) => {
         console.error("Error in Front B - Col:p : +" + err);
       });
-  }, []);
+  }, [prjid]);
   return (
     <>
       {_listColle && (
@@ -92,7 +92,7 @@ const RoleSelect = ({ prid, rolSet }: { prid: string; rolSet: any }) => {
       .catch((err) => {
         console.error("Error in Front B - Col:p : +" + err);
       });
-  }, []);
+  }, [prid]);
 
   return (
     <>

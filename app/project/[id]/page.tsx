@@ -3,10 +3,12 @@ import {
   Avatar,
   Box,
   Button,
+  Callout,
   Container,
   DropdownMenu,
   Flex,
   Grid,
+  Strong,
   Tabs,
   Text,
   Tooltip,
@@ -17,6 +19,7 @@ import {
   FiBox,
   FiChevronDown,
   FiClipboard,
+  FiInfo,
   FiLayout,
   FiMail,
   FiPaperclip,
@@ -26,6 +29,9 @@ import Tasks from "./Tasks";
 import { OverviewPage } from "./OverviewPage";
 import { TasksPage } from "./TasksPage.2";
 import axios from "axios";
+import MessagenoIcon from "./componets/MessagenoIcon";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const DropMenu = ({ title }: { title: String }) => {
   return (
@@ -69,15 +75,65 @@ const DropMenu = ({ title }: { title: String }) => {
 const MessagesPage = () => {
   return (
     <Grid>
-      <Text className=" text-white">We Messages</Text>
+      <Flex
+        className=" w-full h-full"
+        justify={"center"}
+        align={"start"}
+        pt={"8"}
+      >
+        <Flex
+          className=" h-1/2 w-1/2"
+          align={"center"}
+          justify={"start"}
+          direction={"column"}
+        >
+          <MessagenoIcon />
+          <Text className=" text-white">No Messages</Text>
+        </Flex>
+      </Flex>
     </Grid>
   );
 };
 
-const FilesPage = () => {
+const FilesPage = ({ project }: { project: any }) => {
+  const Router = useRouter();
+
   return (
     <Grid>
-      <Text className=" text-white">We Files</Text>
+      <Flex className=" h-full w-full" direction={"column"} align={"center"}>
+        <Image
+          alt=""
+          src="/nofiles.png"
+          className=" object-contain aspect-auto w-1/3"
+        />
+        <Flex
+          className=" w-full"
+          gap={"5"}
+          justify={"center"}
+          mt={"5"}
+          direction={"column"}
+          maxWidth={"20%"}
+        >
+          <Button
+            color="brown"
+            onClick={() => {
+              Router.push("/space/" + project.spaceid.id);
+            }}
+          >
+            {" "}
+            Upload a file to Space
+          </Button>
+          <Callout.Root>
+            <Callout.Icon>
+              <FiInfo color="#ffffff" />
+            </Callout.Icon>
+            <Callout.Text className=" text-white">
+              to add a file to <Strong>Task</Strong> select the task in project
+              tab
+            </Callout.Text>
+          </Callout.Root>
+        </Flex>
+      </Flex>
     </Grid>
   );
 };
@@ -98,7 +154,7 @@ const ProjectPage = ({ params: { id } }: { params: { id: String } }) => {
       .catch((err) => {
         console.error("Errr proj p " + err);
       });
-  }, []);
+  }, [id]);
 
   return (
     <Flex
@@ -115,7 +171,10 @@ const ProjectPage = ({ params: { id } }: { params: { id: String } }) => {
           >
             <Flex gap={"1"} align={"end"} pb={"1"}>
               <FiLayout color="#d9f99d" size={"3em"} />
-              <DropMenu title={_project ? _project.name : ""} />
+              <Text weight={"medium"} className=" text-white">
+                {_project ? _project.name : ""}
+              </Text>
+              {/* <DropMenu title={_project ? _project.name : ""} /> */}
             </Flex>
           </Flex>
 
@@ -174,12 +233,12 @@ const ProjectPage = ({ params: { id } }: { params: { id: String } }) => {
                 <MessagesPage />
               </Tabs.Content>
               <Tabs.Content value="Resources">
-                <FilesPage />
+                <FilesPage project={_project} />
               </Tabs.Content>
             </Flex>
           </Tabs.Root>
         </Flex>
-        {_Task && <Tasks taskopen={_setTask} />}
+        {_Task && <Tasks taskopen={_setTask} task={_Task} />}
       </Grid>
     </Flex>
   );

@@ -28,7 +28,7 @@ interface SpaceForm {
   description: String;
 }
 
-const page = () => {
+const SpaceCreatePage = () => {
   const Session = useSession();
 
   const {
@@ -130,4 +130,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default SpaceCreatePage;

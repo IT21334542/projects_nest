@@ -78,9 +78,16 @@ export  async function GET(req:NextRequest){
                 projectId:projectid
             },
             include:{
-                assignedTo:true,
+                assignedTo:{
+                    include:{
+                        userID:true
+                    }
+                },
                 assignedBy:true,
                 subtask:true
+            },
+            orderBy:{
+                taskname:'asc'
             }
         })
 
@@ -119,7 +126,7 @@ export async function PUT(req:NextRequest){
     {
         return NextResponse.json({
             errorCode:" BAD REQUEST",
-            error:" Missing Parameters(project)"
+            error:" Missing Parameters(taskid)"
         },{status:400})
     }
 

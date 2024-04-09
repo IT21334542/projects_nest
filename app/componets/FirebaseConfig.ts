@@ -1,14 +1,14 @@
 import { FirebaseApp, initializeApp } from "firebase/app";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDRdZd9VZV9lmXmSwfowKowPRoUPrhfH-0",
-    authDomain: "canvonest.firebaseapp.com",
-    projectId: "canvonest",
-    storageBucket: "canvonest.appspot.com",
-    messagingSenderId: "51947614484",
-    appId: "1:51947614484:web:696daa9f2e7eaff5f51201",
-    measurementId: "G-ECBJKSL20L"
-  };
+  apiKey: process.env.FIREBASE_G_ID,
+  authDomain: "canvonestv2.firebaseapp.com",
+  projectId: "canvonestv2",
+  storageBucket: "canvonestv2.appspot.com",
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.FIREBASE_APP_ID
+};
+
 
 
   export const FbaseApp :FirebaseApp= initializeApp(firebaseConfig);

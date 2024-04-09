@@ -40,7 +40,7 @@ export const OverviewPage = ({ prj, desc }: { prj: string; desc: string }) => {
       .catch((err) => {
         console.error("Front errov OverPrj L" + err);
       });
-  }, []);
+  }, [prj]);
 
   return (
     <Grid justify={"center"}>
@@ -102,8 +102,13 @@ export const OverviewPage = ({ prj, desc }: { prj: string; desc: string }) => {
         </Box>
         {!Members && (
           <Grid columns={"3"} mt={"3"} gap={"3"}>
-            <Card>
-              <Box>
+            <Card className=" w-1/2 ">
+              <Box height={"80px"}>
+                <Skeleton loading={true} />
+              </Box>
+            </Card>
+            <Card className=" w-1/2 ">
+              <Box height={"80px"}>
                 <Skeleton loading={true} />
               </Box>
             </Card>
