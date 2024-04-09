@@ -29,7 +29,12 @@ interface SpaceForm {
 }
 
 const SpaceCreatePage = () => {
-  const Session = useSession();
+  const { data } = useSession();
+  const [User, SetUser] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (User) SetUser(User);
+  }, [data, User]);
 
   const {
     register,
@@ -43,7 +48,7 @@ const SpaceCreatePage = () => {
       id: _SId,
       name: data.name,
       description: data.description,
-      createdby: Session.data?.user.id,
+      createdby: User,
     };
 
     axios
@@ -105,10 +110,12 @@ const SpaceCreatePage = () => {
                 {...register("description")}
               />
             </Box>
-            <Button type="submit" color="brown" mt={"6"}>
-              <FiPlus color="#ffffff" />
-              Create Space
-            </Button>
+            {User && (
+              <Button type="submit" color="brown" mt={"6"}>
+                <FiPlus color="#ffffff" />
+                Create Space
+              </Button>
+            )}
           </Box>
           <Box className=" w-full h-full ">
             <Flex className=" h-full max-h-screen">
