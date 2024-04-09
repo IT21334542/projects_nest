@@ -80,7 +80,7 @@ const SpaceComponets = () => {
           setisLoading(false);
         });
     }
-  }, [data, _SpaceList]);
+  }, [data]);
 
   return (
     <Flex
