@@ -148,6 +148,24 @@ const SpaceComponets = () => {
               ))}
             </Grid>
           )}
+          {_SpaceList.length == 0 && (
+            <Flex
+              className=" h-full w-full"
+              align={"center"}
+              justify={"center"}
+              direction={"column"}
+            >
+              <FiFolder color="#ffffff" size={"4em"} className=" m-3" />
+              <Text className=" text-white" size={"4"} weight={"light"}>
+                {" "}
+                No any Workspaces available
+              </Text>
+              <Text className=" text-white" size={"4"} weight={"light"}>
+                {" "}
+                Create a <Strong>new Workspace</Strong>
+              </Text>
+            </Flex>
+          )}
         </>
       )}
     </Flex>
