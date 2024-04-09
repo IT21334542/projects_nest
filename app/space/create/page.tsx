@@ -33,7 +33,7 @@ const SpaceCreatePage = () => {
   const [User, SetUser] = useState<string | null>(null);
 
   useEffect(() => {
-    if (User) SetUser(User);
+    if (!User) SetUser(User);
   }, [data, User]);
 
   const {
