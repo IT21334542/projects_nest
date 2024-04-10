@@ -104,14 +104,15 @@ const Tasks = (props: { taskopen: any; task: String }) => {
           .then((v) => {
             if (v.status == 200) {
               setFilesAdded(true);
+              STsetNameChanged(null);
             }
           })
           .catch((err) => {
             console.error("object" + err);
           });
-        console.log(
-          "Saving name of Row" + STpreRow + ".... name is" + STnamechanged
-        );
+        // console.log(
+        //   "Saving name of Row" + STpreRow + ".... name is" + STnamechanged
+        // );
       }
     }
   }, [STrow]);
@@ -152,6 +153,7 @@ const Tasks = (props: { taskopen: any; task: String }) => {
       .then((v) => {
         if (v.status == 200) {
           setTsk(v.data.data);
+          setIsAdd(false);
           setSubadded(false);
           setFilesAdded(false);
         }
