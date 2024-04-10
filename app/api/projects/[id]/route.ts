@@ -45,7 +45,7 @@ export async function PATCH(req:NextRequest){
     const body = await req.json();
     const {searchParams} = new URL(req.url);
     const Pid = searchParams.get("project");
-
+    console.log("came to update ")
 
     if(!Pid)
     {
@@ -60,6 +60,7 @@ export async function PATCH(req:NextRequest){
     }
 
     try {
+        console.log("PID"+Pid+"\n dex"+body.desc)
         await prisma.project.update({
             where:{
                 id:Pid
