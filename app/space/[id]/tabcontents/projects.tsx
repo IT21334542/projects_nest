@@ -27,12 +27,19 @@ import { FiCalendar, FiLayout, FiPlus } from "react-icons/fi";
 const ProjectsPageComponent = ({ spaceid }: { spaceid: String }) => {
   const [_Space, _setSpace] = useState<any | null>(null);
   const [ProjectSelected, setProjectSelected] = useState<string | null>(null);
+  const [_spaceid, _setSpaceid] = useState<String | null>(null);
 
   useEffect(() => {
-    console.log("Lloading fetch spaces of space " + spaceid);
-    if (!spaceid) {
+    if (!_spaceid) {
+      _setSpaceid(spaceid);
+    }
+  }, [spaceid]);
+
+  useEffect(() => {
+    console.log("Lloading fetch spaces of space " + _spaceid);
+    if (_spaceid) {
       axios
-        .get("http://localhost:3000/api/space/" + spaceid)
+        .get("http://localhost:3000/api/space/" + _spaceid)
         .then((value) => {
           console.log("value project  to _Space");
           _setSpace(value.data.data);
@@ -42,7 +49,7 @@ const ProjectsPageComponent = ({ spaceid }: { spaceid: String }) => {
           console.log("FRont error :" + err);
         });
     }
-  }, [spaceid]);
+  }, [_spaceid]);
 
   return (
     <Grid justify={"center"}>
