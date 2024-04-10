@@ -41,8 +41,6 @@ const ProjectsPageComponent = ({ spaceid }: { spaceid: String }) => {
         .catch((err) => {
           console.log("FRont error :" + err);
         });
-    } else {
-      _setSpace([]);
     }
   }, [spaceid]);
 
