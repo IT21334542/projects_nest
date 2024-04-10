@@ -12,7 +12,7 @@ export  async function GET(req:NextRequest){
 
             return NextResponse.json({
                 errorCode:" BAD REQUEST",
-                error:" Missing Parameters (Taskid) "+ Taskid
+                error:" Missing Parameters (Taskid)"+"Request url :"+req.url+"\n "+ Taskid
             },{status:400})
 
     }
