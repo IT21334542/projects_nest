@@ -93,6 +93,7 @@ const SingleSpacePage = ({ params: { id } }: { params: { id: String } }) => {
 
   useEffect(() => {
     if (isChangeMade) {
+      console.log("is Chanded the discription");
       const Sp = {
         id: _Space?.id,
         name: _Space?.name,

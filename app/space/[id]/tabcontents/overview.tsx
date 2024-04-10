@@ -93,12 +93,6 @@ const OverviewCompoent = ({
   const [SHANGE, _SHANGE] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isEdited && SHANGE) {
-      console.log("changed the data");
-    }
-  }, [isEdited]);
-
-  useEffect(() => {
     axios
       .get("/api/colleague/" + spaceid)
       .then((value) => {
