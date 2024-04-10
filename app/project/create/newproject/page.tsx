@@ -175,7 +175,7 @@ const BlankProjectpage = () => {
         <Flex className=" w-full h-full ">
           <img
             alt=""
-            src="https://fastly.picsum.photos/id/16/2500/1667.jpg?hmac=uAkZwYc5phCRNFTrV_prJ_0rP0EdwJaZ4ctje2bY7aE"
+            src={PicArry[rand]}
             style={{
               display: "block",
               objectFit: "cover",
