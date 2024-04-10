@@ -117,78 +117,82 @@ const SingleSpacePage = ({ params: { id } }: { params: { id: String } }) => {
       direction={"column"}
       gap={"2"}
     >
-      <Grid columns={_Project ? "2" : "1"} className=" h-full">
-        <Flex direction={"column"}>
-          {/* Title bar */}
-          <Flex
-            className=" h-14 w-full mb-3 border-b-2 border-gray-500 border-opacity-40 items-center"
-            justify={"between"}
-          >
-            <Flex gap={"1"} align={"end"} pb={"1"}>
-              <FiFolder color="#d9f99d" size={"3em"} />
-              <DropMenu title={_Space?.name!} />
-            </Flex>
-            <Flex gap={"2"} align={"center"}>
-              <SelectSpace id={id} />
-            </Flex>
-          </Flex>
-
-          {/* Tabs */}
-          <Tabs.Root className=" max-h-full w-full  " defaultValue="overview">
-            {/* list of tabls*/}
-            <Flex className="  w-full  mb-5  " direction={"column"}>
-              <Tabs.List
-                color="brown"
-                justify={"start"}
-                className="border-white border-opacity-25 border-b"
-              >
-                <Tabs.Trigger value="overview">
-                  <Flex align={"center"} gap={"1"}>
-                    <FiBox color="#ffffff" />
-                    <Text className=" text-white">Overview</Text>
-                  </Flex>
-                </Tabs.Trigger>
-                <Tabs.Trigger value="Projects">
-                  <Flex align={"center"} gap={"1"}>
-                    <FiClipboard color="#ffffff" />
-                    <Text className=" text-white">Projects</Text>
-                  </Flex>
-                </Tabs.Trigger>
-                <Tabs.Trigger value="Resources">
-                  <Flex align={"center"} gap={"1"}>
-                    <FiPaperclip color="#ffffff" />
-                    <Text className=" text-white">Files</Text>
-                  </Flex>
-                </Tabs.Trigger>
-              </Tabs.List>
-            </Flex>
-
-            {/* content pages */}
+      {id && (
+        <Grid columns={_Project ? "2" : "1"} className=" h-full">
+          <Flex direction={"column"}>
+            {/* Title bar */}
             <Flex
-              direction={"column"}
-              className="  overflow-scroll md:max-h-[500px]"
+              className=" h-14 w-full mb-3 border-b-2 border-gray-500 border-opacity-40 items-center"
+              justify={"between"}
             >
-              <Tabs.Content value="overview">
-                {_Space && (
-                  <OverviewCompoent
-                    spaceid={id}
-                    _SpaceDiscription={_Space ? _Space.description : "Loading"}
-                    _setChangeMade={_setChangeMade}
-                  />
-                )}
-              </Tabs.Content>
-
-              <Tabs.Content value="Projects">
-                <ProjectsPageComponent spaceid={id} />
-              </Tabs.Content>
-              <Tabs.Content value="Resources">
-                <FilesCompSpace id={id} />
-              </Tabs.Content>
+              <Flex gap={"1"} align={"end"} pb={"1"}>
+                <FiFolder color="#d9f99d" size={"3em"} />
+                <DropMenu title={_Space?.name!} />
+              </Flex>
+              <Flex gap={"2"} align={"center"}>
+                <SelectSpace id={id} />
+              </Flex>
             </Flex>
-          </Tabs.Root>
-        </Flex>
-        {_Project && <ProjectSideComponent />}
-      </Grid>
+
+            {/* Tabs */}
+            <Tabs.Root className=" max-h-full w-full  " defaultValue="overview">
+              {/* list of tabls*/}
+              <Flex className="  w-full  mb-5  " direction={"column"}>
+                <Tabs.List
+                  color="brown"
+                  justify={"start"}
+                  className="border-white border-opacity-25 border-b"
+                >
+                  <Tabs.Trigger value="overview">
+                    <Flex align={"center"} gap={"1"}>
+                      <FiBox color="#ffffff" />
+                      <Text className=" text-white">Overview</Text>
+                    </Flex>
+                  </Tabs.Trigger>
+                  <Tabs.Trigger value="Projects">
+                    <Flex align={"center"} gap={"1"}>
+                      <FiClipboard color="#ffffff" />
+                      <Text className=" text-white">Projects</Text>
+                    </Flex>
+                  </Tabs.Trigger>
+                  <Tabs.Trigger value="Resources">
+                    <Flex align={"center"} gap={"1"}>
+                      <FiPaperclip color="#ffffff" />
+                      <Text className=" text-white">Files</Text>
+                    </Flex>
+                  </Tabs.Trigger>
+                </Tabs.List>
+              </Flex>
+
+              {/* content pages */}
+              <Flex
+                direction={"column"}
+                className="  overflow-scroll md:max-h-[500px]"
+              >
+                <Tabs.Content value="overview">
+                  {_Space && (
+                    <OverviewCompoent
+                      spaceid={id}
+                      _SpaceDiscription={
+                        _Space ? _Space.description : "Loading"
+                      }
+                      _setChangeMade={_setChangeMade}
+                    />
+                  )}
+                </Tabs.Content>
+
+                <Tabs.Content value="Projects">
+                  <ProjectsPageComponent spaceid={id} />
+                </Tabs.Content>
+                <Tabs.Content value="Resources">
+                  <FilesCompSpace id={id} />
+                </Tabs.Content>
+              </Flex>
+            </Tabs.Root>
+          </Flex>
+          {_Project && <ProjectSideComponent />}
+        </Grid>
+      )}
     </Flex>
   );
 };
