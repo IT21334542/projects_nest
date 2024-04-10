@@ -173,7 +173,7 @@ const BlankProjectpage = () => {
           </Box>
         </form>
         <Flex className=" w-full h-full ">
-          <Image alt="" src={PicArry[0]} />
+          <Image alt="" src={PicArry[rand]} />
         </Flex>
       </Grid>
     </Flex>
