@@ -28,6 +28,7 @@ export const OverviewPage = ({ prj, desc }: { prj: string; desc: string }) => {
 
   useEffect(() => {
     if (!changeMade) {
+      console.log("Pid " + prj);
       axios
         .patch(
           "/api/projects/Pid",
@@ -36,7 +37,7 @@ export const OverviewPage = ({ prj, desc }: { prj: string; desc: string }) => {
           },
           {
             params: {
-              Pid: prj,
+              PidS: prj,
             },
           }
         )

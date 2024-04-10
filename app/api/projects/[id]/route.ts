@@ -51,7 +51,8 @@ export async function PATCH(req:NextRequest){
     {
         console.error("Bad request (missing) : Project unique");
         return NextResponse.json({
-            message:"NO project unique"
+            message:"NO project unique",
+            data:"No pid"
 
         },{
             status:400
@@ -73,7 +74,7 @@ export async function PATCH(req:NextRequest){
 
         return NextResponse.json({
             message:"Found Projects",
-            data:"Success"
+            data:"PID"+Pid+",dex"+body.desc
         },{status:200})
     
     } catch (error) {
