@@ -176,6 +176,13 @@ const BlankProjectpage = () => {
           <Image
             alt=""
             src="https://fastly.picsum.photos/id/16/2500/1667.jpg?hmac=uAkZwYc5phCRNFTrV_prJ_0rP0EdwJaZ4ctje2bY7aE"
+            style={{
+              display: "block",
+              objectFit: "cover",
+              width: "100%",
+              height: "100%",
+              backgroundColor: "var(--gray-5)",
+            }}
           />
         </Flex>
       </Grid>
