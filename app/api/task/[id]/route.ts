@@ -6,8 +6,7 @@ import { TaskStatus , Tasks} from "prisma/prisma-client";
 
 export  async function GET(req:NextRequest){
     const {searchParams} = new URL(req.url);
-    const Taskid =  searchParams.get('id');
-
+    const Taskid = searchParams.get("Taskid");
     if(!Taskid)
     {
 
