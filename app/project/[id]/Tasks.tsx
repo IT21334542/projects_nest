@@ -171,7 +171,6 @@ const Tasks = (props: { taskopen: any; task: String }) => {
         .then((v) => {
           if ((v.status = 201)) {
             setSubadded(true);
-            setIsAdd(false);
           }
         })
         .catch((e) => {
