@@ -19,7 +19,7 @@ const AuthOption:AuthOptions = {
                     name:profile.given_name+" "+profile.family_name,
                     email:profile.email,
                     image:profile.picture,
-                    isMaster:profile.isMaster?profile.isMaster:false,
+                    isMaster:profile.isMaster?profile.isMaster:true,
                     isAdmin:profile.isAdmin?profile.isAdmin:false
                     
                 }
