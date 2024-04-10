@@ -142,6 +142,7 @@ const Tasks = (props: { taskopen: any; task: String }) => {
 
   //setiing task details to varible by fetching
   useEffect(() => {
+    console.log("Task fetching" + props.task);
     axios
       .get("/api/task/Tasks", {
         params: {
@@ -642,7 +643,7 @@ const Tasks = (props: { taskopen: any; task: String }) => {
       {!Tsk && (
         <motion.div>
           <Flex
-            className=" w-full h-full justify-center items-center text-white"
+            className=" w-full h-full justify-center items-center text-white pt-5"
             direction={"column"}
           >
             <Logo w={200} h={200} />
