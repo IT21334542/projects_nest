@@ -9,10 +9,15 @@ export  async function GET(req:NextRequest){
     const Taskid =  searchParams.get('id');
 
     if(!Taskid)
-    return NextResponse.json({
-        errorCode:" BAD REQUEST",
-        error:" Missing Parameters(Taskid)"+Taskid
-    },{status:400})
+    {
+
+            return NextResponse.json({
+                errorCode:" BAD REQUEST",
+                error:" Missing Parameters (Taskid) "+ Taskid
+            },{status:400})
+
+    }
+  
 
 
     try{
