@@ -78,7 +78,7 @@ const FileComp = ({
                   justify={"center"}
                   align={"center"}
                 >
-                  <Image
+                  <img
                     alt=""
                     src={getSrc(file.type) ? getSrc(file.type) : file.url}
                     className=" object-cover w-full aspect-video h-full"
