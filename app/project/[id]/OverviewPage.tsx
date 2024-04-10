@@ -27,7 +27,7 @@ export const OverviewPage = ({ prj, desc }: { prj: string; desc: string }) => {
   const [changeMade, setChangeMade] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!changeMade) {
+    if (changeMade) {
       console.log("Pid " + prj);
       axios
         .patch(
