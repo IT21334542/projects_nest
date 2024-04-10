@@ -146,7 +146,7 @@ const Tasks = (props: { taskopen: any; task: String }) => {
     axios
       .get("/api/task/Tasks", {
         params: {
-          id: props.task,
+          Taskid: props.task,
         },
       })
       .then((v) => {
