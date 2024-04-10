@@ -32,6 +32,7 @@ const ProjectsPageComponent = ({ spaceid }: { spaceid: String }) => {
     axios
       .get("http://localhost:3000/api/space/" + spaceid)
       .then((value) => {
+        console.log("value project  to _Space");
         _setSpace(value.data.data);
         console.log(value.data.data);
       })
