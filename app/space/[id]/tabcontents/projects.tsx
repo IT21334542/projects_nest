@@ -37,11 +37,9 @@ const ProjectsPageComponent = ({ spaceid }: { spaceid: String }) => {
 
   useEffect(() => {
     if (_spaceid) {
-      console.log("Lloading fetch spaces of space " + _spaceid);
       axios
         .get("/api/space/" + _spaceid)
         .then((value) => {
-          console.log("value project  to _Space");
           _setSpace(value.data.data);
           console.log(value.data.data);
         })
