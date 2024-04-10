@@ -32,11 +32,58 @@ export async function GET(req:NextRequest,{params:{id}}:{params:{id:string}}){
         return NextResponse.json({
             errorCode:"DB fail in  projects",
             error:error
-        },{status:400})
+        },{status:500})
         
     }
 
 
 
+
+}
+
+export async function PATCH(req:NextRequest){
+    const body = await req.json();
+    const {searchParams} = new URL(req.url);
+    const Pid = searchParams.get("project");
+
+
+    if(!Pid)
+    {
+        console.error("Bad request (missing) : Project unique");
+        return NextResponse.json({
+            message:"NO project unique"
+
+        },{
+            status:400
+        })
+
+    }
+
+    try {
+        await prisma.project.update({
+            where:{
+                id:Pid
+            },
+            data:{
+                description:body.desc
+            }
+            
+        })
+
+        return NextResponse.json({
+            message:"Found Projects",
+            data:"Success"
+        },{status:200})
+    
+    } catch (error) {
+
+        console.error("Error Db : \t"+error)
+        return NextResponse.json({
+            errorCode:"DB fail in  projects",
+            error:error
+        },{status:500})
+        
+    }
+    
 
 }

@@ -135,7 +135,6 @@ const OverviewCompoent = ({
               <Button
                 color="red"
                 onClick={() => {
-                  console.log("Chande in SHa" + SHANGE);
                   _setChangeMade(SHANGE);
                   _setEditstatus(false);
                 }}

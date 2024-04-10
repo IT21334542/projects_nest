@@ -24,6 +24,32 @@ export const OverviewPage = ({ prj, desc }: { prj: string; desc: string }) => {
   const [_Colle, _setCollege] = useState<any | null>();
   const [SHANGE, _SHANGE] = useState<string | null>(desc);
   const [Members, _SetMemners] = useState<any>();
+  const [changeMade, setChangeMade] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!changeMade) {
+      axios
+        .patch(
+          "/api/projects/Pid",
+          {
+            desc: changeMade,
+          },
+          {
+            params: {
+              Pid: prj,
+            },
+          }
+        )
+        .then((v) => {
+          if (v.status == 200) {
+            setChangeMade(null);
+          }
+        })
+        .catch((e) => {
+          console.error("error front :\t" + e);
+        });
+    }
+  }, [changeMade]);
 
   useEffect(() => {
     axios
@@ -74,7 +100,7 @@ export const OverviewPage = ({ prj, desc }: { prj: string; desc: string }) => {
               <Button
                 color="red"
                 onClick={() => {
-                  //  _setChangeMade(SHANGE);
+                  setChangeMade(SHANGE);
                   _setEditstatus(false);
                 }}
               >
