@@ -292,7 +292,9 @@ const Tasks = (props: { taskopen: any; task: String }) => {
                   </Table.RowHeaderCell>
                   <Table.Cell className=" border border-white text-white ">
                     <Avatar
-                      src={Tsk ? Tsk.assignedTo.userID.image : ""}
+                      src={
+                        Tsk && Tsk.assignedTo ? Tsk.assignedTo.userID.image : ""
+                      }
                       fallback="a"
                     />
                   </Table.Cell>
