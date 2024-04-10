@@ -159,7 +159,7 @@ const Tasks = (props: { taskopen: any; task: String }) => {
       .catch((Err) => {
         console.error("Front error " + Err);
       });
-  }, [isSubadded, isFilesadded]);
+  }, [isSubadded, isFilesadded, props.task]);
 
   // Adding new Subtask
   useEffect(() => {
