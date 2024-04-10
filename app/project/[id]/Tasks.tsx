@@ -144,6 +144,7 @@ const Tasks = (props: { taskopen: any; task: String }) => {
   //setiing task details to varible by fetching
   useEffect(() => {
     console.log("Task fetching" + props.task);
+    setTsk(null);
     axios
       .get("/api/task/Tasks", {
         params: {
@@ -602,7 +603,7 @@ const Tasks = (props: { taskopen: any; task: String }) => {
                                   onChange={(e) => {
                                     STsetNameChanged(e.currentTarget.value);
                                   }}
-                                  placeholder=""
+                                  placeholder="Enter name"
                                   variant="soft"
                                   color="brown"
                                   defaultValue={
