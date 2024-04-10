@@ -29,17 +29,21 @@ const ProjectsPageComponent = ({ spaceid }: { spaceid: String }) => {
   const [ProjectSelected, setProjectSelected] = useState<string | null>(null);
 
   useEffect(() => {
-    console.log("Lloading fetch spaces of space " + _Space);
-    axios
-      .get("http://localhost:3000/api/space/" + spaceid)
-      .then((value) => {
-        console.log("value project  to _Space");
-        _setSpace(value.data.data);
-        console.log(value.data.data);
-      })
-      .catch((err) => {
-        console.log("FRont error :" + err);
-      });
+    console.log("Lloading fetch spaces of space " + spaceid);
+    if (!spaceid) {
+      axios
+        .get("http://localhost:3000/api/space/" + spaceid)
+        .then((value) => {
+          console.log("value project  to _Space");
+          _setSpace(value.data.data);
+          console.log(value.data.data);
+        })
+        .catch((err) => {
+          console.log("FRont error :" + err);
+        });
+    } else {
+      _setSpace([]);
+    }
   }, [spaceid]);
 
   return (
