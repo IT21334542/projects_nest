@@ -29,6 +29,7 @@ const ProjectsPageComponent = ({ spaceid }: { spaceid: String }) => {
   const [ProjectSelected, setProjectSelected] = useState<string | null>(null);
 
   useEffect(() => {
+    console.log("Lloading fetch spaces of space " + _Space);
     axios
       .get("http://localhost:3000/api/space/" + spaceid)
       .then((value) => {
