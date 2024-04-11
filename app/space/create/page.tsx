@@ -29,12 +29,13 @@ interface SpaceForm {
 }
 
 const SpaceCreatePage = () => {
-  const { data } = useSession();
+  const Session = useSession();
+  // Session.status;
   const [User, SetUser] = useState<string | null>(null);
 
   useEffect(() => {
-    SetUser(data?.user.id!);
-  }, [data]);
+    SetUser(Session.data?.user.id!);
+  }, [Session]);
 
   const {
     register,
