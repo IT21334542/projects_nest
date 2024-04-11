@@ -33,8 +33,8 @@ const SpaceCreatePage = () => {
   const [User, SetUser] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!User) SetUser(data?.user.id!);
-  }, [data, User]);
+    SetUser(data?.user.id!);
+  }, [data]);
 
   const {
     register,
