@@ -29,13 +29,18 @@ interface SpaceForm {
 }
 
 const SpaceCreatePage = () => {
-  const Session = useSession();
+  const { data } = useSession();
   // Session.status;
   const [User, SetUser] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    SetUser(Session.data?.user.id!);
-  }, [Session]);
+    setLoading(true);
+    if (data) {
+      SetUser(data.user.id!);
+      setLoading(false);
+    }
+  }, [data]);
 
   const {
     register,
@@ -65,7 +70,7 @@ const SpaceCreatePage = () => {
   return (
     <Flex className=" bg-[#292A2C] w-screen h-screen" direction={"column"}>
       <form onSubmit={Handling}>
-        {User && (
+        {!loading && (
           <Grid columns={"2"} height={"100%"}>
             <Box p={"6"}>
               <Link href={"/space/all"}>
