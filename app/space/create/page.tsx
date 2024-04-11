@@ -101,7 +101,10 @@ const SpaceCreatePage = () => {
             )}
 
             <Box className=" mt-9">
-              <Text weight={"light"} className=" text-white text-xl ">
+              <Text
+                weight={"light"}
+                className=" text-white text-xl cursor-none"
+              >
                 Description
               </Text>
               <TextArea
