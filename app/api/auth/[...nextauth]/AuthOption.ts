@@ -48,7 +48,7 @@ const AuthOption:AuthOptions = {
         },
         async session({session,token,user}) {
 
-            session.user.id = user.id;
+            session.user.id = token.id;
             session.user.isMaster = token.isMaster;
             session.user.isAdmin = token.isAdmin;
             return session;
