@@ -40,7 +40,7 @@ export async function POST(req:NextRequest)
             id:body.id,
             name:body.name,
             description:body.description,
-            createdby:body.createdby
+            createdby:Session?.user.id!
         }
     })
 
@@ -55,7 +55,7 @@ export async function POST(req:NextRequest)
         });
 
 
-        console.log("Userid"+Session?.user.id)
+        
         const colleague = await prisma.colleague.create({
             data:{
                 id:colleagueId,
@@ -63,7 +63,7 @@ export async function POST(req:NextRequest)
                 invite: InviteState.ACCEPTED,
                 roleid:Role.id,
                 spaceid:SpaceNew.id,
-                userid:body.createdby
+                userid:Session?.user.id
 
             }
         })
