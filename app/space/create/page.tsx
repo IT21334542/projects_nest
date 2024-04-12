@@ -33,7 +33,7 @@ const SpaceCreatePage = () => {
   const { data } = useSession();
   // Session.status;
   const [User, SetUser] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const {
     register,
@@ -115,6 +115,7 @@ const SpaceCreatePage = () => {
             <Button
               type="submit"
               color="brown"
+              disabled={loading}
               mt={"6"}
               onClick={() => {
                 setLoading(true);
