@@ -7,6 +7,7 @@ import {
   Callout,
   Flex,
   Grid,
+  Spinner,
   Text,
   TextArea,
   TextField,
@@ -34,14 +35,6 @@ const SpaceCreatePage = () => {
   const [User, SetUser] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    setLoading(true);
-    if (data) {
-      SetUser(data.user.id!);
-      setLoading(false);
-    }
-  }, [data]);
-
   const {
     register,
     handleSubmit,
@@ -60,10 +53,12 @@ const SpaceCreatePage = () => {
     axios
       .post("/api/space", Space)
       .then((r) => {
+        setLoading(false);
         if (r.status == 201) Router.push("/space/all");
       })
       .catch((err) => {
         console.log("Log.Creation in Space : " + err);
+        setLoading(false);
       });
   });
 
@@ -117,9 +112,17 @@ const SpaceCreatePage = () => {
               />
             </Box>
 
-            <Button type="submit" color="brown" mt={"6"}>
+            <Button
+              type="submit"
+              color="brown"
+              mt={"6"}
+              onClick={() => {
+                setLoading(true);
+              }}
+            >
               <FiPlus color="#ffffff" />
               Create Space
+              {loading && <Spinner loading />}
             </Button>
           </Box>
           <Box className=" w-full h-full ">
