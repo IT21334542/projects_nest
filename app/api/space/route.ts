@@ -5,11 +5,12 @@ import { SpaceCreateSchema } from "../../ValidationSchemas/SpaceValidationSchema
 import { getServerSession } from "next-auth";
 import { randomUUID, UUID } from "crypto";
 import { InviteState } from "prisma/prisma-client";
+import AuthOption from "../auth/[...nextauth]/AuthOption";
 
 
 export async function POST(req:NextRequest)
 {
-    const Session = await getServerSession();
+    const Session = await getServerSession(AuthOption);
     const Roleid = randomUUID();
     const colleagueId = randomUUID();
     const body =await req.json();
