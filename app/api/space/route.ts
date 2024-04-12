@@ -24,8 +24,9 @@ export async function POST(req:NextRequest)
        },{status:400})
     }
 
-    if(Session?.user.isMaster)
+    if(!Session?.user.isMaster)
     {
+        console.log("USER IS NOT MASTER :  USER ID"+Session?.user.id);
         return NextResponse.json({
             ErrorCode:"Bad Authentication",
             Error:"User is Not a Master"
