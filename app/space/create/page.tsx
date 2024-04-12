@@ -115,7 +115,6 @@ const SpaceCreatePage = () => {
             <Button
               type="submit"
               color="brown"
-              disabled={loading}
               mt={"6"}
               onClick={() => {
                 setLoading(true);
