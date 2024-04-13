@@ -26,6 +26,7 @@ export const OverviewPage = ({ prj, desc }: { prj: string; desc: string }) => {
   const [Members, _SetMemners] = useState<any>();
   const [changeMade, setChangeMade] = useState<string | null>(null);
 
+  //Updating description
   useEffect(() => {
     if (changeMade) {
       axios
@@ -51,6 +52,7 @@ export const OverviewPage = ({ prj, desc }: { prj: string; desc: string }) => {
     }
   }, [changeMade]);
 
+  //geting colab details
   useEffect(() => {
     axios
       .get("/api/collab", {
@@ -74,7 +76,7 @@ export const OverviewPage = ({ prj, desc }: { prj: string; desc: string }) => {
         <Box>
           <TextArea
             disabled={!isEdited}
-            defaultValue={SHANGE?.toString()}
+            defaultValue={SHANGE ? SHANGE.toString() : "..."}
             onChange={(e) => {
               _SHANGE(e.currentTarget.value);
             }}
