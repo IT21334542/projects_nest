@@ -38,7 +38,7 @@ const ProrityCompoent = ({
     <Select.Root
       defaultValue={prority}
       onValueChange={(e: TaskPriority) => {
-        const Ut: Tasks = {
+        const Ut = {
           id: task.id,
           taskname: task.taskname,
           status: task.status,
@@ -99,7 +99,7 @@ const StatusComponent = ({
     <Select.Root
       defaultValue={status}
       onValueChange={(e: TaskStatus) => {
-        const Ut: Tasks = {
+        const Ut = {
           id: task.id,
           taskname: task.taskname,
           status: e,
@@ -224,7 +224,7 @@ const DueDateCompoent = ({
             <Button
               color="brown"
               onClick={() => {
-                const Ut: Tasks = {
+                const Ut = {
                   id: task.id,
                   taskname: task.taskname,
                   status: task.status,
@@ -275,7 +275,7 @@ export const TasksPage = (props: { setFun: any; Id: string }) => {
   const [isBluredRow, setIsBlur] = useState<string | null>();
 
   //selectedTask
-  const [TaskSelected, SetTaskSelected] = useState<Tasks | null>(null);
+  const [TaskSelected, SetTaskSelected] = useState<any | null>(null);
 
   const [isSubmiting, setSubmiting] = useState<boolean>(false);
   const [SubmitError, SetSubmiterror] = useState<boolean>(false);
@@ -452,7 +452,7 @@ export const TasksPage = (props: { setFun: any; Id: string }) => {
                                 placeholder="enter task name..."
                                 onBlur={() => {
                                   task.taskname = _NameChanged;
-                                  const Ut: Tasks = {
+                                  const Ut = {
                                     id: task.id,
                                     taskname: _NameChanged!,
                                     status: task.status,
