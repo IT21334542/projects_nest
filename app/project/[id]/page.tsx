@@ -221,10 +221,12 @@ const ProjectPage = ({ params: { id } }: { params: { id: String } }) => {
               className="  overflow-scroll md:max-h-[500px]"
             >
               <Tabs.Content value="overview">
-                <OverviewPage
-                  prj={id.toString()}
-                  desc={_project ? _project.description : " loading"}
-                />
+                {_project && (
+                  <OverviewPage
+                    prj={id.toString()}
+                    desc={_project ? _project.description : " loading"}
+                  />
+                )}
               </Tabs.Content>
               <Tabs.Content value="Tasks">
                 <TasksPage setFun={_setTask} Id={id.toString()} />
