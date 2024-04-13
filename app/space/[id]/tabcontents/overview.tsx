@@ -91,17 +91,21 @@ const OverviewCompoent = ({
   const [isInviting, _setInvitings] = useState<boolean>(false);
   const [_Colle, _setCollege] = useState<Colleg[] | null>();
   const [SHANGE, _SHANGE] = useState<string | null>(null);
+  const [LoadingBtn, _setLoadingBtn] = useState<boolean>(false);
 
   useEffect(() => {
+    _setLoadingBtn(true);
     axios
       .get("/api/colleague/" + spaceid)
       .then((value) => {
         _setCollege(value.data.data);
         _setInvitings(false);
+        _setLoadingBtn(false);
       })
       .catch((err) => {
         console.log("Log.d error front Overview" + err);
         _setInvitings(false);
+        _setLoadingBtn(false);
       });
   }, [isInviting]);
 
@@ -161,7 +165,11 @@ const OverviewCompoent = ({
                 </Text>
               </Flex>
             </Flex>
-            <InviteCollegue spaceid={spaceid} _setInvitings={_setInvitings} />
+            <InviteCollegue
+              spaceid={spaceid}
+              _setInvitings={_setInvitings}
+              loadingS={LoadingBtn}
+            />
           </Flex>
         </Box>
         <Grid columns={"3"} mt={"3"} gap={"3"}>

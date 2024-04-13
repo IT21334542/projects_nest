@@ -1,5 +1,12 @@
 "use Client";
-import { Dialog, Button, Flex, TextField, Text } from "@radix-ui/themes";
+import {
+  Dialog,
+  Button,
+  Flex,
+  TextField,
+  Text,
+  Spinner,
+} from "@radix-ui/themes";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FiMail } from "react-icons/fi";
@@ -14,9 +21,11 @@ interface FormStructre {
 const InviteCollegue = ({
   spaceid,
   _setInvitings,
+  loadingS,
 }: {
   spaceid: String;
   _setInvitings: any;
+  loadingS: any;
 }) => {
   const Collegueid = uuidv4();
   const [SelectedRole, Selection] = useState<String | null>(null);
@@ -25,6 +34,7 @@ const InviteCollegue = ({
     <Dialog.Root>
       <Dialog.Trigger>
         <Button color="brown" mt={"2"} mr={"3"}>
+          {loadingS && <Spinner loading size={"2"} />}
           <FiMail color="#ffffff" size={"1.5em"} />
           <Text className=" text-white">Invite Colleague</Text>
         </Button>
