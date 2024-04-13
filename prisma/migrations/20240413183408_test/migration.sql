@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE `project` MODIFY `description` TEXT NULL DEFAULT '_';
+ALTER TABLE `Project` MODIFY `description` TEXT NULL DEFAULT '_';
