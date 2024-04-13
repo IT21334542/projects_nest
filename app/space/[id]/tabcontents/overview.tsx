@@ -97,9 +97,11 @@ const OverviewCompoent = ({
       .get("/api/colleague/" + spaceid)
       .then((value) => {
         _setCollege(value.data.data);
+        _setInvitings(false);
       })
       .catch((err) => {
         console.log("Log.d error front Overview" + err);
+        _setInvitings(false);
       });
   }, [isInviting]);
 
