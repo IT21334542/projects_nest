@@ -87,7 +87,7 @@ export  async function GET(req:NextRequest){
                 subtask:true
             },
             orderBy:{
-                taskname:'asc'
+                createdAt:"asc"
             }
         })
 
