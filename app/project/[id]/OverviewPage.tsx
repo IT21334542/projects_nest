@@ -26,6 +26,10 @@ export const OverviewPage = ({ prj, desc }: { prj: string; desc: string }) => {
   const [Members, _SetMemners] = useState<any>();
   const [changeMade, setChangeMade] = useState<string | null>(null);
 
+  useEffect(() => {
+    _SHANGE(desc);
+  }, [desc]);
+
   //Updating description
   useEffect(() => {
     if (changeMade) {
@@ -76,7 +80,7 @@ export const OverviewPage = ({ prj, desc }: { prj: string; desc: string }) => {
         <Box>
           <TextArea
             disabled={!isEdited}
-            defaultValue={desc ? desc : "..."}
+            defaultValue={SHANGE ? SHANGE : "..."}
             onChange={(e) => {
               _SHANGE(e.currentTarget.value);
             }}
