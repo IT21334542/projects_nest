@@ -76,7 +76,7 @@ export const OverviewPage = ({ prj, desc }: { prj: string; desc: string }) => {
         <Box>
           <TextArea
             disabled={!isEdited}
-            defaultValue={SHANGE ? SHANGE.toString() : "..."}
+            defaultValue={desc ? desc : "..."}
             onChange={(e) => {
               _SHANGE(e.currentTarget.value);
             }}
