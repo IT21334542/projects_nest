@@ -56,7 +56,7 @@ const AssignTaskMember = ({
             });
 
             _setSrc(Coll ? Coll.userID.image : "");
-            const Ut: Tasks = {
+            const Ut: any = {
               id: task.id,
               taskname: task.taskname,
               status: task.status,
