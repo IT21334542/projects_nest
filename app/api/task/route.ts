@@ -84,7 +84,11 @@ export  async function GET(req:NextRequest){
                     }
                 },
                 assignedBy:true,
-                subtask:true
+                subtask:{
+                    orderBy:{
+                        createdAt:"asc"
+                    }
+                }
             },
             orderBy:{
                 createdAt:"asc"
