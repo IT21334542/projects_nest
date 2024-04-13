@@ -141,6 +141,7 @@ const FilesPage = ({ project }: { project: any }) => {
 const ProjectPage = ({ params: { id } }: { params: { id: String } }) => {
   const [_Task, _setTask] = useState<String | null>(null);
   const [_project, _setProject] = useState<any>();
+  const [isDesciEdited, _setisDesciEdited] = useState<boolean>(false);
 
   useEffect(() => {
     axios
@@ -149,12 +150,14 @@ const ProjectPage = ({ params: { id } }: { params: { id: String } }) => {
         if (vvalue.status == 200) {
           console.log("object");
           _setProject(vvalue.data.data);
+          _setisDesciEdited(false);
         }
       })
       .catch((err) => {
         console.error("Errr proj p " + err);
+        _setisDesciEdited(false);
       });
-  }, [id]);
+  }, [id, isDesciEdited]);
 
   return (
     <Flex
@@ -225,6 +228,7 @@ const ProjectPage = ({ params: { id } }: { params: { id: String } }) => {
                   <OverviewPage
                     prj={id.toString()}
                     desc={_project ? _project.description : " loading"}
+                    isDesci={_setisDesciEdited}
                   />
                 )}
               </Tabs.Content>

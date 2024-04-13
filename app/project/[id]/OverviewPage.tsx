@@ -18,7 +18,15 @@ import NewCollabForm from "./componets/NewCollabForm";
 import axios from "axios";
 import { json } from "stream/consumers";
 
-export const OverviewPage = ({ prj, desc }: { prj: string; desc: string }) => {
+export const OverviewPage = ({
+  prj,
+  desc,
+  isDesci,
+}: {
+  prj: string;
+  desc: string;
+  isDesci: any;
+}) => {
   const [isEdited, _setEditstatus] = useState<boolean>(false);
   const [isInviting, _setInvitings] = useState<boolean>(false);
   const [_Colle, _setCollege] = useState<any | null>();
@@ -48,6 +56,7 @@ export const OverviewPage = ({ prj, desc }: { prj: string; desc: string }) => {
         .then((v) => {
           if (v.status == 200) {
             setChangeMade(null);
+            isDesci(true);
           }
         })
         .catch((e) => {
