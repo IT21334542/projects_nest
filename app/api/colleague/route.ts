@@ -2,7 +2,8 @@
 import prisma from "@/prisma/PrismaClient";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-
+import { Resend } from 'resend';
+import WelcomeTemplate from "@/emails/WelcomeTemplate";
 const ValidationSchema = z.object({
     id:z.string().min(1,"id is required"),
     email:z.string({
@@ -15,7 +16,7 @@ const ValidationSchema = z.object({
 export async function POST(req:NextRequest) {
 
     const Body = await req.json();
-
+    const resend = new Resend(process.env.RESEND_EMAIL_API);
     const valid =await ValidationSchema.safeParse(Body);
 
     if(!valid.success)
@@ -29,8 +30,30 @@ export async function POST(req:NextRequest) {
     try {
         
         const colle = await prisma.colleague.create({
-            data:Body
+            data:Body,
+            include:{
+                roleId:true,
+                spaceId:{
+                    include:{
+                        createduser:true
+                    }
+                }
+            }
         })
+
+        const R = await resend.emails.send({
+            from:"@no-reply.wie-solutions.co.uk",
+            to:colle.email,
+            subject:"Invitation",
+            react:WelcomeTemplate({
+                email:colle.email,
+                ownername:colle.spaceId.createduser.name!,
+                role:colle.roleId.name,
+                spacename:colle.spaceId.name 
+            })
+        })
+        if(R.error)
+            console.error("Mail error"+R.error.message);
 
         return NextResponse.json({
             message:"Creation Succesful",
