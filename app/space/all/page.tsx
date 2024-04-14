@@ -88,7 +88,7 @@ const SpaceCard = ({
             </Text>
           </Link>
 
-          <Flex gap={"1"} className=" pl-5">
+          <Flex gap={"1"} className=" pr-6">
             <FiEdit color="#ffffff" />
             <FiImage
               color="#ffffff"
