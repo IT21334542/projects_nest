@@ -92,7 +92,7 @@ const Invitepage = () => {
                 >
                   <Flex direction={"column"} gapY={"2"}>
                     <Inset clip="padding-box" side="top" pb="current">
-                      <Image
+                      <img
                         src="https://images.pexels.com/photos/1679618/pexels-photo-1679618.jpeg?auto=compress&cs=tinysrgb&w=600"
                         alt="Invite Image"
                         style={{
