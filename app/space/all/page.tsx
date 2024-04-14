@@ -15,7 +15,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { AiFillFolder } from "react-icons/ai";
-import { FiFolder, FiPlus } from "react-icons/fi";
+import { FiChevronDown, FiFolder, FiPlus } from "react-icons/fi";
 import { BarLoader } from "react-spinners";
 
 function capitalizeFirstLetter(s: String) {
@@ -40,14 +40,17 @@ const SpaceCard = ({ title }: { title: String }) => {
   return (
     <>
       <Flex direction={"column"}>
-        <Card
-          className={`w-44 h-36 max-w-44 max-h-36 ${
-            colorlist[Math.floor(Math.random() * colorlist.length)]
-          }`}
-          variant="ghost"
-        >
-          <FiFolder size={"100%"} />
-        </Card>
+        <Flex gap={"1"}>
+          <Card
+            className={`w-44 h-36 max-w-44 max-h-36 ${
+              colorlist[Math.floor(Math.random() * colorlist.length)]
+            }`}
+            variant="ghost"
+          >
+            <FiFolder size={"100%"} />
+          </Card>
+          <FiChevronDown color="#ffffff" />
+        </Flex>
         <br />
         <Text className=" text-white">{title}</Text>
       </Flex>
