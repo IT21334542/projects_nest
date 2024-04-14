@@ -76,10 +76,14 @@ const SpaceCard = ({
         </Link>
         <br />
         <Flex gap={"1"} justify={"between"} className=" w-44 max-w-44 ">
-          <Text className=" text-white line-clamp-1">{title}</Text>
+          <Link href={"/space/" + space_id}>
+            <Text className=" text-white line-clamp-1 cursor-pointer">
+              {title}
+            </Text>
+          </Link>
           <DropdownMenu.Root>
             <DropdownMenu.Trigger>
-              <DropdownMenu.TriggerIcon />
+              <FiChevronDown color="#ffffff" className=" mx-2" />
             </DropdownMenu.Trigger>
             <DropdownMenu.Content variant="solid">
               <DropdownMenu.Item>
