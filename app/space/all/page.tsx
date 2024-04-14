@@ -57,11 +57,7 @@ const SpaceCard = ({
             }`}
             variant="ghost"
           >
-            {iconurl && (
-              <Inset>
-                <img src={iconurl} className=" w-fit" />
-              </Inset>
-            )}
+            {iconurl && <Flex className=" bg-red-800 w-4/5 h-4/5"></Flex>}
             {!iconurl && <FiFolder size={"100%"} />}
           </Card>
         </Link>
