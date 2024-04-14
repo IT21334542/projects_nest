@@ -2,6 +2,7 @@
 import {
   Button,
   Card,
+  DropdownMenu,
   Flex,
   Grid,
   Inset,
@@ -16,7 +17,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { AiFillFolder } from "react-icons/ai";
-import { FiChevronDown, FiFolder, FiPlus } from "react-icons/fi";
+import { FiChevronDown, FiEdit3, FiFolder, FiPlus } from "react-icons/fi";
 import { BarLoader } from "react-spinners";
 
 function capitalizeFirstLetter(s: String) {
@@ -70,7 +71,19 @@ const SpaceCard = ({
         <br />
         <Flex gap={"1"} justify={"between"} className=" w-44 max-w-44 ">
           <Text className=" text-white line-clamp-1">{title}</Text>
-          <FiChevronDown color="#ffffff" className=" mx-2" />
+          <DropdownMenu.Root>
+            <DropdownMenu.Trigger>
+              <FiChevronDown color="#ffffff" className=" mx-2" />
+            </DropdownMenu.Trigger>
+            <DropdownMenu.Content>
+              <DropdownMenu.Item>Change Space Image</DropdownMenu.Item>
+              <DropdownMenu.Separator />
+              <DropdownMenu.Item>
+                <FiEdit3 color="#ffffff" />
+                Edit Name
+              </DropdownMenu.Item>
+            </DropdownMenu.Content>
+          </DropdownMenu.Root>
         </Flex>
       </Flex>
     </>
