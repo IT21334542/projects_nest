@@ -17,7 +17,13 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { AiFillFolder } from "react-icons/ai";
-import { FiChevronDown, FiEdit3, FiFolder, FiPlus } from "react-icons/fi";
+import {
+  FiChevronDown,
+  FiEdit3,
+  FiFolder,
+  FiImage,
+  FiPlus,
+} from "react-icons/fi";
 import { BarLoader } from "react-spinners";
 
 function capitalizeFirstLetter(s: String) {
@@ -73,10 +79,13 @@ const SpaceCard = ({
           <Text className=" text-white line-clamp-1">{title}</Text>
           <DropdownMenu.Root>
             <DropdownMenu.Trigger>
-              <FiChevronDown color="#ffffff" className=" mx-2" />
+              <DropdownMenu.TriggerIcon />
             </DropdownMenu.Trigger>
-            <DropdownMenu.Content>
-              <DropdownMenu.Item>Change Space Image</DropdownMenu.Item>
+            <DropdownMenu.Content variant="solid">
+              <DropdownMenu.Item>
+                <FiImage color="#ffffff" />
+                Change Space Image
+              </DropdownMenu.Item>
               <DropdownMenu.Separator />
               <DropdownMenu.Item>
                 <FiEdit3 color="#ffffff" />
