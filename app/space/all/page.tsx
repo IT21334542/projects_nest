@@ -27,14 +27,17 @@ interface Space {
   id: String;
   description: String;
   createdby: String;
+  iconurl: string;
 }
 
 const SpaceCard = ({
   title,
   space_id,
+  iconurl,
 }: {
   title: String;
   space_id: string;
+  iconurl: string;
 }) => {
   const colorlist: String[] = [
     "bg-[#53B365]",
@@ -53,7 +56,14 @@ const SpaceCard = ({
             }`}
             variant="ghost"
           >
-            <FiFolder size={"100%"} />
+            {iconurl && (
+              <img
+                src={iconurl}
+                className=" object-cover aspect-video "
+                width={"100%"}
+              />
+            )}
+            {!iconurl && <FiFolder size={"100%"} />}
           </Card>
         </Link>
         <br />
@@ -157,6 +167,7 @@ const SpaceComponets = () => {
                   key={index}
                   title={capitalizeFirstLetter(space.name)}
                   space_id={space.id.toString()}
+                  iconurl={space.iconurl}
                 />
               ))}
             </Grid>
