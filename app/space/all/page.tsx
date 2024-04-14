@@ -87,43 +87,18 @@ const SpaceCard = ({
               {title}
             </Text>
           </Link>
+
           <Flex gap={"1"}>
-            <AlertDialog.Root>
-              <AlertDialog.Trigger>
-                <Tooltip content="Edit Spacename">
-                  <FiEdit color="#ffffff" />
-                </Tooltip>
-              </AlertDialog.Trigger>
-              <AlertDialog.Content maxWidth="450px">
-                <AlertDialog.Title>Revoke access</AlertDialog.Title>
-                <AlertDialog.Description size="2">
-                  Are you sure? This application will no longer be accessible
-                  and any existing sessions will be expired.
-                </AlertDialog.Description>
+            <Tooltip content="Edit Spacename">
+              <FiEdit color="#ffffff" />
+            </Tooltip>
 
-                <Flex gap="3" mt="4" justify="end">
-                  <AlertDialog.Cancel>
-                    <Button variant="soft" color="gray">
-                      Cancel
-                    </Button>
-                  </AlertDialog.Cancel>
-                  <AlertDialog.Action>
-                    <Button variant="solid" color="red">
-                      Revoke access
-                    </Button>
-                  </AlertDialog.Action>
-                </Flex>
-              </AlertDialog.Content>
-            </AlertDialog.Root>
-
-            <FileUpload auto ref={Selectfile}>
-              <FiImage
-                color="#ffffff"
-                onClick={() => {
-                  Selectfile.current;
-                }}
-              />
-            </FileUpload>
+            <FiImage
+              color="#ffffff"
+              onClick={() => {
+                Selectfile.current;
+              }}
+            />
           </Flex>
         </Flex>
       </Flex>
