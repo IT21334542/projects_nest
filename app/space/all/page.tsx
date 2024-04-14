@@ -49,7 +49,7 @@ const SpaceCard = ({ title }: { title: String }) => {
           <FiFolder size={"100%"} />
         </Card>
         <br />
-        <Flex gap={"1"} justify={"between"}>
+        <Flex gap={"1"} justify={"between"} className=" w-44  ">
           <Text className=" text-white line-clamp-1">{title}</Text>
           <FiChevronDown color="#ffffff" />
         </Flex>
