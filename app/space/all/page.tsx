@@ -83,8 +83,8 @@ const SpaceCard = ({
             </Text>
           </Link>
           <Flex gap={"1"}>
-            <FiEdit color="#fffffff" />
-            <FiImage color="#fffffff" />
+            <FiEdit color="#ffffff" />
+            <FiImage color="#ffffff" />
           </Flex>
         </Flex>
       </Flex>
