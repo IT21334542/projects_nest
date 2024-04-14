@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE `space` ADD COLUMN `iconurl` VARCHAR(191) NULL;
+ALTER TABLE `Space` ADD COLUMN `iconurl` VARCHAR(191) NULL;
