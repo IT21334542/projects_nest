@@ -19,6 +19,7 @@ import React, { useEffect, useState } from "react";
 import { AiFillFolder } from "react-icons/ai";
 import {
   FiChevronDown,
+  FiEdit,
   FiEdit3,
   FiFolder,
   FiImage,
@@ -81,22 +82,10 @@ const SpaceCard = ({
               {title}
             </Text>
           </Link>
-          <DropdownMenu.Root>
-            <DropdownMenu.Trigger>
-              <FiChevronDown color="#ffffff" className=" mx-2" />
-            </DropdownMenu.Trigger>
-            <DropdownMenu.Content variant="solid">
-              <DropdownMenu.Item>
-                <FiImage color="#ffffff" />
-                Change Space Image
-              </DropdownMenu.Item>
-              <DropdownMenu.Separator />
-              <DropdownMenu.Item>
-                <FiEdit3 color="#ffffff" />
-                Edit Name
-              </DropdownMenu.Item>
-            </DropdownMenu.Content>
-          </DropdownMenu.Root>
+          <Flex gap={"1"}>
+            <FiEdit color="#fffffff" />
+            <FiImage color="#fffffff" />
+          </Flex>
         </Flex>
       </Flex>
     </>
