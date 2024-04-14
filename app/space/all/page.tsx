@@ -116,13 +116,14 @@ const SpaceCard = ({
               </AlertDialog.Content>
             </AlertDialog.Root>
 
-            {/* <FiImage
+            <FileUpload auto ref={Selectfile}>
+              <FiImage
                 color="#ffffff"
                 onClick={() => {
-                  Selectfile.current
+                  Selectfile.current;
                 }}
-              /> */}
-            <FileUpload auto ref={Selectfile} />
+              />
+            </FileUpload>
           </Flex>
         </Flex>
       </Flex>
