@@ -89,11 +89,12 @@ const SpaceCard = ({
           </Link>
 
           <Flex gap={"1"} className=" pr-6">
-            <FiEdit color="#ffffff" />
+            <FiEdit color="#ffffff" className=" cursor-pointer" />
             <FiImage
               color="#ffffff"
+              className=" cursor-pointer"
               onClick={() => {
-                Selectfile.current?.click;
+                Selectfile.current?.click();
               }}
             />
             <input
