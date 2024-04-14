@@ -87,7 +87,7 @@ export async function PUT(req:NextRequest,{params:{id}}:{params:{id:string}}){
 }
 
 
-export async function PATCH(req:NextResponse) {
+export async function PATCH(req:NextRequest) {
     const Session = await getServerSession(AuthOption);
     const {searchParams} = new URL(req.url);
     const Spaceid = searchParams.get("Space");
