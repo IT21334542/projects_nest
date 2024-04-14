@@ -154,6 +154,7 @@ const SpaceComponets = () => {
             <Grid columns={"4"} p={"6"} gap={"6"}>
               {_SpaceList.map((space, index) => (
                 <SpaceCard
+                  key={index}
                   title={capitalizeFirstLetter(space.name)}
                   space_id={space.id.toString()}
                 />
