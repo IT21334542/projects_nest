@@ -1,4 +1,5 @@
 "use client";
+import { FbaseApp } from "@/app/componets/FirebaseConfig";
 import {
   AlertDialog,
   Button,
@@ -13,12 +14,13 @@ import {
 } from "@radix-ui/themes";
 import axios from "axios";
 import { randomInt } from "crypto";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { FileUpload } from "primereact/fileupload";
 import { Tooltip } from "primereact/tooltip";
-import React, { useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { AiFillFolder } from "react-icons/ai";
 import {
   FiChevronDown,
@@ -34,6 +36,16 @@ function capitalizeFirstLetter(s: String) {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
+function generateRandomString(length: number) {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
+  const charactersLength = characters.length;
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
 interface Space {
   name: String;
   id: String;
@@ -46,10 +58,12 @@ const SpaceCard = ({
   title,
   space_id,
   iconurl,
+  changed,
 }: {
   title: String;
   space_id: string;
   iconurl: string;
+  changed: any;
 }) => {
   const colorlist: String[] = [
     "bg-[#53B365]",
@@ -59,6 +73,50 @@ const SpaceCard = ({
   ];
 
   const Selectfile = useRef<HTMLInputElement | null>(null);
+  const firebaseApp = FbaseApp;
+  const Storage = getStorage(firebaseApp);
+  const StorageRef = ref(
+    Storage,
+    "filesofCANVONEST/" + generateRandomString(5)
+  );
+
+  const Handle = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.currentTarget.files) {
+      const File = e.currentTarget.files[0];
+      uploadBytes(StorageRef, File)
+        .then((value) => {
+          getDownloadURL(value.ref)
+            .then((value) => {
+              axios
+                .patch(
+                  "/api/space/s",
+                  {
+                    icon: value,
+                  },
+                  {
+                    params: {
+                      Space: space_id,
+                    },
+                  }
+                )
+                .then((data) => {
+                  if (data.status == 200) {
+                    changed(true);
+                  }
+                })
+                .catch((err) => {
+                  console.error("Error in front", err);
+                });
+            })
+            .catch((err) => {
+              console.error("Getting Download url error error " + err);
+            });
+        })
+        .catch((err) => {
+          console.error("Upload stream error " + err);
+        });
+    }
+  };
 
   return (
     <>
@@ -100,11 +158,11 @@ const SpaceCard = ({
             <input
               type="file"
               className=" hidden w-0 h-0 none"
+              accept="image/*"
               ref={Selectfile}
               multiple={false}
               onChange={(e) => {
-                if (e.currentTarget.files)
-                  console.log(e.currentTarget.files[0].name);
+                Handle(e);
               }}
             />
           </Flex>
@@ -118,6 +176,7 @@ const SpaceComponets = () => {
   const { data } = useSession();
   const [_SpaceList, _setSpaceList] = useState<Space[] | null>(null);
   const [isloading, setisLoading] = useState<boolean>(false);
+  const [Changed, setChanged] = useState<boolean>(false);
 
   useEffect(() => {
     setisLoading(true);
@@ -133,6 +192,7 @@ const SpaceComponets = () => {
             _setSpaceList(value.data.data);
             console.log("has list of space");
             setisLoading(false);
+            setChanged(false);
           }
         })
         .catch((err) => {
@@ -140,7 +200,7 @@ const SpaceComponets = () => {
           setisLoading(false);
         });
     }
-  }, [data]);
+  }, [data, Changed]);
 
   return (
     <Flex
@@ -206,6 +266,7 @@ const SpaceComponets = () => {
                   title={capitalizeFirstLetter(space.name)}
                   space_id={space.id.toString()}
                   iconurl={space.iconurl}
+                  changed={setChanged}
                 />
               ))}
             </Grid>

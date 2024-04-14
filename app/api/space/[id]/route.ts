@@ -1,5 +1,7 @@
 import prisma from "@/prisma/PrismaClient";
+import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
+import AuthOption from "../../auth/[...nextauth]/AuthOption";
 
 export async function GET(req:NextRequest,{params:{id}}:{params:{id:string}}){
 
@@ -84,4 +86,44 @@ export async function PUT(req:NextRequest,{params:{id}}:{params:{id:string}}){
     
 }
 
+
+export async function PATCH(req:NextResponse) {
+    const Session = await getServerSession(AuthOption);
+    const {searchParams} = new URL(req.url);
+    const Spaceid = searchParams.get("Space");
+    const Body = await req.json();
+
+    if(!Session?.user.isMaster)
+        return NextResponse.json({
+    message:"Not Authorized User"
+    },{status:401})
+    
+    try{
+
+        const a =await prisma.space.update({
+            where:{
+                id:Spaceid!
+            },
+            data:{
+                iconurl:Body.icon
+            }
+        })
+
+        return NextResponse.json({
+            message:"Success Update"
+
+        },{status:200})
+    }catch(e){
+        return NextResponse.json({
+            message:"DB ERROR",
+            data:e
+
+        },{status:500})
+
+    }
+
+
+
+    
+}
 
