@@ -131,7 +131,7 @@ const SpaceCard = ({
             {iconurl && (
               <Flex className="  w-full h-full my-1">
                 <Inset>
-                  <img src={iconurl} className=" object-cover" width={"100%"} />
+                  <img src={iconurl} className=" object-fill" width={"100%"} />
                 </Inset>
               </Flex>
             )}
