@@ -59,7 +59,7 @@ const SpaceCard = ({
           >
             {iconurl && (
               <Inset>
-                <img src={iconurl} width={"100%"} />
+                <img src={iconurl} className=" w-fit" />
               </Inset>
             )}
             {!iconurl && <FiFolder size={"100%"} />}
