@@ -6,7 +6,6 @@ import {
   Flex,
   Grid,
   Inset,
-  Popover,
   Separator,
   Strong,
   Text,
@@ -82,17 +81,22 @@ const SpaceCard = ({
               {title}
             </Text>
           </Link>
-          <Popover.Root>
-            <Popover.Trigger>
+          <DropdownMenu.Root>
+            <DropdownMenu.Trigger>
               <FiChevronDown color="#ffffff" className=" mx-2" />
-            </Popover.Trigger>
-            <Popover.Content>
-              <Flex direction={"column"} gap={"2"}>
-                <Button color="brown">Img</Button>
-                <Button color="brown">Img</Button>
-              </Flex>
-            </Popover.Content>
-          </Popover.Root>
+            </DropdownMenu.Trigger>
+            <DropdownMenu.Content variant="solid">
+              <DropdownMenu.Item>
+                <FiImage color="#ffffff" />
+                Change Space Image
+              </DropdownMenu.Item>
+              <DropdownMenu.Separator />
+              <DropdownMenu.Item>
+                <FiEdit3 color="#ffffff" />
+                Edit Name
+              </DropdownMenu.Item>
+            </DropdownMenu.Content>
+          </DropdownMenu.Root>
         </Flex>
       </Flex>
     </>
