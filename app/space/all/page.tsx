@@ -61,7 +61,7 @@ const SpaceCard = ({
               <Inset>
                 <img
                   src={iconurl}
-                  className=" object-cover h-full"
+                  className=" object-cover h-4/5"
                   width={"100%"}
                 />
               </Inset>
