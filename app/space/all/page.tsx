@@ -29,7 +29,13 @@ interface Space {
   createdby: String;
 }
 
-const SpaceCard = ({ title }: { title: String }) => {
+const SpaceCard = ({
+  title,
+  space_id,
+}: {
+  title: String;
+  space_id: string;
+}) => {
   const colorlist: String[] = [
     "bg-[#53B365]",
     "bg-[#978365]",
@@ -40,18 +46,20 @@ const SpaceCard = ({ title }: { title: String }) => {
   return (
     <>
       <Flex direction={"column"}>
-        <Card
-          className={`w-44 h-36 max-w-44 max-h-36 ${
-            colorlist[Math.floor(Math.random() * colorlist.length)]
-          }`}
-          variant="ghost"
-        >
-          <FiFolder size={"100%"} />
-        </Card>
+        <Link href={"/space/" + space_id}>
+          <Card
+            className={`w-44 h-36 max-w-44 max-h-36 ${
+              colorlist[Math.floor(Math.random() * colorlist.length)]
+            }`}
+            variant="ghost"
+          >
+            <FiFolder size={"100%"} />
+          </Card>
+        </Link>
         <br />
         <Flex gap={"1"} justify={"between"} className=" w-44 max-w-44 ">
           <Text className=" text-white line-clamp-1">{title}</Text>
-          <FiChevronDown color="#ffffff" />
+          <FiChevronDown color="#ffffff" className=" mx-2" />
         </Flex>
       </Flex>
     </>
@@ -145,9 +153,10 @@ const SpaceComponets = () => {
           {_SpaceList.length != 0 && (
             <Grid columns={"4"} p={"6"} gap={"6"}>
               {_SpaceList.map((space, index) => (
-                <Link key={index} href={"/space/" + space.id}>
-                  <SpaceCard title={capitalizeFirstLetter(space.name)} />
-                </Link>
+                <SpaceCard
+                  title={capitalizeFirstLetter(space.name)}
+                  space_id={space.id.toString()}
+                />
               ))}
             </Grid>
           )}
