@@ -4,6 +4,7 @@ import {
   Card,
   Flex,
   Grid,
+  Inset,
   Separator,
   Strong,
   Text,
@@ -57,12 +58,13 @@ const SpaceCard = ({
             variant="ghost"
           >
             {iconurl && (
-              <img
-                src={iconurl}
-                className=" object-cover "
-                width={"100%"}
-                height={"50%"}
-              />
+              <Inset>
+                <img
+                  src={iconurl}
+                  className=" object-cover h-full"
+                  width={"100%"}
+                />
+              </Inset>
             )}
             {!iconurl && <FiFolder size={"100%"} />}
           </Card>
