@@ -117,7 +117,6 @@ const SpaceCard = ({
             </AlertDialog.Root>
 
             <Tooltip content="Change SpaceIcon">
-              <FileUpload auto className=" hidden" ref={Selectfile} />
               <FiImage
                 color="#ffffff"
                 onClick={() => {
@@ -126,6 +125,7 @@ const SpaceCard = ({
               />
             </Tooltip>
           </Flex>
+          <FileUpload auto className=" hidden" ref={Selectfile} />
         </Flex>
       </Flex>
     </>
