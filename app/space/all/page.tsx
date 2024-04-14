@@ -58,7 +58,7 @@ const SpaceCard = ({
     "bg-[#9EB1FF]",
   ];
 
-  const Selectfile = useRef<FileUpload | null>(null);
+  const Selectfile = useRef<HTMLInputElement | null>(null);
 
   return (
     <>
@@ -93,7 +93,17 @@ const SpaceCard = ({
             <FiImage
               color="#ffffff"
               onClick={() => {
-                Selectfile.current;
+                Selectfile.current?.click;
+              }}
+            />
+            <input
+              type="file"
+              className=" hidden w-0 h-0 none"
+              ref={Selectfile}
+              multiple={false}
+              onChange={(e) => {
+                if (e.currentTarget.files)
+                  console.log(e.currentTarget.files[0].name);
               }}
             />
           </Flex>
