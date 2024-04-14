@@ -10,7 +10,6 @@ import {
   Separator,
   Strong,
   Text,
-  Tooltip,
 } from "@radix-ui/themes";
 import axios from "axios";
 import { randomInt } from "crypto";
@@ -18,6 +17,7 @@ import { randomInt } from "crypto";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { FileUpload } from "primereact/fileupload";
+import { Tooltip } from "primereact/tooltip";
 import React, { useEffect, useRef, useState } from "react";
 import { AiFillFolder } from "react-icons/ai";
 import {
@@ -62,6 +62,7 @@ const SpaceCard = ({
 
   return (
     <>
+      <FileUpload className=" hidden" ref={Selectfile} />
       <Flex direction={"column"}>
         <Link href={"/space/" + space_id}>
           <Card
@@ -88,7 +89,7 @@ const SpaceCard = ({
             </Text>
           </Link>
 
-          <Flex gap={"1"}>
+          <Flex gap={"1"} className=" pl-5">
             <Tooltip content="Edit Spacename">
               <FiEdit color="#ffffff" />
             </Tooltip>
