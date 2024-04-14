@@ -42,7 +42,7 @@ export async function POST(req:NextRequest) {
         })
 
         const R = await resend.emails.send({
-            from:"@no-reply.wie-solutions.co.uk",
+            from:"donot-reply@wie-solutions.co.uk",
             to:colle.email,
             subject:"Invitation",
             react:WelcomeTemplate({
