@@ -40,19 +40,19 @@ const SpaceCard = ({ title }: { title: String }) => {
   return (
     <>
       <Flex direction={"column"}>
-        <Flex gap={"1"}>
-          <Card
-            className={`w-44 h-36 max-w-44 max-h-36 ${
-              colorlist[Math.floor(Math.random() * colorlist.length)]
-            }`}
-            variant="ghost"
-          >
-            <FiFolder size={"100%"} />
-          </Card>
+        <Card
+          className={`w-44 h-36 max-w-44 max-h-36 ${
+            colorlist[Math.floor(Math.random() * colorlist.length)]
+          }`}
+          variant="ghost"
+        >
+          <FiFolder size={"100%"} />
+        </Card>
+        <br />
+        <Flex gap={"1"} justify={"between"}>
+          <Text className=" text-white line-clamp-1">{title}</Text>
           <FiChevronDown color="#ffffff" />
         </Flex>
-        <br />
-        <Text className=" text-white">{title}</Text>
       </Flex>
     </>
   );
