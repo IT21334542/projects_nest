@@ -76,7 +76,7 @@ const SpaceCard = ({
           </Card>
         </Link>
         <br />
-        <Flex gap={"1"} justify={"between"} className=" w-44 max-w-44 ">
+        <Flex gap={"1"} justify={"between"} className=" ">
           <Link href={"/space/" + space_id}>
             <Text className=" text-white line-clamp-1 cursor-pointer">
               {title}
