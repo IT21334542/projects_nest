@@ -59,7 +59,7 @@ const SpaceCard = ({
             {iconurl && (
               <img
                 src={iconurl}
-                className=" object-cover "
+                className=" object-cover mb-5"
                 width={"100%"}
                 height={"100%"}
               />
