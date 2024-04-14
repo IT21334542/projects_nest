@@ -59,9 +59,9 @@ const SpaceCard = ({
             {iconurl && (
               <img
                 src={iconurl}
-                className=" object-cover mb-5"
+                className=" object-cover "
                 width={"100%"}
-                height={"100%"}
+                height={"80%"}
               />
             )}
             {!iconurl && <FiFolder size={"100%"} />}
