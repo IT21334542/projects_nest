@@ -1,5 +1,6 @@
 "use client";
 import {
+  AlertDialog,
   Button,
   Card,
   DropdownMenu,
@@ -9,13 +10,15 @@ import {
   Separator,
   Strong,
   Text,
+  Tooltip,
 } from "@radix-ui/themes";
 import axios from "axios";
 import { randomInt } from "crypto";
 
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import { FileUpload } from "primereact/fileupload";
+import React, { useEffect, useRef, useState } from "react";
 import { AiFillFolder } from "react-icons/ai";
 import {
   FiChevronDown,
@@ -55,6 +58,8 @@ const SpaceCard = ({
     "bg-[#9EB1FF]",
   ];
 
+  const Selectfile = useRef<FileUpload | null>(null);
+
   return (
     <>
       <Flex direction={"column"}>
@@ -76,15 +81,50 @@ const SpaceCard = ({
           </Card>
         </Link>
         <br />
-        <Flex gap={"1"} justify={"between"} className=" ">
+        <Flex gap={"1"} justify={"between"} className=" w-44  max-w-44">
           <Link href={"/space/" + space_id}>
             <Text className=" text-white line-clamp-1 cursor-pointer">
               {title}
             </Text>
           </Link>
           <Flex gap={"1"}>
-            <FiEdit color="#ffffff" />
-            <FiImage color="#ffffff" />
+            <AlertDialog.Root>
+              <AlertDialog.Trigger>
+                <Tooltip content="Edit Spacename">
+                  <FiEdit color="#ffffff" />
+                </Tooltip>
+              </AlertDialog.Trigger>
+              <AlertDialog.Content maxWidth="450px">
+                <AlertDialog.Title>Revoke access</AlertDialog.Title>
+                <AlertDialog.Description size="2">
+                  Are you sure? This application will no longer be accessible
+                  and any existing sessions will be expired.
+                </AlertDialog.Description>
+
+                <Flex gap="3" mt="4" justify="end">
+                  <AlertDialog.Cancel>
+                    <Button variant="soft" color="gray">
+                      Cancel
+                    </Button>
+                  </AlertDialog.Cancel>
+                  <AlertDialog.Action>
+                    <Button variant="solid" color="red">
+                      Revoke access
+                    </Button>
+                  </AlertDialog.Action>
+                </Flex>
+              </AlertDialog.Content>
+            </AlertDialog.Root>
+
+            <Tooltip content="Change SpaceIcon">
+              <FileUpload auto className=" hidden" ref={Selectfile} />
+              <FiImage
+                color="#ffffff"
+                onClick={() => {
+                  Selectfile.current?.upload();
+                }}
+              />
+            </Tooltip>
           </Flex>
         </Flex>
       </Flex>
