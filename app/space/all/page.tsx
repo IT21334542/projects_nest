@@ -62,7 +62,6 @@ const SpaceCard = ({
 
   return (
     <>
-      <FileUpload className=" hidden" ref={Selectfile} />
       <Flex direction={"column"}>
         <Link href={"/space/" + space_id}>
           <Card
@@ -90,10 +89,7 @@ const SpaceCard = ({
           </Link>
 
           <Flex gap={"1"} className=" pl-5">
-            <Tooltip content="Edit Spacename">
-              <FiEdit color="#ffffff" />
-            </Tooltip>
-
+            <FiEdit color="#ffffff" />
             <FiImage
               color="#ffffff"
               onClick={() => {
